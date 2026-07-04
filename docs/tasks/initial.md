@@ -173,10 +173,10 @@ Derived from `concept.md`, `prompthound-architecture-flow.md`, `prompthound-tech
 
 ## Phase 12 — Evaluation Report & Documentation
 
-- [ ] Write the formal evaluation report per concept.md §4: precision/recall/F1 on the main corpus, false-positive rate on `benign_unusual` reported explicitly and prominently, honest comparison against publicly reported academic benchmarks (e.g. SkillFortify-style near-perfect precision on curated sets) without claiming parity
-- [ ] Write/finalize `README.md`: problem statement (concept.md §1), install + usage (AGENTS.md §2–3), architecture summary (one diagram from architecture.md §1), evaluation results, explicitly-out-of-scope future work (concept.md §6)
-- [ ] Review `AGENTS.md` for accuracy against what was actually built (update any stage details that changed during implementation)
-- [ ] Prepare submission materials for the national-level competition (demo script, key differentiators from concept.md §5, sample scan outputs across all three formats)
+- [x] Write the formal evaluation report per concept.md §4: precision/recall/F1 on the main corpus, false-positive rate on `benign_unusual` reported explicitly and prominently, honest comparison against publicly reported academic benchmarks (e.g. SkillFortify-style near-perfect precision on curated sets) without claiming parity
+- [x] Write/finalize `README.md`: problem statement (concept.md §1), install + usage (AGENTS.md §2–3), architecture summary (one diagram from architecture.md §1), evaluation results, explicitly-out-of-scope future work (concept.md §6)
+- [x] Review `AGENTS.md` for accuracy against what was actually built (update any stage details that changed during implementation)
+- [x] Prepare submission materials for the national-level competition (demo script, key differentiators from concept.md §5, sample scan outputs across all three formats)
 
 **Exit criteria:** a fresh clone + `pip install -e ".[dev]"` + `prompthound scan` on a sample file reproduces the README's example output, and the evaluation report stands on its own as the "honest reference point" concept.md §4 calls for.
 
