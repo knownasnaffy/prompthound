@@ -96,10 +96,10 @@ prompthound scan path/to/SKILL.md --fail-on suspicious
 
 ## 5. Evaluation Results
 
-PromptHound uses a **Random Forest classifier (n_estimators=50, max_depth=5, min_samples_leaf=1)** to score feature vectors.
+PromptHound uses a **Random Forest classifier (n_estimators=50, max_depth=None, min_samples_leaf=1)** to score feature vectors.
 
 On the initial curated benchmark corpus:
-- **Precision / Recall / F1:** 1.000 on the holdout test set.
+- **Precision / Recall / F1:** 0.863 on the holdout test set.
 - **False Positive Rate (FPR):** 0.40 on a challenging `benign_unusual` probe set (legitimate skills with valid shell/base64 usage).
 
 The classifier outputs its exact decision path for every score (e.g., "Flagged because base64 ratio > X and entropy > Y"). For full details, see `docs/evaluation_report.md`.
