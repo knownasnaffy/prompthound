@@ -80,11 +80,11 @@ Derived from `concept.md`, `prompthound-architecture-flow.md`, `prompthound-tech
 
 ## Phase 5 — Capability-Chain Check (`chains.py`)
 
-- [ ] Implement capability-tagged event extraction from `ParsedSkill` (frontmatter declared capabilities + body-referenced/executed capabilities), each tagged with source line
-- [ ] Define the fixed set of named dangerous sequences (ordered capability-tag lists), starting with `["file_read","encode","network_send"]` and `["download","write","execute"]`
-- [ ] Implement subsequence matching (not exact-adjacency) per tech-implementation.md §4
-- [ ] Handle the empty/no-chain case as a valid, non-error result (architecture.md §4)
-- [ ] Unit tests: a fixture with a clean adjacent chain, a fixture with the same chain split across non-adjacent lines, a fixture with no chain at all
+- [x] Implement capability-tagged event extraction from `ParsedSkill` (frontmatter declared capabilities + body-referenced/executed capabilities), each tagged with source line
+- [x] Define the fixed set of named dangerous sequences (ordered capability-tag lists), starting with `["file_read","encode","network_send"]` and `["download","write","execute"]`
+- [x] Implement subsequence matching (not exact-adjacency) per tech-implementation.md §4
+- [x] Handle the empty/no-chain case as a valid, non-error result (architecture.md §4)
+- [x] Unit tests: a fixture with a clean adjacent chain, a fixture with the same chain split across non-adjacent lines, a fixture with no chain at all
 
 **Exit criteria:** `chains.py` correctly flags both adjacent and scattered chains, and correctly returns `[]` (not an error) for benign files.
 
