@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "caveman": {
+      "source": "JuliusBrussee/skills",
+      "sourceType": "github",
+      "skillPath": "skills/caveman/SKILL.md",
+      "computedHash": "1902fa0b569912d0c05736d8d98a72097d9b82719aac88c0c1d03bb546f9176d"
+    },
+    "fuck-slop": {
+      "source": "JuliusBrussee/skills",
+      "sourceType": "github",
+      "skillPath": "skills/fuck-slop/SKILL.md",
+      "computedHash": "17ae400cf721c286c187c6613795091c4fb81aed02ce52cc23e86c2f6b170f4d"
+    }
+  }
+}
