@@ -31,13 +31,13 @@ Derived from `concept.md`, `prompthound-architecture-flow.md`, `prompthound-tech
 
 ## Phase 2 — Parse Stage (`parse.py`)
 
-- [ ] Implement frontmatter/body/code-block splitting using `python-frontmatter` + `markdown-it-py` token stream (not regex), per tech-implementation.md §4
-- [ ] Ensure every `CodeBlock` carries real `start_line`/`end_line` and language/fence tag
-- [ ] Implement Unicode Tag character detection (U+E0000–U+E007F) over `raw_bytes` *before* any decoding step; store as `unicode_tag_spans`, never strip
-- [ ] Implement the shared padding/size-anomaly helper referenced in tech-implementation.md §4 (consumed later by both `rules/padding.py` and `features.py::padding_ratio`)
-- [ ] Implement malformed-input short-circuit: no frontmatter / binary garbage / empty file → `parse_ok=False`, `parse_error` set, no partial `ParsedSkill` fields left in a misleading state (architecture.md §4)
-- [ ] Build golden fixtures under `tests/unit/fixtures/parse/`: a valid skill file, a no-frontmatter file, a binary-garbage file, an empty file
-- [ ] Unit tests for each fixture, asserting exact `ParsedSkill` output (or `parse_ok=False` + `parse_error`)
+- [x] Implement frontmatter/body/code-block splitting using `python-frontmatter` + `markdown-it-py` token stream (not regex), per tech-implementation.md §4
+- [x] Ensure every `CodeBlock` carries real `start_line`/`end_line` and language/fence tag
+- [x] Implement Unicode Tag character detection (U+E0000–U+E007F) over `raw_bytes` *before* any decoding step; store as `unicode_tag_spans`, never strip
+- [x] Implement the shared padding/size-anomaly helper referenced in tech-implementation.md §4 (consumed later by both `rules/padding.py` and `features.py::padding_ratio`)
+- [x] Implement malformed-input short-circuit: no frontmatter / binary garbage / empty file → `parse_ok=False`, `parse_error` set, no partial `ParsedSkill` fields left in a misleading state (architecture.md §4)
+- [x] Build golden fixtures under `tests/unit/fixtures/parse/`: a valid skill file, a no-frontmatter file, a binary-garbage file, an empty file
+- [x] Unit tests for each fixture, asserting exact `ParsedSkill` output (or `parse_ok=False` + `parse_error`)
 
 **Exit criteria:** every fixture produces the exact expected `ParsedSkill`; malformed inputs never reach a state that looks like a valid parse.
 

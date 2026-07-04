@@ -2,6 +2,7 @@
 
 Stage: CLI (Stage 0 of architecture.md §1) — thin click wrapper, no business logic.
 """
+
 import click
 
 

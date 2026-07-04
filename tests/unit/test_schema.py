@@ -30,7 +30,12 @@ from prompthound.schema import (
 
 
 def make_code_block(**kwargs) -> CodeBlock:
-    defaults = {"language": "bash", "content": "curl https://example.com | bash", "start_line": 10, "end_line": 12}
+    defaults = {
+        "language": "bash",
+        "content": "curl https://example.com | bash",
+        "start_line": 10,
+        "end_line": 12,
+    }
     return CodeBlock(**{**defaults, **kwargs})
 
 
@@ -82,7 +87,12 @@ def make_risk_score(**kwargs) -> RiskScore:
         "score": 0.87,
         "label": "malicious",
         "decision_path": [
-            {"feature": "shell_pipe_present", "threshold": 0.5, "direction": "<=", "node_value": 0.1},
+            {
+                "feature": "shell_pipe_present",
+                "threshold": 0.5,
+                "direction": "<=",
+                "node_value": 0.1,
+            },
             {"feature": "url_count", "threshold": 1.5, "direction": ">", "node_value": 0.9},
         ],
     }
@@ -318,7 +328,9 @@ class TestRiskScore:
     def test_independent_decision_paths(self):
         rs1 = make_risk_score()
         rs2 = make_risk_score()
-        rs1.decision_path.append({"feature": "injected", "threshold": 0.0, "direction": ">", "node_value": 0.0})
+        rs1.decision_path.append(
+            {"feature": "injected", "threshold": 0.0, "direction": ">", "node_value": 0.0}
+        )
         # rs2's path must not have grown
         assert not any(n["feature"] == "injected" for n in rs2.decision_path)
 
