@@ -1,0 +1,17 @@
+======================================================================
+PromptHound Scan: tests/fixtures/classifier_only_skill.md
+======================================================================
+
+── RULE HITS (deterministic heuristics) ───────────────────────────────
+  No rule hits.
+
+── CLASSIFIER (ML risk score) ─────────────────────────────────────────
+  Score : 0.9200  [MALICIOUS]
+  Decision path:
+    base64_hex_ratio > 0.012345  (malicious_frac=0.3846)
+    [leaf]  malicious_frac=1.0000
+
+── CAPABILITY CHAINS (structural sequence detection) ──────────────────
+  No dangerous capability chains detected.
+
+======================================================================

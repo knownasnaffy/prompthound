@@ -1,0 +1,9 @@
+======================================================================
+PromptHound Scan: tests/fixtures/binary_garbage.bin
+======================================================================
+
+  [ERROR] Could not parse file.
+  Binary or non-UTF-8 content detected; cannot parse as Markdown skill file.
+
+  No further analysis performed.
+======================================================================

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Documents/CommitteeSpecifications/2.1.0/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "PromptHound",
+          "version": "0.1.0",
+          "informationUri": "https://github.com/your-org/prompthound/blob/main/README.md",
+          "rules": [
+            {
+              "id": "PH000/parse-error",
+              "name": "ParseError",
+              "shortDescription": {
+                "text": "File could not be parsed"
+              },
+              "helpUri": "https://github.com/your-org/prompthound/blob/main/README.md",
+              "properties": {
+                "precision": "high"
+              }
+            }
+          ]
+        }
+      },
+      "artifacts": [
+        {
+          "location": {
+            "uri": "tests/fixtures/binary_garbage.bin"
+          },
+          "mimeType": "text/markdown"
+        }
+      ],
+      "results": [
+        {
+          "ruleId": "PH000/parse-error",
+          "level": "error",
+          "message": {
+            "text": "Binary or non-UTF-8 content detected; cannot parse as Markdown skill file."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "tests/fixtures/binary_garbage.bin"
+                },
+                "region": {
+                  "startLine": 1
+                }
+              }
+            }
+          ],
+          "properties": {
+            "evidenceType": "parse-error"
+          }
+        }
+      ]
+    }
+  ]
+}

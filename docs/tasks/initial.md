@@ -137,10 +137,10 @@ Derived from `concept.md`, `prompthound-architecture-flow.md`, `prompthound-tech
 
 ## Phase 9 — Reporter (`report.py`)
 
-- [ ] Implement `render_human`, `render_json`, `render_sarif`, all consuming the same `ScanResult`
-- [ ] Enforce the non-negotiable constraint from architecture.md §2.6 / AGENTS.md §5: rule hits, classifier score+decision path, and chain flags must remain visibly separate in every output format — no flattening into one undifferentiated warning list
-- [ ] Apply the SARIF field mapping resolved in Phase 7 (rule ids, help URIs)
-- [ ] Snapshot tests for all three renderers over a fixed set of `ScanResult` fixtures (clean file, rule-only hit, classifier-only high score, chain-flag case, all-three-at-once case)
+- [x] Implement `render_human`, `render_json`, `render_sarif`, all consuming the same `ScanResult`
+- [x] Enforce the non-negotiable constraint from architecture.md §2.6 / AGENTS.md §5: rule hits, classifier score+decision path, and chain flags must remain visibly separate in every output format — no flattening into one undifferentiated warning list
+- [x] Apply the SARIF field mapping resolved in Phase 7 (rule ids, help URIs)
+- [x] Snapshot tests for all three renderers over a fixed set of `ScanResult` fixtures (clean file, rule-only hit, classifier-only high score, chain-flag case, all-three-at-once case)
 
 **Exit criteria:** the "merge without flattening" property is enforced by a test, not just visually inspected.
 

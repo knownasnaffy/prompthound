@@ -1,0 +1,8 @@
+{
+  "file": "tests/fixtures/binary_garbage.bin",
+  "parse_ok": false,
+  "parse_error": "Binary or non-UTF-8 content detected; cannot parse as Markdown skill file.",
+  "rule_hits": [],
+  "classifier": null,
+  "chain_flags": []
+}

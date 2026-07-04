@@ -1,0 +1,17 @@
+======================================================================
+PromptHound Scan: tests/fixtures/clean_skill.md
+======================================================================
+
+── RULE HITS (deterministic heuristics) ───────────────────────────────
+  No rule hits.
+
+── CLASSIFIER (ML risk score) ─────────────────────────────────────────
+  Score : 0.0500  [BENIGN]
+  Decision path:
+    base64_hex_ratio <= 0.012345  (malicious_frac=0.3846)
+    [leaf]  malicious_frac=0.0000
+
+── CAPABILITY CHAINS (structural sequence detection) ──────────────────
+  No dangerous capability chains detected.
+
+======================================================================

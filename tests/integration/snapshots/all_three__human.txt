@@ -1,0 +1,29 @@
+======================================================================
+PromptHound Scan: tests/fixtures/all_three_skill.md
+======================================================================
+
+── RULE HITS (deterministic heuristics) ───────────────────────────────
+  [HIGH] SHELL_PIPE_001  span=(11, 11)
+    curl | bash pipeline detected in bash code block at line 11
+  [WARN] ENCODED_BLOB_001  span=(5, 6)
+    Base64-encoded blob detected (ratio=0.60)
+  [HIGH] UNICODE_TAG_001  span=(1, 1)
+    Unicode Tag steganography characters detected at byte offsets (45, 50)
+
+── CLASSIFIER (ML risk score) ─────────────────────────────────────────
+  Score : 0.9800  [MALICIOUS]
+  Decision path:
+    base64_hex_ratio > 0.012345  (malicious_frac=0.3846)
+    [leaf]  malicious_frac=1.0000
+
+── CAPABILITY CHAINS (structural sequence detection) ──────────────────
+  CHAIN: file_read→encode→network_send
+    step: file_read  (line 8)
+    step: encode  (line 15)
+    step: network_send  (line 11)
+  CHAIN: download→write→execute
+    step: download  (line 11)
+    step: write  (line 20)
+    step: execute  (line 25)
+
+======================================================================

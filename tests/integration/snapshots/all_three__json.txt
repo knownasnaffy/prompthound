@@ -1,0 +1,87 @@
+{
+  "file": "tests/fixtures/all_three_skill.md",
+  "parse_ok": true,
+  "rule_hits": [
+    {
+      "rule_id": "SHELL_PIPE_001",
+      "severity": "high",
+      "span": [
+        11,
+        11
+      ],
+      "message": "curl | bash pipeline detected in bash code block at line 11"
+    },
+    {
+      "rule_id": "ENCODED_BLOB_001",
+      "severity": "warn",
+      "span": [
+        5,
+        6
+      ],
+      "message": "Base64-encoded blob detected (ratio=0.60)"
+    },
+    {
+      "rule_id": "UNICODE_TAG_001",
+      "severity": "high",
+      "span": [
+        1,
+        1
+      ],
+      "message": "Unicode Tag steganography characters detected at byte offsets (45, 50)"
+    }
+  ],
+  "classifier": {
+    "score": 0.98,
+    "label": "malicious",
+    "decision_path": [
+      {
+        "feature": "base64_hex_ratio",
+        "threshold": 0.012345,
+        "direction": ">",
+        "node_value": 0.3846
+      },
+      {
+        "feature": "[leaf]",
+        "threshold": null,
+        "direction": null,
+        "node_value": 1.0
+      }
+    ]
+  },
+  "chain_flags": [
+    {
+      "chain_name": "file_read\u2192encode\u2192network_send",
+      "steps": [
+        {
+          "capability": "file_read",
+          "line": 8
+        },
+        {
+          "capability": "encode",
+          "line": 15
+        },
+        {
+          "capability": "network_send",
+          "line": 11
+        }
+      ]
+    },
+    {
+      "chain_name": "download\u2192write\u2192execute",
+      "steps": [
+        {
+          "capability": "download",
+          "line": 11
+        },
+        {
+          "capability": "write",
+          "line": 20
+        },
+        {
+          "capability": "execute",
+          "line": 25
+        }
+      ]
+    }
+  ]
+}

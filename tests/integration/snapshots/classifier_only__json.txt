@@ -1,0 +1,24 @@
+{
+  "file": "tests/fixtures/classifier_only_skill.md",
+  "parse_ok": true,
+  "rule_hits": [],
+  "classifier": {
+    "score": 0.92,
+    "label": "malicious",
+    "decision_path": [
+      {
+        "feature": "base64_hex_ratio",
+        "threshold": 0.012345,
+        "direction": ">",
+        "node_value": 0.3846
+      },
+      {
+        "feature": "[leaf]",
+        "threshold": null,
+        "direction": null,
+        "node_value": 1.0
+      }
+    ]
+  },
+  "chain_flags": []
+}

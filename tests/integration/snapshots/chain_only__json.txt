@@ -1,0 +1,25 @@
+{
+  "file": "tests/fixtures/chain_only_skill.md",
+  "parse_ok": true,
+  "rule_hits": [],
+  "classifier": null,
+  "chain_flags": [
+    {
+      "chain_name": "file_read\u2192encode\u2192network_send",
+      "steps": [
+        {
+          "capability": "file_read",
+          "line": 12
+        },
+        {
+          "capability": "encode",
+          "line": 34
+        },
+        {
+          "capability": "network_send",
+          "line": 51
+        }
+      ]
+    }
+  ]
+}

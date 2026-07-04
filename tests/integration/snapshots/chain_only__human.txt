@@ -1,0 +1,17 @@
+======================================================================
+PromptHound Scan: tests/fixtures/chain_only_skill.md
+======================================================================
+
+── RULE HITS (deterministic heuristics) ───────────────────────────────
+  No rule hits.
+
+── CLASSIFIER (ML risk score) ─────────────────────────────────────────
+  Classifier not run (parse failed or artifact missing).
+
+── CAPABILITY CHAINS (structural sequence detection) ──────────────────
+  CHAIN: file_read→encode→network_send
+    step: file_read  (line 12)
+    step: encode  (line 34)
+    step: network_send  (line 51)
+
+======================================================================
