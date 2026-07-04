@@ -20,10 +20,10 @@ This metric is explicitly tracked and prioritized. The `benign_unusual` set cont
 
 ## 3. Honest Comparison to Academic Benchmarks
 
-Recent academic frameworks in this space, such as **SkillTrustBench** and **SkillFortify**, report near-perfect precision and recall on curated benchmarks of agent skill supply chains. 
+Recent academic frameworks in this space, such as **[SkillTrustBench](https://huggingface.co/datasets/cuhk-zhuque/SkillTrustBench)** and **SkillFortify**, report near-perfect precision and recall on curated benchmarks of agent skill supply chains.
 
 We **do not claim full parity** with these academic formal-verification frameworks for two reasons:
-1. **Corpus Source:** While we have grown our corpus to 2000+ files using datasets like SkillTrustBench, ensuring a robust statistical evaluation, our primary focus remains practical risk detection rather than exhaustive proof.
+1. **Corpus Source:** While we have grown our corpus to 2000+ files using datasets like [SkillTrustBench](https://huggingface.co/datasets/cuhk-zhuque/SkillTrustBench), ensuring a robust statistical evaluation, our primary focus remains practical risk detection rather than exhaustive proof.
 2. **Scope of Tooling:** Frameworks like SkillFortify often employ formal analysis or enterprise-scale behavioral integrity verification (BIV) registries. PromptHound intentionally takes a lighter approach as a "sniffer, not shield" CLI tool for solo developers, running in sub-second time without external network calls.
 
 While PromptHound is not a formal verification engine, it successfully bridges the gap between having no protection and requiring an enterprise security scanner, offering an interpretable and fast risk signal.

@@ -91,9 +91,9 @@ The classifier surfaces the local feature contributions (via Saabas decompositio
 
 Other security scanners take different architectural approaches:
 
-- **NVIDIA SkillSpector**: Sends skills to LLMs for semantic evaluation and queries OSV.dev for live vulnerability data.
-- **Cisco skill-scanner**: Combines static YARA rules with LLM-as-a-judge and behavioral dataflow analysis, specifically targeting OpenAI Codex and Cursor Agent rules.
-- **Tencent AI-Infra-Guard**: A heavy, full-stack AI Red Teaming platform requiring Docker. It bundles jailbreak evaluation, infrastructure scanning, and agent testing.
+- **[NVIDIA SkillSpector](https://github.com/NVIDIA/skillspector)**: Sends skills to LLMs for semantic evaluation and queries OSV.dev for live vulnerability data.
+- **[Cisco skill-scanner](https://github.com/cisco-ai-defense/skill-scanner)**: Combines static YARA rules with LLM-as-a-judge and behavioral dataflow analysis, specifically targeting OpenAI Codex and Cursor Agent rules.
+- **[Tencent AI-Infra-Guard](https://github.com/Tencent/AI-Infra-Guard)**: A heavy, full-stack AI Red Teaming platform requiring Docker. It bundles jailbreak evaluation, infrastructure scanning, and agent testing.
 
 PromptHound is built for environments with strict constraints:
 - **Air-gapped.** PromptHound relies on a local Random Forest classifier and offline heuristics. It makes zero network calls. Skill files never leave your machine, and scans finish in milliseconds.
@@ -108,3 +108,9 @@ PromptHound is a fast, offline CLI analyzer. We plan to support the following in
 - **Editor & Agent Plugins:** Direct integration with Claude Code, Codex, or OpenCode.
 - **Capability Sandboxing:** PromptHound detects, but does not enforce confinement.
 - **Registry-Scale Crawling:** Batch-scanning entire marketplaces.
+
+## 8. Acknowledgements
+
+Our evaluation corpus and dataset generation heavily rely on the following open-source datasets:
+- **[cuhk-zhuque/SkillTrustBench](https://huggingface.co/datasets/cuhk-zhuque/SkillTrustBench)**
+- **[yoonholee/agent-skill-malware](https://huggingface.co/datasets/yoonholee/agent-skill-malware)**
