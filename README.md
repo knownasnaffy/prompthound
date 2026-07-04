@@ -20,38 +20,21 @@ PromptHound runs in under a second. Run it before you `git clone` a skill.
 
 PromptHound runs a linear pipeline with a rule-based side-channel. Deterministic rules and statistical machine-learning scores are kept distinct.
 
-```text
-                    ┌───────────────┐
-   SKILL.md  ──────▶│    PARSE      │
-                    └───────┬───────┘
-                            │  ParsedSkill
-                ┌───────────┴────────────┐
-                ▼                        ▼
-        ┌────────────────┐        ┌─────────────────┐
-        │  RULE LAYER    │        │ FEATURE         │
-        │  (heuristics)  │        │ EXTRACTION      │
-        └───────┬────────┘        └───────┬─────────┘
-                │ RuleHits[]              │ FeatureVector
-                │                         ▼
-                │                 ┌─────────────────┐
-                │                 │  CLASSIFIER     │
-                │                 └───────┬─────────┘
-                │                         │ RiskScore + SplitPath
-                │                         │
-                └───────────┬─────────────┘
-                            ▼
-                  ┌────────────────────┐
-                  │ CAPABILITY-CHAIN   │◀── reads ParsedSkill directly
-                  │ CHECK              │
-                  └─────────┬──────────┘
-                            │ ChainFlags[]
-                            ▼
-                  ┌────────────────────┐
-                  │   REPORTER         │
-                  │ (merge + explain)  │
-                  └─────────┬──────────┘
-                            ▼
-                 human report / --format sarif|json
+```mermaid
+flowchart TB
+    A["SKILL.md"] --> B["PARSE"]
+
+    B -->|ParsedSkill| C["RULE LAYER"]
+    B -->|ParsedSkill| D["FEATURE EXTRACTION"]
+
+    D -->|FeatureVector| E["CLASSIFIER"]
+
+    C -->|RuleHits| F["CAPABILITY-CHAIN CHECK"]
+    E -->|RiskScore + SplitPath| F
+    B -.->|reads ParsedSkill directly| F
+
+    F -->|ChainFlags| G["REPORTER"]
+    G --> H["Human report or --format sarif/json"]
 ```
 
 ## 3. Installation & Setup
