@@ -193,22 +193,14 @@ def render_human(result: ScanResult) -> str:
         risk = result.risk
         badge = _label_badge(risk.label)
         lines.append(f"  Score : {risk.score:.4f}  {badge}")
-        lines.append("  Decision path:")
-        if not risk.decision_path:
-            lines.append("    (no decision path available)")
+        lines.append("  Important Features:")
+        if not risk.feature_importances:
+            lines.append("    (no feature importances available)")
         else:
-            for step in risk.decision_path:
-                feat = step.get("feature", "?")
-                thresh = step.get("threshold")
-                direction = step.get("direction", "")
-                node_val = step.get("node_value", 0.0)
-                if feat == "[leaf]":
-                    lines.append(f"    [leaf]  malicious_frac={node_val:.4f}")
-                else:
-                    lines.append(
-                        f"    {feat} {direction} {thresh}  "
-                        f"(malicious_frac={node_val:.4f})"
-                    )
+            for feat_info in risk.feature_importances:
+                feat = feat_info.get("feature", "?")
+                importance = feat_info.get("importance", 0.0)
+                lines.append(f"    - {feat} (Importance: {importance:.4f})")
 
     # ── Section 3: Capability Chains ─────────────────────────────────────────
     lines.append("")
@@ -272,7 +264,7 @@ def render_json(result: ScanResult) -> str:
         doc["classifier"] = {
             "score": risk.score,
             "label": risk.label,
-            "decision_path": risk.decision_path,
+            "feature_importances": risk.feature_importances,
         }
 
     # Section 3: chain_flags
@@ -397,7 +389,7 @@ def render_sarif(result: ScanResult) -> str:
                     "evidenceType": "classifier",
                     "score": risk.score,
                     "label": risk.label,
-                    "decisionPath": risk.decision_path,
+                    "featureImportances": risk.feature_importances,
                 },
             })
 

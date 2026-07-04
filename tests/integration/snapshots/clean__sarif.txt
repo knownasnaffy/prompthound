@@ -54,18 +54,10 @@
             "evidenceType": "classifier",
             "score": 0.05,
             "label": "benign",
-            "decisionPath": [
+            "featureImportances": [
               {
                 "feature": "base64_hex_ratio",
-                "threshold": 0.012345,
-                "direction": "<=",
-                "node_value": 0.3846
-              },
-              {
-                "feature": "[leaf]",
-                "threshold": null,
-                "direction": null,
-                "node_value": 0.0
+                "importance": 0.3846
               }
             ]
           }

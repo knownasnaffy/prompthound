@@ -86,14 +86,12 @@ def make_risk_score(**kwargs) -> RiskScore:
     defaults = {
         "score": 0.87,
         "label": "malicious",
-        "decision_path": [
+        "feature_importances": [
             {
                 "feature": "shell_pipe_present",
-                "threshold": 0.5,
-                "direction": "<=",
-                "node_value": 0.1,
+                "importance": 0.3,
             },
-            {"feature": "url_count", "threshold": 1.5, "direction": ">", "node_value": 0.9},
+            {"feature": "url_count", "importance": 0.7},
         ],
     }
     return RiskScore(**{**defaults, **kwargs})
@@ -300,19 +298,17 @@ class TestRiskScore:
         assert 0.0 <= rs.score <= 1.0
         assert rs.label in ("benign", "suspicious", "malicious")
 
-    def test_decision_path_is_list_of_dicts(self):
+    def test_feature_importances_is_list_of_dicts(self):
         rs = make_risk_score()
-        assert isinstance(rs.decision_path, list)
-        for node in rs.decision_path:
+        assert isinstance(rs.feature_importances, list)
+        for node in rs.feature_importances:
             assert isinstance(node, dict)
             assert "feature" in node
-            assert "threshold" in node
-            assert "direction" in node
-            assert "node_value" in node
+            assert "importance" in node
 
-    def test_empty_decision_path_valid(self):
-        rs = make_risk_score(decision_path=[])
-        assert rs.decision_path == []
+    def test_empty_feature_importances_valid(self):
+        rs = make_risk_score(feature_importances=[])
+        assert rs.feature_importances == []
 
     def test_all_label_values(self):
         for label in ("benign", "suspicious", "malicious"):
@@ -325,14 +321,14 @@ class TestRiskScore:
         assert rs_low.score == 0.0
         assert rs_high.score == 1.0
 
-    def test_independent_decision_paths(self):
+    def test_independent_feature_importances(self):
         rs1 = make_risk_score()
         rs2 = make_risk_score()
-        rs1.decision_path.append(
-            {"feature": "injected", "threshold": 0.0, "direction": ">", "node_value": 0.0}
+        rs1.feature_importances.append(
+            {"feature": "injected", "importance": 0.0}
         )
         # rs2's path must not have grown
-        assert not any(n["feature"] == "injected" for n in rs2.decision_path)
+        assert not any(n["feature"] == "injected" for n in rs2.feature_importances)
 
 
 # ---------------------------------------------------------------------------

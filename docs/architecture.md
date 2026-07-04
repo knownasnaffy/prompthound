@@ -190,7 +190,7 @@ rather than requiring a redesign:
 
 - Data structures / serialization format for `ParsedSkill`, `FeatureVector`,
   etc.
-- Which library implements the decision tree.
+- Which library implements the classifier.
 - File layout of the codebase (modules/packages).
 - Test corpus storage format.
 

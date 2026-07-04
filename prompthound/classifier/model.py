@@ -5,11 +5,11 @@ Stage: C (architecture.md §2.4).
 Responsibilities:
   - Load the committed ``.joblib`` artifact and ``metadata.json`` once at
     import time (lazy, on first call).
-  - Accept a ``FeatureVector`` and return a ``RiskScore`` with a populated
-    ``decision_path``.
-  - The ``decision_path`` is the primary deliverable of this stage — it turns
-    the raw score into an interpretable trace of which features and thresholds
-    led to the decision (architecture.md §2.4, concept.md §2).
+  - Accept a ``FeatureVector`` and return a ``RiskScore`` with populated
+    ``feature_importances``.
+  - The ``feature_importances`` is the primary deliverable of this stage — it turns
+    the raw score into an interpretable summary of which features
+    contributed to the decision (architecture.md §2.4, concept.md §2).
 
 Constraints (AGENTS.md §5, hard):
   - This module NEVER imports ``classifier/train.py``.
@@ -101,139 +101,71 @@ def _score_to_label(score: float, thresholds: dict) -> str:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Decision path extraction
+# Feature Importance extraction
 # ─────────────────────────────────────────────────────────────────────────────
 
-def _extract_decision_path_sklearn(
+def _extract_feature_importances(
     estimator: Any,
     X_row: np.ndarray,
     feature_names: list[str],
 ) -> list[dict]:
-    """Extract the decision path from a scikit-learn tree estimator.
+    """Extract local feature contributions for the sample using the Saabas method.
 
-    Uses ``estimator.decision_path()`` which returns a sparse indicator matrix
-    of shape ``(1, n_nodes)``.  We then look up each visited node's split
-    feature and threshold from ``estimator.tree_``.
-
-    Returns a list of dicts, one per decision node visited (leaf nodes are
-    omitted — they carry no split information):
+    Instead of returning global feature importances (which are the same for every
+    file), this computes how much each feature shifted the probability of the
+    "malicious" class *for this specific sample*, by tracing its path through
+    every tree in the forest and accumulating the changes in expected value.
+    
+    Returns the top 5 features that increased the malicious score, as:
       - ``feature``    (str)   — feature name
-      - ``threshold``  (float) — the split threshold value
-      - ``direction``  (str)   — ``"<="`` if the sample went left, ``">"`` if right
-      - ``node_value`` (float) — raw leaf/impurity value at this node
-                                 (fraction of malicious samples reaching it)
-
-    For a leaf node (feature index == TREE_UNDEFINED = -2), we add a summary
-    entry with ``feature="[leaf]"`` recording the final class distribution.
+      - ``importance`` (float) — local contribution to the score
     """
-    tree = estimator.tree_
-
-    # decision_path returns a csr_matrix; .indices gives the visited node ids.
-    indicator = estimator.decision_path(X_row)
-    node_ids = indicator.indices  # shape: (n_nodes_visited_for_sample_0,)
-
-    TREE_UNDEFINED = -2  # sklearn sentinel for leaf nodes
-    path: list[dict] = []
-
-    for node_id in node_ids:
-        feature_idx = tree.feature[node_id]
-
-        if feature_idx == TREE_UNDEFINED:
-            # Leaf node — record class distribution as a summary entry
-            node_vals = tree.value[node_id, 0]  # shape (n_classes,)
-            total = float(node_vals.sum())
-            malicious_frac = float(node_vals[1] / total) if total > 0 else 0.0
-            path.append({
-                "feature": "[leaf]",
-                "threshold": None,
-                "direction": None,
-                "node_value": round(malicious_frac, 4),
-            })
-        else:
-            # Decision node — determine which branch the sample took
-            feature_name = (
-                feature_names[feature_idx]
-                if feature_idx < len(feature_names)
-                else f"feature_{feature_idx}"
-            )
-            threshold = float(tree.threshold[node_id])
-            sample_value = float(X_row[0, feature_idx])
-            direction = "<=" if sample_value <= threshold else ">"
-
-            # node_value: fraction of malicious samples at this node
-            node_vals = tree.value[node_id, 0]
-            total = float(node_vals.sum())
-            malicious_frac = float(node_vals[1] / total) if total > 0 else 0.0
-
-            path.append({
-                "feature": feature_name,
-                "threshold": round(threshold, 6),
-                "direction": direction,
-                "node_value": round(malicious_frac, 4),
-            })
-
-    return path
-
-
-def _extract_decision_path_ensemble(
-    estimator: Any,
-    X_row: np.ndarray,
-    feature_names: list[str],
-) -> list[dict]:
-    """Extract a summarised decision path from an ensemble estimator.
-
-    For RandomForest / GradientBoosting, ``decision_path()`` returns paths
-    across all constituent trees.  We extract the path from the first tree
-    as a representative summary, and annotate it with the ensemble vote.
-
-    This keeps the output human-readable (one representative path, not one
-    path per tree) while preserving traceability.
-    """
-    # Get the first tree from the ensemble
-    estimators_list: list[Any] = []
-    if hasattr(estimator, "estimators_"):
-        raw = estimator.estimators_
-        if hasattr(raw, "flatten"):
-            estimators_list = list(raw.flatten())
-        elif isinstance(raw, list) and raw and isinstance(raw[0], list):
-            estimators_list = [e for sub in raw for e in sub]
-        else:
-            estimators_list = list(raw)
-
-    if not estimators_list:
+    if not hasattr(estimator, "estimators_"):
         return []
+    
+    contributions = {name: 0.0 for name in feature_names}
+    n_trees = len(estimator.estimators_)
+    
+    for tree in estimator.estimators_:
+        if not hasattr(tree, "tree_") or not hasattr(tree, "decision_path"):
+            continue
+            
+        node_indicator = tree.decision_path(X_row)
+        node_ids = node_indicator.indices
+        
+        for i in range(len(node_ids) - 1):
+            parent = node_ids[i]
+            child = node_ids[i + 1]
+            
+            feature_idx = tree.tree_.feature[parent]
+            if feature_idx < 0 or feature_idx >= len(feature_names):
+                continue
+            feature_name = feature_names[feature_idx]
+            
+            # Calculate malicious fraction at parent and child
+            parent_vals = tree.tree_.value[parent, 0]
+            child_vals = tree.tree_.value[child, 0]
+            
+            parent_frac = parent_vals[1] / parent_vals.sum() if parent_vals.sum() > 0 else 0.0
+            child_frac = child_vals[1] / child_vals.sum() if child_vals.sum() > 0 else 0.0
+            
+            # Contribution is the change in malicious probability
+            delta = child_frac - parent_frac
+            contributions[feature_name] += delta
 
-    first_tree = estimators_list[0]
-    if not hasattr(first_tree, "tree_"):
-        return []
-
-    return _extract_decision_path_sklearn(first_tree, X_row, feature_names)
-
-
-def _extract_decision_path(
-    estimator: Any,
-    X_row: np.ndarray,
-    feature_names: list[str],
-) -> list[dict]:
-    """Dispatch to the correct decision-path extractor for the estimator type.
-
-    Supports:
-      - sklearn ``DecisionTreeClassifier`` — direct tree_ attribute
-      - sklearn ensembles (RandomForest, GradientBoosting) — first-tree summary
-      - LightGBM — falls back to empty list (leaf-path API differs significantly)
-
-    Returns an empty list for unknown estimator types rather than raising.
-    """
-    # Single sklearn decision tree
-    if hasattr(estimator, "tree_") and hasattr(estimator, "decision_path"):
-        return _extract_decision_path_sklearn(estimator, X_row, feature_names)
-
-    # sklearn ensemble: has estimators_ list
-    if hasattr(estimator, "estimators_"):
-        return _extract_decision_path_ensemble(estimator, X_row, feature_names)
-
-    # LightGBM or other: return empty — graceful degradation
-    return []
+    # Average the contributions over all trees
+    active_features = []
+    for name, contrib in contributions.items():
+        avg_contrib = contrib / n_trees
+        # We only report features that pushed the score higher (contributed to malice)
+        if avg_contrib > 0:
+            active_features.append({"feature": name, "importance": round(avg_contrib, 4)})
+            
+    # Sort by importance descending
+    active_features.sort(key=lambda x: x["importance"], reverse=True)
+    
+    # Return top 5
+    return active_features[:5]
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -251,8 +183,8 @@ def classify(feature_vector: FeatureVector) -> RiskScore:
         ``RiskScore`` with:
           - ``score``: raw malicious-class probability from ``predict_proba()``
           - ``label``: "benign" / "suspicious" / "malicious" from thresholds
-          - ``decision_path``: ordered list of split decisions that produced
-            this score, as ``[{feature, threshold, direction, node_value}]``
+          - ``feature_importances``: top features contributing to this score,
+            as ``[{feature, importance}]``
 
     Raises:
         FileNotFoundError: if the model artifact or metadata.json are missing.
@@ -278,11 +210,11 @@ def classify(feature_vector: FeatureVector) -> RiskScore:
     thresholds = metadata.get("risk_thresholds", {})
     label = _score_to_label(score, thresholds)
 
-    # ── Decision path ────────────────────────────────────────────────────────
-    decision_path = _extract_decision_path(estimator, X_row, feature_order)
+    # ── Feature Importances ──────────────────────────────────────────────────
+    feature_importances = _extract_feature_importances(estimator, X_row, feature_order)
 
     return RiskScore(
         score=round(score, 6),
         label=label,
-        decision_path=decision_path,
+        feature_importances=feature_importances,
     )

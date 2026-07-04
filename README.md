@@ -106,7 +106,7 @@ prompthound scan path/to/SKILL.md --fail-on suspicious
 
 ## 5. Evaluation Results
 
-PromptHound uses a highly interpretable **Decision Tree classifier** (depth 3, 3 nodes) to score feature vectors.
+PromptHound uses a highly interpretable **Random Forest classifier** to score feature vectors.
 
 On our initial curated benchmark corpus:
 - **Precision / Recall / F1:** 1.000 on the holdout test set.

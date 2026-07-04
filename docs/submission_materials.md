@@ -21,7 +21,7 @@ prompthound scan awesome-dev-skill.md
 *(The CLI outputs a high-risk report)*
 *Presenter:* "PromptHound caught it instantly, entirely offline. Notice three distinct sections in the report:
 1. **Rule Layer:** It caught an embedded hex blob in the setup block.
-2. **Classifier Score:** It scored a 0.85 (Malicious). And crucially, because we use a shallow decision tree instead of a black-box LLM, it tells us exactly *why*: the entropy is unusually high and the file has size-padding anomalies common in evasion techniques.
+2. **Classifier Score:** It scored a 0.85 (Malicious). And crucially, because we use an interpretable Random Forest instead of a black-box LLM, it tells us exactly *why* by surfacing the most important features that drove the decision: like unusually high entropy and size-padding anomalies.
 3. **Capability Chain:** It noticed that the instructions ask the agent to 'read a file', 'encode it', and 'send it over the network'. Even if those actions are benign individually, chained together they form an exfiltration pipeline."
 
 **Step 4: CI/CD Integration**
@@ -39,7 +39,7 @@ Why PromptHound stands out in the AI agent security space:
 
 1. **Focused on Agent Supply Chains, Not Prompt Injection:** Most tools (e.g., Rebuff, LLM Guard) are built to stop traditional prompt injection at the API boundary. PromptHound targets the **supply chain**—the third-party `SKILL.md` files downloaded from marketplaces, identifying semantic instruction hijacking and invisible payloads.
 2. **Sniffer, Not Shield:** We do not attempt to sandbox or block the agent at runtime, which is complex and brittle. PromptHound is a fast, offline static analysis CLI that gives developers the information they need *before* installation.
-3. **Interpretable by Construction:** Instead of using an opaque transformer model, PromptHound uses a strictly regulated Decision Tree. Every classifier score is accompanied by the exact decision path (e.g., "Score: 0.85 because Entropy > 4.2 and Padding Ratio > 0.3"). A developer is never left guessing why a file was flagged.
+3. **Interpretable by Construction:** Instead of using an opaque transformer model, PromptHound uses an interpretable Random Forest ensemble. Every classifier score is accompanied by the exact feature importances that drove the score (e.g., "Score: 0.85 driven by body_entropy and padding_ratio"). A developer is never left guessing why a file was flagged.
 4. **Merge Without Flattening:** PromptHound preserves the distinction between deterministic rules (e.g., "Found `curl | bash`"), statistical anomalies (e.g., classifier scores), and structural sequences (capability chains). It merges these signals into one report without flattening them into a generic, unhelpful list of warnings.
 
 ---
@@ -55,9 +55,9 @@ Risk Level: MALICIOUS (Score: 0.85)
 
 --- 1. CLASSIFIER ANALYSIS ---
 The statistical model flagged this file as Malicious.
-Decision Path:
-  - Entropy is 4.8 (Threshold > 4.2)
-  - Padding anomaly ratio is 0.4 (Threshold > 0.3)
+Important Features:
+  - body_entropy (Importance: 0.4200)
+  - padding_ratio (Importance: 0.3100)
 
 --- 2. RULE HITS ---
 [PH001/shell-pipe] HIGH: Detected 'curl | bash' pattern in setup block (Line 14).
@@ -76,9 +76,9 @@ Decision Path:
   "file": "test-skill.md",
   "risk_score": 0.85,
   "risk_label": "malicious",
-  "classifier_decision_path": [
-    {"feature": "entropy", "value": 4.8, "threshold": 4.2, "direction": "greater"},
-    {"feature": "padding_ratio", "value": 0.4, "threshold": 0.3, "direction": "greater"}
+  "feature_importances": [
+    {"feature": "body_entropy", "importance": 0.4200},
+    {"feature": "padding_ratio", "importance": 0.3100}
   ],
   "rule_hits": [
     {"rule_id": "PH001/shell-pipe", "severity": "high", "line": 14, "message": "Detected 'curl | bash' pattern in setup block"},

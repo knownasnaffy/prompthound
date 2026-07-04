@@ -70,18 +70,10 @@ def fixture_clean() -> ScanResult:
         risk=RiskScore(
             score=0.05,
             label="benign",
-            decision_path=[
+            feature_importances=[
                 {
                     "feature": "base64_hex_ratio",
-                    "threshold": 0.012345,
-                    "direction": "<=",
-                    "node_value": 0.3846,
-                },
-                {
-                    "feature": "[leaf]",
-                    "threshold": None,
-                    "direction": None,
-                    "node_value": 0.0,
+                    "importance": 0.3846,
                 },
             ],
         ),
@@ -123,18 +115,10 @@ def fixture_classifier_only() -> ScanResult:
         risk=RiskScore(
             score=0.9200,
             label="malicious",
-            decision_path=[
+            feature_importances=[
                 {
                     "feature": "base64_hex_ratio",
-                    "threshold": 0.012345,
-                    "direction": ">",
-                    "node_value": 0.3846,
-                },
-                {
-                    "feature": "[leaf]",
-                    "threshold": None,
-                    "direction": None,
-                    "node_value": 1.0,
+                    "importance": 0.3846,
                 },
             ],
         ),
@@ -222,18 +206,10 @@ def fixture_all_three() -> ScanResult:
         risk=RiskScore(
             score=0.9800,
             label="malicious",
-            decision_path=[
+            feature_importances=[
                 {
                     "feature": "base64_hex_ratio",
-                    "threshold": 0.012345,
-                    "direction": ">",
-                    "node_value": 0.3846,
-                },
-                {
-                    "feature": "[leaf]",
-                    "threshold": None,
-                    "direction": None,
-                    "node_value": 1.0,
+                    "importance": 0.3846,
                 },
             ],
         ),

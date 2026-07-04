@@ -226,16 +226,13 @@ class RiskScore:
     Phase 7 (tech-implementation.md §8).
     """
 
-    decision_path: list[dict]
-    """Ordered list of decision tree / GBT split decisions that produced this
-    score.  Each entry has the keys:
+    feature_importances: list[dict]
+    """Ordered list of the top features that contributed to this score, based on global feature importance.
+    Each entry has the keys:
       - ``feature``    (str)   — feature name from ``FeatureVector.order``
-      - ``threshold``  (float) — split threshold value
-      - ``direction``  (str)   — ``"<="`` or ``">"``
-      - ``node_value`` (float) — impurity or leaf value at this node
+      - ``importance`` (float) — feature importance weight
 
-    An empty list is valid when the model doesn't produce a meaningful path
-    (e.g. a mock or stub).
+    An empty list is valid when the model doesn't produce meaningful importances.
     """
 
 

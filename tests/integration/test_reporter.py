@@ -287,13 +287,13 @@ class TestJsonSeparation:
         cls = doc["classifier"]
         assert "score" in cls
         assert "label" in cls
-        assert "decision_path" in cls
+        assert "feature_importances" in cls
 
-    def test_decision_path_not_in_rule_hits(self) -> None:
+    def test_feature_importances_not_in_rule_hits(self) -> None:
         doc = self._parsed("all_three")
         for hit in doc["rule_hits"]:
-            assert "decision_path" not in hit, (
-                "decision_path must not appear inside rule_hits entries"
+            assert "feature_importances" not in hit, (
+                "feature_importances must not appear inside rule_hits entries"
             )
 
     def test_chain_step_fields(self) -> None:

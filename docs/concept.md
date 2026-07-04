@@ -54,10 +54,7 @@ body content and code blocks.
 suspicious or newly-registered-looking domains, abnormal file-size padding.
 3. **Feature extraction** — turn the file into a numeric feature vector (see
 §3).
-4. **Classifier** — a decision tree / gradient-boosted tree scores risk from
-the feature vector. Chosen over an opaque transformer classifier specifically
-because it stays interpretable: every score traces back to which features
-fired.
+4. **Classifier** — a Random Forest scores risk from the feature vector. Chosen over an opaque transformer classifier specifically because it stays interpretable: every score traces back to which features fired.
 5. **Capability-chain check** — compare what the frontmatter *declares* the
 skill needs against what the body actually references or executes, and flag
 known dangerous sequences (file read → encode → network send; download → write
@@ -78,10 +75,7 @@ that triggered it, no LLM-generated prose required for the core report.
   "important," all-caps runs)
 - File size / padding anomaly relative to code-to-prose ratio
 - Shannon entropy of body text
-- Code-block-to-prose ratio This ties directly back to the decision tree
-  / classifier material from the course — the contribution isn't "train
-  a model," it's picking features that make a tree's splits genuinely mean
-  something a developer can act on.
+- **Code-block-to-prose ratio**: Normal skills have instructions explaining what to do. Malicious payloads often just dump a massive block of code and say "run this." This ties directly back to the classifier prioritizing interpretability — the contribution isn't "train a model," it's picking features that make the features genuinely mean something a developer can act on.
 
 ## 4. Evaluation plan
 

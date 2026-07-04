@@ -12,9 +12,8 @@ PromptHound Scan: tests/fixtures/all_three_skill.md
 
 ── CLASSIFIER (ML risk score) ─────────────────────────────────────────
   Score : 0.9800  [MALICIOUS]
-  Decision path:
-    base64_hex_ratio > 0.012345  (malicious_frac=0.3846)
-    [leaf]  malicious_frac=1.0000
+  Important Features:
+    - base64_hex_ratio (Importance: 0.3846)
 
 ── CAPABILITY CHAINS (structural sequence detection) ──────────────────
   CHAIN: file_read→encode→network_send

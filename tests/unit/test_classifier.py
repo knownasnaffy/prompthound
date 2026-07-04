@@ -1,13 +1,13 @@
 """Unit tests for Classifier inference (Phase 8).
 
 Tests load the committed ``model.joblib`` artifact and run inference on known
-fixtures, asserting that scores, labels, and decision paths are non-trivial
+fixtures, asserting that scores, labels, and feature importances are non-trivial
 and stable across runs.
 
 Key assertions:
-  - A known malicious file produces score=1.0, label="malicious".
-  - A known benign file produces score=0.0, label="benign".
-  - Decision paths are non-empty and have the expected structure.
+  - A known malicious file produces score > 0.8, label="malicious".
+  - A known benign file produces score < 0.2, label="benign".
+  - Feature importances are non-empty and have the expected structure.
   - Running inference twice on the same input yields identical results
     (determinism guarantee).
   - ``model.py`` never imports ``classifier/train.py`` (AGENTS.md §5 hard
@@ -145,56 +145,32 @@ class TestClassifyMalicious:
         fv = _parse_and_extract(CORPUS_MALICIOUS)
         return classify(fv)
 
-    def test_score_is_one(self, risk):
-        """Known malicious file must score 1.0 (pure malicious leaf)."""
-        assert risk.score == 1.0, f"Expected score=1.0, got {risk.score}"
+    def test_score_is_high(self, risk):
+        """Known malicious file must score > 0.8."""
+        assert risk.score > 0.8, f"Expected score > 0.8, got {risk.score}"
 
     def test_label_is_malicious(self, risk):
         """Score 1.0 must map to label='malicious' (threshold ≥ 0.65)."""
         assert risk.label == "malicious"
 
-    def test_decision_path_non_empty(self, risk):
-        """Decision path must be non-empty — bare score without path is a black box."""
-        assert len(risk.decision_path) > 0, "decision_path is empty"
+    def test_feature_importances_non_empty(self, risk):
+        """Feature importances must be non-empty — bare score without path is a black box."""
+        assert len(risk.feature_importances) > 0, "feature_importances is empty"
 
-    def test_decision_path_has_leaf(self, risk):
-        """Last entry must be the leaf node (feature='[leaf]')."""
-        assert risk.decision_path[-1]["feature"] == "[leaf]", (
-            f"Last decision_path entry is not a leaf: {risk.decision_path[-1]}"
-        )
-
-    def test_decision_path_leaf_value_is_one(self, risk):
-        """Malicious leaf node_value must be 1.0 (pure malicious node)."""
-        leaf = risk.decision_path[-1]
-        assert leaf["node_value"] == 1.0, (
-            f"Expected leaf node_value=1.0 for malicious file, got {leaf['node_value']}"
-        )
-
-    def test_decision_path_entries_have_required_keys(self, risk):
-        """Every decision path entry (including leaf) must have the documented keys."""
-        for entry in risk.decision_path:
+    def test_feature_importances_entries_have_required_keys(self, risk):
+        """Every feature_importances entry must have the documented keys."""
+        for entry in risk.feature_importances:
             assert "feature" in entry, f"Missing 'feature' key in entry: {entry}"
-            assert "threshold" in entry, f"Missing 'threshold' key in entry: {entry}"
-            assert "direction" in entry, f"Missing 'direction' key in entry: {entry}"
-            assert "node_value" in entry, f"Missing 'node_value' key in entry: {entry}"
+            assert "importance" in entry, f"Missing 'importance' key in entry: {entry}"
 
-    def test_decision_nodes_have_valid_direction(self, risk):
-        """Non-leaf decision nodes must have direction '<=' or '>'."""
-        for entry in risk.decision_path:
-            if entry["feature"] != "[leaf]":
-                assert entry["direction"] in ("<=", ">"), (
-                    f"Invalid direction '{entry['direction']}' in entry: {entry}"
-                )
-
-    def test_decision_nodes_feature_is_known(self, risk):
-        """Non-leaf decision nodes must reference a feature in FEATURE_ORDER."""
+    def test_feature_importances_feature_is_known(self, risk):
+        """Feature importances nodes must reference a feature in FEATURE_ORDER."""
         from prompthound.features import FEATURE_ORDER
-        for entry in risk.decision_path:
-            if entry["feature"] != "[leaf]":
-                assert entry["feature"] in FEATURE_ORDER, (
-                    f"Unknown feature '{entry['feature']}' in decision_path. "
-                    f"Valid features: {FEATURE_ORDER}"
-                )
+        for entry in risk.feature_importances:
+            assert entry["feature"] in FEATURE_ORDER, (
+                f"Unknown feature '{entry['feature']}' in feature_importances. "
+                f"Valid features: {FEATURE_ORDER}"
+            )
 
     def test_risk_score_is_risk_score_dataclass(self, risk):
         """classify() must return a RiskScore instance, not a raw dict or tuple."""
@@ -211,36 +187,17 @@ class TestClassifyBenign:
         fv = _parse_and_extract(CORPUS_BENIGN)
         return classify(fv)
 
-    def test_score_is_zero(self, risk):
-        """Known benign file must score 0.0 (pure benign leaf)."""
-        assert risk.score == 0.0, f"Expected score=0.0, got {risk.score}"
+    def test_score_is_low(self, risk):
+        """Known benign file must score < 0.2."""
+        assert risk.score < 0.2, f"Expected score < 0.2, got {risk.score}"
 
     def test_label_is_benign(self, risk):
         """Score 0.0 must map to label='benign' (threshold < 0.3)."""
         assert risk.label == "benign"
 
-    def test_decision_path_non_empty(self, risk):
-        """Benign file decision path must also be non-empty."""
-        assert len(risk.decision_path) > 0
-
-    def test_decision_path_has_leaf(self, risk):
-        """Last entry must be the leaf node."""
-        assert risk.decision_path[-1]["feature"] == "[leaf]"
-
-    def test_decision_path_leaf_value_is_zero(self, risk):
-        """Benign leaf node_value must be 0.0 (pure benign node)."""
-        leaf = risk.decision_path[-1]
-        assert leaf["node_value"] == 0.0, (
-            f"Expected leaf node_value=0.0 for benign file, got {leaf['node_value']}"
-        )
-
-    def test_decision_path_longer_than_malicious(self, risk):
-        """Benign path traverses two decision nodes (depth-1 tree has 2 splits
-        before the benign leaf), so path length should be > 1 decision node."""
-        # path: [root split, second split, leaf] = length 3
-        assert len(risk.decision_path) >= 2, (
-            f"Expected benign path ≥ 2 entries, got {len(risk.decision_path)}"
-        )
+    def test_feature_importances_non_empty(self, risk):
+        """Benign file feature importances must also be non-empty."""
+        assert len(risk.feature_importances) > 0
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -253,25 +210,25 @@ class TestClassifyDeterminism:
 
     def test_malicious_score_stable_across_runs(self):
         """Calling classify() twice on the same malicious FeatureVector
-        must return identical scores and decision paths."""
+        must return identical scores and feature importances."""
         from prompthound.classifier.model import classify
         fv = _parse_and_extract(CORPUS_MALICIOUS)
         risk1 = classify(fv)
         risk2 = classify(fv)
         assert risk1.score == risk2.score
         assert risk1.label == risk2.label
-        assert risk1.decision_path == risk2.decision_path
+        assert risk1.feature_importances == risk2.feature_importances
 
     def test_benign_score_stable_across_runs(self):
         """Calling classify() twice on the same benign FeatureVector
-        must return identical scores and decision paths."""
+        must return identical scores and feature importances."""
         from prompthound.classifier.model import classify
         fv = _parse_and_extract(CORPUS_BENIGN)
         risk1 = classify(fv)
         risk2 = classify(fv)
         assert risk1.score == risk2.score
         assert risk1.label == risk2.label
-        assert risk1.decision_path == risk2.decision_path
+        assert risk1.feature_importances == risk2.feature_importances
 
     def test_malicious_and_benign_scores_differ(self):
         """The malicious and benign fixture must produce different scores —
