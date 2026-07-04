@@ -104,7 +104,17 @@ On the expanded benchmark corpus (2000+ files):
 
 The classifier outputs its exact decision path for every score (e.g., "Flagged because base64 ratio > X and entropy > Y"). For full details, see `docs/evaluation_report.md`.
 
-## 6. Future Work (Out of Scope for v1.0)
+## 6. PromptHound vs. NVIDIA SkillSpector
+
+NVIDIA's SkillSpector analyzes skill files using a different architecture. It sends skills to LLMs (OpenAI, Anthropic) for semantic evaluation and queries OSV.dev for live vulnerability data.
+
+PromptHound is built for environments with different constraints:
+- **Air-gapped.** PromptHound relies on a local Random Forest classifier and static heuristics. It makes zero network calls. Skill files never leave your machine, and scans finish in milliseconds.
+- **Deterministic evidence.** The classifier outputs its exact mathematical decision path (e.g., `base64 ratio > 0.4 AND entropy > 7.1`). Scores are exactly reproducible across CI runs without LLM-as-a-judge variance.
+
+Use SkillSpector when you want LLM-backed semantic analysis. Use PromptHound when you need an offline, instant check.
+
+## 7. Future Work (Out of Scope for v1.0)
 
 PromptHound is a fast, offline CLI analyzer. We plan to support the following integrations, but they are out of scope for the current MVP:
 - **MCP Server Integration:** Wrapping the `Parse` pipeline in an MCP server.
