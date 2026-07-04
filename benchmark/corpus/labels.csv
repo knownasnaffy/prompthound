@@ -73,3 +73,8 @@ benchmark/corpus/malicious/download_write_exec_chain_2.md,malicious,reconstructe
 benchmark/corpus/malicious/suspicious_domain_curl.md,malicious,reconstructed-from-report,curl from suspicious new domain
 benchmark/corpus/malicious/prompt_injection_urgency_2.md,malicious,reconstructed-from-report,IMPORTANT/CRITICAL override phrases for prompt injection
 benchmark/corpus/malicious/hex_encoded_payload_2.md,malicious,reconstructed-from-report,hex-encoded payload decoded at runtime via bytes.fromhex
+benchmark/corpus/benign/caveman.md,benign,local,caveman skill that caused FP
+benchmark/corpus/benign/caveman2.md,benign,local,caveman oversampling
+benchmark/corpus/benign/caveman3.md,benign,local,caveman oversampling
+benchmark/corpus/benign/caveman4.md,benign,local,caveman oversampling
+benchmark/corpus/benign/caveman5.md,benign,local,caveman oversampling
