@@ -87,15 +87,19 @@ On the expanded benchmark corpus (2000+ files):
 
 The classifier outputs its exact decision path for every score (e.g., "Flagged because base64 ratio > X and entropy > Y"). For full details, see `docs/evaluation_report.md`.
 
-## 6. PromptHound vs. NVIDIA SkillSpector
+## 6. Comparison with Alternative Tools
 
-NVIDIA's SkillSpector analyzes skill files using a different architecture. It sends skills to LLMs (OpenAI, Anthropic) for semantic evaluation and queries OSV.dev for live vulnerability data.
+Other security scanners take different architectural approaches:
 
-PromptHound is built for environments with different constraints:
-- **Air-gapped.** PromptHound relies on a local Random Forest classifier and static heuristics. It makes zero network calls. Skill files never leave your machine, and scans finish in milliseconds.
+- **NVIDIA SkillSpector**: Sends skills to LLMs for semantic evaluation and queries OSV.dev for live vulnerability data.
+- **Cisco skill-scanner**: Combines static YARA rules with LLM-as-a-judge and behavioral dataflow analysis, specifically targeting OpenAI Codex and Cursor Agent rules.
+- **Tencent AI-Infra-Guard**: A heavy, full-stack AI Red Teaming platform requiring Docker. It bundles jailbreak evaluation, infrastructure scanning, and agent testing.
+
+PromptHound is built for environments with strict constraints:
+- **Air-gapped.** PromptHound relies on a local Random Forest classifier and offline heuristics. It makes zero network calls. Skill files never leave your machine, and scans finish in milliseconds.
 - **Deterministic evidence.** The classifier outputs its exact mathematical decision path (e.g., `base64 ratio > 0.4 AND entropy > 7.1`). Scores are exactly reproducible across CI runs without LLM-as-a-judge variance.
 
-Use SkillSpector when you want LLM-backed semantic analysis. Use PromptHound when you need an offline, instant check.
+Use the LLM-backed suites above for deep semantic analysis or ecosystem auditing. Use PromptHound for offline, sub-second pre-commit hooks.
 
 ## 7. Future Work (Out of Scope for v1.0)
 
