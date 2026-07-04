@@ -3,12 +3,12 @@
   "parse_ok": true,
   "rule_hits": [],
   "classifier": {
-    "score": 0.0,
+    "score": 0.008296,
     "label": "benign",
     "feature_importances": [
       {
         "feature": "body_entropy",
-        "importance": 0.0412
+        "importance": 0.049
       }
     ]
   },

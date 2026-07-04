@@ -211,9 +211,9 @@
         },
         {
           "ruleId": "PH100/classifier-score",
-          "level": "error",
+          "level": "warning",
           "message": {
-            "text": "Classifier risk score 0.7000 \u2192 label 'malicious'."
+            "text": "Classifier risk score 0.6453 \u2192 label 'suspicious'."
           },
           "locations": [
             {
@@ -229,24 +229,24 @@
           ],
           "properties": {
             "evidenceType": "classifier",
-            "score": 0.7,
-            "label": "malicious",
+            "score": 0.645302,
+            "label": "suspicious",
             "featureImportances": [
               {
-                "feature": "body_entropy",
-                "importance": 0.2817
+                "feature": "domain_suspicion_score",
+                "importance": 0.3293
               },
               {
-                "feature": "domain_suspicion_score",
-                "importance": 0.2601
+                "feature": "body_entropy",
+                "importance": 0.22
               },
               {
                 "feature": "url_count",
-                "importance": 0.1072
+                "importance": 0.1412
               },
               {
                 "feature": "capability_mismatch_score",
-                "importance": 0.0773
+                "importance": 0.0743
               }
             ]
           }

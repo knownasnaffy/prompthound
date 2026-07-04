@@ -6,9 +6,9 @@ PromptHound Scan: <TEST_FILE_PATH>
   No rule hits.
 
 ── CLASSIFIER (ML risk score) ─────────────────────────────────────────
-  Score : 0.0000  [BENIGN]
+  Score : 0.0083  [BENIGN]
   Important Features:
-    - body_entropy (Importance: 0.0412)
+    - body_entropy (Importance: 0.0490)
 
 ── CAPABILITY CHAINS (structural sequence detection) ──────────────────
   CHAIN: file_read→network_send

@@ -381,16 +381,21 @@ def sort_results(
     }
     col = metric_col_map.get(primary_metric, primary_metric)
 
-    def sort_key(row: dict[str, Any]) -> tuple[float, float]:
+    top_score = max((float(r.get(col, 0) or 0) for r in rows), default=0.0)
+
+    def sort_key(row: dict[str, Any]) -> tuple[int, float, float]:
         score = float(row.get(col, 0) or 0)
-        # Negate so highest score sorts first; within epsilon band prefer
-        # lower penalty (also negated so smaller penalty → earlier in sort).
-        return (-score, _interpretability_penalty(row))
+        is_tied = (top_score - score) <= epsilon
+        if is_tied:
+            # Tie band items come first (group 0). Sort by penalty (lower better), then score (higher better)
+            return (0, _interpretability_penalty(row), -score)
+        else:
+            # Outside tie band items come next (group 1). Sort by score (higher better)
+            return (1, 0.0, -score)
 
     sorted_rows = sorted(rows, key=sort_key)
 
     # Annotate each row with its rank and whether it's in the tie band.
-    top_score = float(sorted_rows[0].get(col, 0) or 0)
     for rank, row in enumerate(sorted_rows, 1):
         row["rank"] = rank
         row["in_tie_band"] = abs(float(row.get(col, 0) or 0) - top_score) <= epsilon
