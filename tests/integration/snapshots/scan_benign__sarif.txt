@@ -47,7 +47,7 @@
           "ruleId": "PH100/classifier-score",
           "level": "note",
           "message": {
-            "text": "Classifier risk score 0.0297 \u2192 label 'benign'."
+            "text": "Classifier risk score 0.0000 \u2192 label 'benign'."
           },
           "locations": [
             {
@@ -63,9 +63,14 @@
           ],
           "properties": {
             "evidenceType": "classifier",
-            "score": 0.029686,
+            "score": 0.0,
             "label": "benign",
-            "featureImportances": []
+            "featureImportances": [
+              {
+                "feature": "body_entropy",
+                "importance": 0.0412
+              }
+            ]
           }
         },
         {

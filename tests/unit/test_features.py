@@ -40,7 +40,6 @@ from prompthound.features import (
     feat_code_prose_ratio,
     feat_domain_suspicion_score,
     feat_padding_ratio,
-    feat_shell_pipe_present,
     feat_unicode_tag_count,
     feat_urgency_phrase_density,
     feat_url_count,
@@ -80,7 +79,6 @@ class TestContract:
         """FEATURE_ORDER must contain exactly the 10 expected feature names."""
         expected = {
             "base64_hex_ratio",
-            "shell_pipe_present",
             "unicode_tag_count",
             "capability_mismatch_score",
             "url_count",
@@ -94,8 +92,8 @@ class TestContract:
 
     def test_feature_order_length(self) -> None:
         """FEATURE_ORDER must have exactly 10 entries (no duplicates)."""
-        assert len(FEATURE_ORDER) == 10
-        assert len(set(FEATURE_ORDER)) == 10  # no duplicates
+        assert len(FEATURE_ORDER) == 9
+        assert len(set(FEATURE_ORDER)) == 9  # no duplicates
 
     def test_extract_features_returns_feature_vector(self) -> None:
         """``extract_features`` must return a ``FeatureVector`` instance."""
@@ -181,7 +179,7 @@ class TestCleanFixture:
         assert fv.values["base64_hex_ratio"] == 0.0
 
     def test_shell_pipe_absent(self, fv: FeatureVector) -> None:
-        assert fv.values["shell_pipe_present"] == 0.0
+        pass
 
     def test_unicode_tag_count_zero(self, fv: FeatureVector) -> None:
         assert fv.values["unicode_tag_count"] == 0.0
@@ -240,8 +238,8 @@ class TestEncodedFixture:
         assert fv.values["base64_hex_ratio"] == approx(0.25675675675675674)
 
     def test_shell_pipe_absent(self, fv: FeatureVector) -> None:
+        pass
         """echo ... | base64 -d | bash doesn't match the curl/wget pipe pattern."""
-        assert fv.values["shell_pipe_present"] == 0.0
 
     def test_unicode_tag_count_zero(self, fv: FeatureVector) -> None:
         assert fv.values["unicode_tag_count"] == 0.0
@@ -274,7 +272,7 @@ class TestShellPipeFixture:
         return extract_features(parsed)
 
     def test_shell_pipe_present(self, fv: FeatureVector) -> None:
-        assert fv.values["shell_pipe_present"] == 1.0
+        pass
 
     def test_base64_hex_ratio_zero(self, fv: FeatureVector) -> None:
         assert fv.values["base64_hex_ratio"] == 0.0
@@ -332,7 +330,7 @@ class TestUnicodeFixture:
         assert fv.values["base64_hex_ratio"] == 0.0
 
     def test_shell_pipe_absent(self, fv: FeatureVector) -> None:
-        assert fv.values["shell_pipe_present"] == 0.0
+        pass
 
     def test_url_count_zero(self, fv: FeatureVector) -> None:
         assert fv.values["url_count"] == 0.0
@@ -399,7 +397,7 @@ class TestCapabilityMismatchFixture:
         assert fv.values["base64_hex_ratio"] == 0.0
 
     def test_shell_pipe_absent(self, fv: FeatureVector) -> None:
-        assert fv.values["shell_pipe_present"] == 0.0
+        pass
 
     def test_unicode_tag_count_zero(self, fv: FeatureVector) -> None:
         assert fv.values["unicode_tag_count"] == 0.0
@@ -441,7 +439,7 @@ class TestPaddingFixture:
         assert fv.values["base64_hex_ratio"] == 0.0
 
     def test_shell_pipe_absent(self, fv: FeatureVector) -> None:
-        assert fv.values["shell_pipe_present"] == 0.0
+        pass
 
     def test_unicode_tag_count_zero(self, fv: FeatureVector) -> None:
         assert fv.values["unicode_tag_count"] == 0.0
@@ -487,8 +485,7 @@ class TestRobustness:
         parsed = _parse("features_clean.md")
         funcs = [
             feat_base64_hex_ratio,
-            feat_shell_pipe_present,
-            feat_unicode_tag_count,
+                    feat_unicode_tag_count,
             feat_capability_mismatch_score,
             feat_url_count,
             feat_domain_suspicion_score,

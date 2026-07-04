@@ -66,7 +66,6 @@ def make_rule_hit(**kwargs) -> RuleHit:
 def make_feature_vector(**kwargs) -> FeatureVector:
     order = [
         "base64_hex_ratio",
-        "shell_pipe_present",
         "unicode_tag_count",
         "capability_mismatch_score",
         "url_count",
@@ -77,7 +76,7 @@ def make_feature_vector(**kwargs) -> FeatureVector:
         "code_prose_ratio",
     ]
     values = {k: 0.0 for k in order}
-    values.update({"shell_pipe_present": 1.0, "url_count": 2.0, "body_entropy": 4.32})
+    values.update({"url_count": 2.0, "body_entropy": 4.32})
     defaults = {"values": values, "order": order}
     return FeatureVector(**{**defaults, **kwargs})
 
@@ -87,10 +86,6 @@ def make_risk_score(**kwargs) -> RiskScore:
         "score": 0.87,
         "label": "malicious",
         "feature_importances": [
-            {
-                "feature": "shell_pipe_present",
-                "importance": 0.3,
-            },
             {"feature": "url_count", "importance": 0.7},
         ],
     }
@@ -251,8 +246,7 @@ class TestFeatureVector:
         fv = make_feature_vector()
         expected_features = {
             "base64_hex_ratio",
-            "shell_pipe_present",
-            "unicode_tag_count",
+                "unicode_tag_count",
             "capability_mismatch_score",
             "url_count",
             "domain_suspicion_score",

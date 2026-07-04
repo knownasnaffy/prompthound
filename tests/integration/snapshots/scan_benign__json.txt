@@ -3,9 +3,14 @@
   "parse_ok": true,
   "rule_hits": [],
   "classifier": {
-    "score": 0.029686,
+    "score": 0.0,
     "label": "benign",
-    "feature_importances": []
+    "feature_importances": [
+      {
+        "feature": "body_entropy",
+        "importance": 0.0412
+      }
+    ]
   },
   "chain_flags": [
     {

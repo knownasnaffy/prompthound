@@ -58,28 +58,24 @@
     }
   ],
   "classifier": {
-    "score": 0.92,
+    "score": 0.7,
     "label": "malicious",
     "feature_importances": [
       {
-        "feature": "url_count",
-        "importance": 0.1401
-      },
-      {
-        "feature": "shell_pipe_present",
-        "importance": 0.1017
-      },
-      {
-        "feature": "padding_ratio",
-        "importance": 0.0675
+        "feature": "body_entropy",
+        "importance": 0.2817
       },
       {
         "feature": "domain_suspicion_score",
-        "importance": 0.0672
+        "importance": 0.2601
       },
       {
-        "feature": "body_entropy",
-        "importance": 0.0645
+        "feature": "url_count",
+        "importance": 0.1072
+      },
+      {
+        "feature": "capability_mismatch_score",
+        "importance": 0.0773
       }
     ]
   },

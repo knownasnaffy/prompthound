@@ -19,9 +19,8 @@ Public API::
 
 Features (concept.md §3):
   1. base64_hex_ratio         — presence/ratio of base64 or hex-encoded blobs
-  2. shell_pipe_present        — 0/1 flag for pipe-to-interpreter pattern
-  3. unicode_tag_count         — total Unicode Tag characters found
-  4. capability_mismatch_score — declared-vs-referenced capability mismatch
+  2. unicode_tag_count         — total Unicode Tag characters found
+  3. capability_mismatch_score — declared-vs-referenced capability mismatch
   5. url_count                 — external URL count in body
   6. domain_suspicion_score    — aggregate domain heuristic score
   7. urgency_phrase_density    — instruction-override / urgency phrase density
@@ -50,7 +49,6 @@ from prompthound.schema import FeatureVector, ParsedSkill
 
 FEATURE_ORDER: list[str] = [
     "base64_hex_ratio",
-    "shell_pipe_present",
     "unicode_tag_count",
     "capability_mismatch_score",
     "url_count",
@@ -178,20 +176,7 @@ def feat_base64_hex_ratio(parsed: ParsedSkill) -> float:
     return min(blob_chars / total_chars, 1.0)
 
 
-def feat_shell_pipe_present(parsed: ParsedSkill) -> float:
-    """1.0 if any shell pipe-to-interpreter pattern is detected, else 0.0.
 
-    Checks code blocks and body prose for ``curl|bash``-style patterns
-    (same pattern as rules/shell_pipe.py but returns a float flag, not RuleHits).
-    Features must not know about rule hits (architecture.md §2.3), so the
-    pattern is re-evaluated here independently.
-    """
-    for block in parsed.code_blocks:
-        if _PIPE_RE.search(block.content):
-            return 1.0
-    if parsed.body_prose and _PIPE_RE.search(parsed.body_prose):
-        return 1.0
-    return 0.0
 
 
 def feat_unicode_tag_count(parsed: ParsedSkill) -> float:
@@ -424,7 +409,6 @@ def feat_code_prose_ratio(parsed: ParsedSkill) -> float:
 # Mapping of feature name → function for programmatic access.
 _FEATURE_FUNCTIONS: dict[str, object] = {
     "base64_hex_ratio":         feat_base64_hex_ratio,
-    "shell_pipe_present":       feat_shell_pipe_present,
     "unicode_tag_count":        feat_unicode_tag_count,
     "capability_mismatch_score": feat_capability_mismatch_score,
     "url_count":                feat_url_count,

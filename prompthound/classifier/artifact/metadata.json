@@ -1,16 +1,15 @@
 {
-  "run_id": "random_forest__0005",
-  "promoted_at": "2026-07-05T01:59:38",
+  "run_id": "random_forest__0011",
+  "promoted_at": "2026-07-05T02:18:10",
   "model_family": "random_forest",
   "estimator_class": "sklearn.ensemble._forest.RandomForestClassifier",
   "hyperparameters": {
-    "n_estimators": 50,
+    "n_estimators": 100,
     "max_depth": null,
     "min_samples_leaf": 1
   },
   "feature_order": [
     "base64_hex_ratio",
-    "shell_pipe_present",
     "unicode_tag_count",
     "capability_mismatch_score",
     "url_count",
@@ -21,30 +20,30 @@
     "code_prose_ratio"
   ],
   "corpus": {
-    "n_train_benign": 246,
-    "n_train_malicious": 141,
-    "n_total": 387,
-    "corpus_hash": "c5b00b75a599d614",
+    "n_train_benign": 1625,
+    "n_train_malicious": 388,
+    "n_total": 2013,
+    "corpus_hash": "e53f2f1dffde3be1",
     "labels_csv": "benchmark/corpus/labels.csv"
   },
   "benchmark_metrics": {
-    "cv_f1": 0.8415967937562622,
-    "holdout_f1": 0.8627450980392157,
-    "holdout_precision": 0.9565217391304348,
-    "holdout_recall": 0.7857142857142857,
-    "holdout_roc_auc": 0.9553571428571429,
+    "cv_f1": 0.8834686660621298,
+    "holdout_f1": 0.9271523178807947,
+    "holdout_precision": 0.958904109589041,
+    "holdout_recall": 0.8974358974358975,
+    "holdout_roc_auc": 0.9731558185404339,
     "fpr_benign_unusual_benchmark": 0.0,
-    "fpr_benign_unusual_full_corpus": 0.4,
-    "mean_depth": 12.42,
-    "total_nodes": 3456,
-    "n_estimators": 50
+    "fpr_benign_unusual_full_corpus": 0.0,
+    "mean_depth": 18.33,
+    "total_nodes": 20096,
+    "n_estimators": 100
   },
   "risk_thresholds": {
     "benign_max": 0.3,
     "suspicious_max": 0.65,
     "description": "score < benign_max \u2192 benign; benign_max \u2264 score < suspicious_max \u2192 suspicious; score \u2265 suspicious_max \u2192 malicious"
   },
-  "fit_time_s": 0.0382,
+  "fit_time_s": 0.1589,
   "random_state": 42,
   "fpr_advisory_threshold": 0.4,
   "fpr_advisory_exceeded": false

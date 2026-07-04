@@ -43,7 +43,6 @@ def _base_features() -> FeatureVector:
     """Return a minimal ``FeatureVector`` consistent with a benign file."""
     order = [
         "base64_hex_ratio",
-        "shell_pipe_present",
         "unicode_tag_count",
         "capability_mismatch_score",
         "url_count",
@@ -154,7 +153,6 @@ def fixture_all_three() -> ScanResult:
     """All-three — rule hit + classifier malicious + chain flag, all simultaneously."""
     fv = _base_features()
     fv.values["base64_hex_ratio"] = 0.6
-    fv.values["shell_pipe_present"] = 1.0
     fv.values["unicode_tag_count"] = 5.0
     parsed = ParsedSkill(
         path="tests/fixtures/all_three_skill.md",

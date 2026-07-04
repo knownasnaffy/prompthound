@@ -17,13 +17,12 @@ PromptHound Scan: <TEST_FILE_PATH>
     Non-standard TLD at line 45: 'sh.rustup.rs' (TLD: .'rs'). Uncommon TLDs are associated with newly-registered attacker domains.
 
 ── CLASSIFIER (ML risk score) ─────────────────────────────────────────
-  Score : 0.9200  [MALICIOUS]
+  Score : 0.7000  [MALICIOUS]
   Important Features:
-    - url_count (Importance: 0.1401)
-    - shell_pipe_present (Importance: 0.1017)
-    - padding_ratio (Importance: 0.0675)
-    - domain_suspicion_score (Importance: 0.0672)
-    - body_entropy (Importance: 0.0645)
+    - body_entropy (Importance: 0.2817)
+    - domain_suspicion_score (Importance: 0.2601)
+    - url_count (Importance: 0.1072)
+    - capability_mismatch_score (Importance: 0.0773)
 
 ── CAPABILITY CHAINS (structural sequence detection) ──────────────────
   CHAIN: download→execute
