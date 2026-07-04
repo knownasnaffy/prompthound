@@ -1,12 +1,12 @@
 {
-  "run_id": "decision_tree__0003",
-  "promoted_at": "2026-07-04T22:40:34",
+  "run_id": "decision_tree__0008",
+  "promoted_at": "2026-07-05T00:15:22",
   "model_family": "decision_tree",
   "estimator_class": "sklearn.tree._classes.DecisionTreeClassifier",
   "hyperparameters": {
-    "max_depth": 3,
-    "min_samples_leaf": 5,
-    "criterion": "gini"
+    "max_depth": 5,
+    "min_samples_leaf": 1,
+    "criterion": "entropy"
   },
   "feature_order": [
     "base64_hex_ratio",
@@ -21,22 +21,22 @@
     "code_prose_ratio"
   ],
   "corpus": {
-    "n_train_benign": 10,
-    "n_train_malicious": 11,
-    "n_total": 21,
-    "corpus_hash": "e0bef554bd3d5efd",
+    "n_train_benign": 20,
+    "n_train_malicious": 21,
+    "n_total": 41,
+    "corpus_hash": "ec43ea6235c2fcdc",
     "labels_csv": "benchmark/corpus/labels.csv"
   },
   "benchmark_metrics": {
-    "cv_f1": 0.7333333333333333,
-    "holdout_f1": 1.0,
+    "cv_f1": 0.9,
+    "holdout_f1": 0.8888888888888888,
     "holdout_precision": 1.0,
-    "holdout_recall": 1.0,
-    "holdout_roc_auc": 1.0,
-    "fpr_benign_unusual_benchmark": 0.2,
-    "fpr_benign_unusual_full_corpus": 0.2,
-    "mean_depth": 1.0,
-    "total_nodes": 3,
+    "holdout_recall": 0.8,
+    "holdout_roc_auc": 0.9,
+    "fpr_benign_unusual_benchmark": 0.4,
+    "fpr_benign_unusual_full_corpus": 0.8,
+    "mean_depth": 5.0,
+    "total_nodes": 11,
     "n_estimators": 1
   },
   "risk_thresholds": {
@@ -47,5 +47,5 @@
   "fit_time_s": 0.0009,
   "random_state": 42,
   "fpr_advisory_threshold": 0.4,
-  "fpr_advisory_exceeded": false
+  "fpr_advisory_exceeded": true
 }

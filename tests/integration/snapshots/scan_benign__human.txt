@@ -6,11 +6,12 @@ PromptHound Scan: <TEST_FILE_PATH>
   No rule hits.
 
 ── CLASSIFIER (ML risk score) ─────────────────────────────────────────
-  Score : 0.2000  [BENIGN]
+  Score : 0.0000  [BENIGN]
   Decision path:
-    padding_ratio > 0.017415  (malicious_frac=0.5238)
-    code_prose_ratio > 0.229313  (malicious_frac=0.0909)
-    [leaf]  malicious_frac=0.2000
+    code_prose_ratio > 0.112986  (malicious_frac=0.5122)
+    body_entropy <= 4.549119  (malicious_frac=0.3103)
+    padding_ratio <= 0.530645  (malicious_frac=0.0526)
+    [leaf]  malicious_frac=0.0000
 
 ── CAPABILITY CHAINS (structural sequence detection) ──────────────────
   CHAIN: file_read→network_send

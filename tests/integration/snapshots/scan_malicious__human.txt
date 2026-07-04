@@ -19,7 +19,9 @@ PromptHound Scan: <TEST_FILE_PATH>
 ── CLASSIFIER (ML risk score) ─────────────────────────────────────────
   Score : 1.0000  [MALICIOUS]
   Decision path:
-    padding_ratio <= 0.017415  (malicious_frac=0.5238)
+    code_prose_ratio > 0.112986  (malicious_frac=0.5122)
+    body_entropy > 4.549119  (malicious_frac=0.3103)
+    body_entropy <= 4.673841  (malicious_frac=0.8000)
     [leaf]  malicious_frac=1.0000
 
 ── CAPABILITY CHAINS (structural sequence detection) ──────────────────

@@ -47,7 +47,7 @@
           "ruleId": "PH100/classifier-score",
           "level": "note",
           "message": {
-            "text": "Classifier risk score 0.2000 \u2192 label 'benign'."
+            "text": "Classifier risk score 0.0000 \u2192 label 'benign'."
           },
           "locations": [
             {
@@ -63,26 +63,32 @@
           ],
           "properties": {
             "evidenceType": "classifier",
-            "score": 0.2,
+            "score": 0.0,
             "label": "benign",
             "decisionPath": [
               {
-                "feature": "padding_ratio",
-                "threshold": 0.017415,
+                "feature": "code_prose_ratio",
+                "threshold": 0.112986,
                 "direction": ">",
-                "node_value": 0.5238
+                "node_value": 0.5122
               },
               {
-                "feature": "code_prose_ratio",
-                "threshold": 0.229313,
-                "direction": ">",
-                "node_value": 0.0909
+                "feature": "body_entropy",
+                "threshold": 4.549119,
+                "direction": "<=",
+                "node_value": 0.3103
+              },
+              {
+                "feature": "padding_ratio",
+                "threshold": 0.530645,
+                "direction": "<=",
+                "node_value": 0.0526
               },
               {
                 "feature": "[leaf]",
                 "threshold": null,
                 "direction": null,
-                "node_value": 0.2
+                "node_value": 0.0
               }
             ]
           }

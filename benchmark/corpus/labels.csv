@@ -53,3 +53,23 @@ benchmark/corpus/malicious/capability_mismatch_hidden_send.md,malicious,reconstr
 benchmark/corpus/malicious/prompt_injection_urgency.md,malicious,reconstructed-from-report,IMPORTANT/CRITICAL/FIRST AND FOREMOST override phrases; instruction hijack pattern
 benchmark/corpus/malicious/multi_vector_shell_encoded_domain.md,malicious,reconstructed-from-report,multi-vector: curl|bash + wget|sh from xyz domain + base64-d|bash payload
 benchmark/corpus/malicious/hex_encoded_payload.md,malicious,reconstructed-from-report,hex-encoded payload decoded at runtime via bytes.fromhex() then exec()
+benchmark/corpus/benign/regex_tester.md,benign,self-authored,Regex pattern matcher; file_read only; no network
+benchmark/corpus/benign/json_formatter.md,benign,self-authored,JSON pretty printer; file_read and write; clean code blocks
+benchmark/corpus/benign/env_validator.md,benign,self-authored,Env var format checker; file_read only; no external calls
+benchmark/corpus/benign/log_parser.md,benign,self-authored,Apache log parser; file_read only; read-only
+benchmark/corpus/benign/csv_to_json.md,benign,self-authored,CSV to JSON converter; file_read and write; no network
+benchmark/corpus/benign/html_minifier.md,benign,self-authored,HTML minifier script; file_read and write; clean blocks
+benchmark/corpus/benign/css_linter.md,benign,self-authored,CSS style linter; file_read only; read-only
+benchmark/corpus/benign/yaml_validator.md,benign,self-authored,YAML syntax checker; file_read only; no network
+benchmark/corpus/benign/code_metrics.md,benign,self-authored,Code complexity calculator; file_read only; read-only
+benchmark/corpus/benign/dockerfile_linter.md,benign,self-authored,Dockerfile best practices checker; file_read only
+benchmark/corpus/malicious/base64_encoded_payload.md,malicious,reconstructed-from-report,base64-encoded payload piped to python; credential stealer
+benchmark/corpus/malicious/curl_bash_miner.md,malicious,reconstructed-from-report,curl|bash crypto miner payload to known suspicious domain
+benchmark/corpus/malicious/wget_sh_backdoor.md,malicious,reconstructed-from-report,wget|sh backdoor setup block
+benchmark/corpus/malicious/unicode_tag_hidden_exfil.md,malicious,reconstructed-from-report,U+E0000-U+E007F Tag characters hiding exfil instructions
+benchmark/corpus/malicious/padding_evasion_large.md,malicious,reconstructed-from-report,padding_ratio anomaly; extremely large repeated-byte run
+benchmark/corpus/malicious/read_encode_send_chain_2.md,malicious,reconstructed-from-report,file_read→encode→network_send chain variant
+benchmark/corpus/malicious/download_write_exec_chain_2.md,malicious,reconstructed-from-report,download→write→execute chain variant via python
+benchmark/corpus/malicious/suspicious_domain_curl.md,malicious,reconstructed-from-report,curl from suspicious new domain
+benchmark/corpus/malicious/prompt_injection_urgency_2.md,malicious,reconstructed-from-report,IMPORTANT/CRITICAL override phrases for prompt injection
+benchmark/corpus/malicious/hex_encoded_payload_2.md,malicious,reconstructed-from-report,hex-encoded payload decoded at runtime via bytes.fromhex
