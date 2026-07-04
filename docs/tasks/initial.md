@@ -45,14 +45,14 @@ Derived from `concept.md`, `prompthound-architecture-flow.md`, `prompthound-tech
 
 ## Phase 3 — Rule Layer (`rules/`)
 
-- [ ] Implement `rules/__init__.py` with the `ALL_RULES` registry list
-- [ ] `shell_pipe.py` — `curl|bash` / `wget|sh` pipeline detection
-- [ ] `encoded_blob.py` — base64/hex blob detection
-- [ ] `unicode_tag.py` — flags presence using `parse.py`'s preserved spans
-- [ ] `suspicious_domain.py` — basic domain heuristics (newly-registered-looking, non-standard TLD patterns, etc.)
-- [ ] `padding.py` — consumes the shared helper from Phase 2, does not recompute padding logic independently
-- [ ] Confirm structurally that no rule imports another rule or a shared mutable context object (AGENTS.md §5 — this is a hard constraint, not a style preference)
-- [ ] Golden-file unit test per rule: one fixture that triggers it, one that doesn't, per AGENTS.md §7 "definition of done"
+- [x] Implement `rules/__init__.py` with the `ALL_RULES` registry list
+- [x] `shell_pipe.py` — `curl|bash` / `wget|sh` pipeline detection
+- [x] `encoded_blob.py` — base64/hex blob detection
+- [x] `unicode_tag.py` — flags presence using `parse.py`'s preserved spans
+- [x] `suspicious_domain.py` — basic domain heuristics (newly-registered-looking, non-standard TLD patterns, etc.)
+- [x] `padding.py` — consumes the shared helper from Phase 2, does not recompute padding logic independently
+- [x] Confirm structurally that no rule imports another rule or a shared mutable context object (AGENTS.md §5 — this is a hard constraint, not a style preference)
+- [x] Golden-file unit test per rule: one fixture that triggers it, one that doesn't, per AGENTS.md §7 "definition of done"
 
 **Exit criteria:** `[hit for rule in ALL_RULES for hit in rule(parsed)]` runs cleanly over every Phase-2 fixture and produces only the expected hits.
 
