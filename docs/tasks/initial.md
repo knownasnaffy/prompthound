@@ -148,12 +148,12 @@ Derived from `concept.md`, `prompthound-architecture-flow.md`, `prompthound-tech
 
 ## Phase 10 — CLI Wiring (`cli.py`)
 
-- [ ] Implement `click` entry point: `prompthound scan <path> [--format human|json|sarif] [--fail-on <threshold>]`
-- [ ] Wire the full pipeline: resolve path → Parse → (Rule layer ∥ Feature extraction → Classifier) → Capability-chain check → Reporter, matching architecture.md §1 exactly
-- [ ] Implement malformed-file short-circuit end-to-end: `parse_ok=False` → skip every later stage → Reporter renders "could not parse" (never a misleadingly low score)
-- [ ] Implement `--fail-on` exit-code logic (the one enforcement-adjacent behavior in scope, per architecture.md §3)
-- [ ] Confirm zero disk writes and zero network calls anywhere in the `scan` path (AGENTS.md §2, §5)
-- [ ] Manual smoke test against a handful of real and malicious-pattern files
+- [x] Implement `click` entry point: `prompthound scan <path> [--format human|json|sarif] [--fail-on <threshold>]`
+- [x] Wire the full pipeline: resolve path → Parse → (Rule layer ∥ Feature extraction → Classifier) → Capability-chain check → Reporter, matching architecture.md §1 exactly
+- [x] Implement malformed-file short-circuit end-to-end: `parse_ok=False` → skip every later stage → Reporter renders "could not parse" (never a misleadingly low score)
+- [x] Implement `--fail-on` exit-code logic (the one enforcement-adjacent behavior in scope, per architecture.md §3)
+- [x] Confirm zero disk writes and zero network calls anywhere in the `scan` path (AGENTS.md §2, §5)
+- [x] Manual smoke test against a handful of real and malicious-pattern files
 
 **Exit criteria:** `prompthound scan` works end-to-end for all three output formats and correct exit codes, entirely offline.
 
