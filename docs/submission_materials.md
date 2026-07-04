@@ -51,13 +51,14 @@ Why PromptHound stands out in the AI agent security space:
 $ prompthound scan test-skill.md
 
 ⚠️  PROMPTHOUND SCAN REPORT: test-skill.md ⚠️
-Risk Level: MALICIOUS (Score: 0.85)
+Risk Level: MALICIOUS (Score: 0.92)
 
 --- 1. CLASSIFIER ANALYSIS ---
 The statistical model flagged this file as Malicious.
 Important Features:
-  - body_entropy (Importance: 0.4200)
-  - padding_ratio (Importance: 0.3100)
+  - url_count (Contribution: +0.1401)
+  - shell_pipe_present (Contribution: +0.1017)
+  - padding_ratio (Contribution: +0.0675)
 
 --- 2. RULE HITS ---
 [PH001/shell-pipe] HIGH: Detected 'curl | bash' pattern in setup block (Line 14).
@@ -74,11 +75,12 @@ Important Features:
 ```json
 {
   "file": "test-skill.md",
-  "risk_score": 0.85,
+  "risk_score": 0.92,
   "risk_label": "malicious",
   "feature_importances": [
-    {"feature": "body_entropy", "importance": 0.4200},
-    {"feature": "padding_ratio", "importance": 0.3100}
+    {"feature": "url_count", "importance": 0.1401},
+    {"feature": "shell_pipe_present", "importance": 0.1017},
+    {"feature": "padding_ratio", "importance": 0.0675}
   ],
   "rule_hits": [
     {"rule_id": "PH001/shell-pipe", "severity": "high", "line": 14, "message": "Detected 'curl | bash' pattern in setup block"},

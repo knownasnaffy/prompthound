@@ -1,6 +1,6 @@
 # PromptHound
 
-**PromptHound** is a fast, offline static risk analysis CLI for AI agent skill files (like `SKILL.md` or `AGENTS.md`). It is built to detect malicious instructions, steganographic payloads, and suspicious capability chains before you hand a third-party skill file to your AI coding agent.
+**PromptHound** is an offline static risk analysis CLI for AI agent skill files (`SKILL.md`, `AGENTS.md`). It detects malicious instructions, steganographic payloads, and suspicious capability chains before you give a third-party skill file to your agent.
 
 *Philosophy: Sniffer, not shield. Detect, score, explain. The final call stays with the developer or CI pipeline.*
 
@@ -8,21 +8,21 @@
 
 ## 1. The Problem
 
-AI coding agents (e.g., Claude Code, Codex, OpenClaw) load third-party "skills" to learn capabilities and behavioral rules. Unlike traditional npm or PyPI packages, these payloads are natural-language instructions interpreted by an LLM.
+AI coding agents load third-party "skills" to learn capabilities and rules. Unlike npm or PyPI packages, these payloads are natural-language instructions.
 
-Traditional static analysis and sandboxing tools struggle with this paradigm because the "exploit" can just be a sentence. Real-world incidents have shown attacks like:
+Traditional static analysis and sandboxing tools miss these because the exploit can be a single sentence:
 - **Credential Stealing:** The "ClawHavoc" campaign compromised over 1,000 skills, embedding stealers in setup instructions.
-- **Steganography:** Using invisible Unicode Tag characters (U+E0000–U+E007F) to hide instructions from human reviewers that the LLM still reads.
-- **Capability Chaining:** Chaining individually-benign capabilities (e.g., read a file → encode it → send it) into malicious sequences.
-- **Scanner Evasion:** Padding files with junk data to push payloads past the size limits of marketplace scanners.
+- **Steganography:** Invisible Unicode Tag characters (U+E0000–U+E007F) hide instructions from human reviewers.
+- **Capability Chaining:** Benign capabilities chained together (e.g., read a file → encode it → send it) to exfiltrate data.
+- **Scanner Evasion:** Padding files with junk data to bypass marketplace scanner size limits.
 
-PromptHound is a lightweight, interpretable tool that a developer can run in under a second before `git clone`-ing a skill.
+PromptHound runs in under a second. Run it before you `git clone` a skill.
 
 ---
 
 ## 2. Architecture & Flow
 
-PromptHound runs a linear pipeline with a rule-based side-channel, ensuring that deterministic rules and statistical machine-learning scores are kept distinct and interpretable.
+PromptHound runs a linear pipeline with a rule-based side-channel. Deterministic rules and statistical machine-learning scores are kept distinct.
 
 ```text
                     ┌───────────────┐
@@ -106,19 +106,19 @@ prompthound scan path/to/SKILL.md --fail-on suspicious
 
 ## 5. Evaluation Results
 
-PromptHound uses a highly interpretable **Random Forest classifier** to score feature vectors.
+PromptHound uses a **Random Forest classifier (n_estimators=50, max_depth=5, min_samples_leaf=5)** to score feature vectors.
 
-On our initial curated benchmark corpus:
+On the initial curated benchmark corpus:
 - **Precision / Recall / F1:** 1.000 on the holdout test set.
 - **False Positive Rate (FPR):** 0.20 on a challenging `benign_unusual` probe set (legitimate skills with valid shell/base64 usage).
 
-Every score provided by the classifier includes the exact decision path (e.g., "Flagged because base64 ratio > X and entropy > Y"), providing immediate explainability. For full details, see the `docs/evaluation_report.md`.
+The classifier outputs its exact decision path for every score (e.g., "Flagged because base64 ratio > X and entropy > Y"). For full details, see `docs/evaluation_report.md`.
 
 ---
 
 ## 6. Future Work (Out of Scope for v1.0)
 
-PromptHound intentionally remains a fast, offline CLI analyzer. The following are architectural seams we plan to support in the future, but are out of scope for the current MVP:
+PromptHound is a fast, offline CLI analyzer. We plan to support the following integrations, but they are out of scope for the current MVP:
 - **MCP Server Integration:** Wrapping the `Parse` pipeline in an MCP server.
 - **Editor & Agent Plugins:** Direct integration with Claude Code, Codex, or OpenCode.
 - **Capability Sandboxing:** PromptHound detects, but does not enforce confinement.

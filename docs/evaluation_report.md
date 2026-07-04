@@ -15,8 +15,8 @@ PromptHound was evaluated on an expanded corpus of AI agent skill files to measu
 *Note: These metrics indicate that the engineered features effectively separate malicious patterns from standard benign files without overfitting.*
 
 **False Positive Rate on `benign_unusual` Probe Set**
-- **FPR:** 0.00 (0 out of 5 files flagged)
-This metric is explicitly tracked and prioritized. The `benign_unusual` set contains legitimate skill files that use base64 encoding or shell commands for real reasons. An FPR of 0.00 on this deliberately challenging, tiny probe set indicates the classifier accurately separates real utility from malice.
+- **FPR:** 0.20 (1 out of 5 files flagged)
+This metric is explicitly tracked and prioritized. The `benign_unusual` set contains legitimate skill files that use base64 encoding or shell commands for real reasons. An FPR of 0.20 on this deliberately challenging, tiny probe set indicates the classifier effectively separates real utility from malice in most cases.
 
 ## 3. Honest Comparison to Academic Benchmarks
 
@@ -32,7 +32,9 @@ While PromptHound is not a formal verification engine, it successfully bridges t
 
 Interpretability is a first-class requirement for PromptHound. While we originally aimed for a single decision tree, the accuracy/FPR trade-off heavily favored ensemble models on the expanded corpus.
 
-The selected model is a **Random Forest (n_estimators=100, max_depth=5, min_samples_leaf=1)**. Rather than sacrificing empirical performance for a single readable tree, we chose the Random Forest (which achieved F1=1.000 and FPR=0.00) and retained interpretability by surfacing the **global feature importances** that contributed to the model's decision. When PromptHound flags a file, it tells you exactly which features drove the score (e.g., Code-to-Prose Ratio, Entropy), offering a far more honest explanation than a single oversimplified threshold path.
+The selected model is a **Random Forest (n_estimators=50, max_depth=5, min_samples_leaf=5)**. Rather than sacrificing empirical performance for a single readable tree, we chose the Random Forest (which achieved F1=1.000 and FPR=0.20) and retained interpretability by surfacing the **local feature contributions** that contributed to the model's decision for a specific sample using the Saabas method. When PromptHound flags a file, it tells you exactly which features drove the score (e.g., Code-to-Prose Ratio, Entropy), offering a far more honest explanation than a single oversimplified threshold path.
+
+*(Note: While fast and dependency-free, Saabas contributions have a known weakness—they are not consistent under feature correlation the way SHAP's Shapley-value approach is. A feature can get credit/blame that shifts depending on correlated features, and it lacks SHAP's formal fairness guarantees. This is a deliberate tradeoff made to keep the CLI lightweight and entirely offline).*
 
 ## 5. Resolutions of Deferred Decisions
 

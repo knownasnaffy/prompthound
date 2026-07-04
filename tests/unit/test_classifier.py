@@ -244,6 +244,39 @@ class TestClassifyDeterminism:
         )
         assert risk_mal.label != risk_ben.label
 
+    def test_feature_importances_vary_by_sample(self):
+        """Feature importances must vary per sample, ensuring the Saabas method
+        is genuinely returning local contributions rather than global importances.
+        """
+        from prompthound.classifier.model import classify
+        fv_mal = _parse_and_extract(CORPUS_MALICIOUS)
+        fv_ben = _parse_and_extract(CORPUS_BENIGN)
+        risk_mal = classify(fv_mal)
+        risk_ben = classify(fv_ben)
+        
+        # We assert that the exact feature lists (names and values) differ
+        assert risk_mal.feature_importances != risk_ben.feature_importances, (
+            "Feature importances were identical for malicious and benign fixtures! "
+            "The model is returning global importances instead of per-sample local contributions."
+        )
+
+    def test_feature_importances_can_be_empty_for_solidly_benign(self):
+        """A solidly benign file where all splits pushed toward the benign class
+        will have no positive contributions, resulting in an empty list.
+        This explicitly guards against KeyErrors or unhandled empty lists.
+        """
+        from prompthound.classifier.model import classify
+        # api_schema_validator is known to have 0 positive Saabas contributions
+        solid_benign_path = _ROOT / "benchmark" / "corpus" / "benign" / "api_schema_validator.md"
+        fv = _parse_and_extract(solid_benign_path)
+        risk = classify(fv)
+        
+        # It's completely valid for a highly benign file to have NO features pushing toward malice
+        assert len(risk.feature_importances) == 0, (
+            "Expected empty feature importances for a completely clean benign file. "
+            "If this failed, the fixture might have gained a slightly positive feature contribution."
+        )
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Performance / sub-second test
