@@ -92,12 +92,12 @@ Derived from `concept.md`, `prompthound-architecture-flow.md`, `prompthound-tech
 
 ## Phase 6 — Benchmark Corpus Construction
 
-- [ ] Populate `benchmark/corpus/benign/` — real, license-checked or self-authored skill files
-- [ ] Populate `benchmark/corpus/malicious/` — reconstructed examples per concept.md §1/§7 incident patterns: credential-stealer setup blocks (ClawHavoc-style), Unicode Tag hidden instructions, padding/size-anomaly evasion, chained read→encode→send / download→write→execute sequences
-- [ ] Populate `benchmark/corpus/benign_unusual/` — legitimate skills that genuinely use base64 or shell commands for real reasons (the FPR probe set); keep this eval-only, never mixed into training (AGENTS.md §6)
-- [ ] Write `labels.csv` (`filepath,label,source,notes`), tagging `source` as self-authored / reconstructed-from-report / scraped
-- [ ] Sanity pass: run every corpus file through Phase 2 + Phase 4 code and confirm no parse failures or feature-extraction exceptions before benchmark code depends on it
-- [ ] Decide and document initial corpus size targets (deferred decision from tech-implementation.md §8) now that rule/feature coverage exists to judge against
+- [x] Populate `benchmark/corpus/benign/` — real, license-checked or self-authored skill files
+- [x] Populate `benchmark/corpus/malicious/` — reconstructed examples per concept.md §1/§7 incident patterns: credential-stealer setup blocks (ClawHavoc-style), Unicode Tag hidden instructions, padding/size-anomaly evasion, chained read→encode→send / download→write→execute sequences
+- [x] Populate `benchmark/corpus/benign_unusual/` — legitimate skills that genuinely use base64 or shell commands for real reasons (the FPR probe set); keep this eval-only, never mixed into training (AGENTS.md §6)
+- [x] Write `labels.csv` (`filepath,label,source,notes`), tagging `source` as self-authored / reconstructed-from-report / scraped
+- [x] Sanity pass: run every corpus file through Phase 2 + Phase 4 code and confirm no parse failures or feature-extraction exceptions before benchmark code depends on it
+- [x] Decide and document initial corpus size targets (deferred decision from tech-implementation.md §8) now that rule/feature coverage exists to judge against
 
 **Exit criteria:** every corpus file parses cleanly and produces a full feature vector; `labels.csv` accounts for every file with no orphaned or mislabeled entries.
 

@@ -1,0 +1,55 @@
+# PromptHound Benchmark Corpus — labels.csv
+#
+# Format: filepath,label,source,notes
+#
+# label    : benign | malicious
+#            benign_unusual files are not listed here — they are the eval-only
+#            FPR probe set and must NEVER be mixed into the benign/malicious
+#            train or test split (tech-implementation.md §5.3, AGENTS.md §6).
+#            See benchmark/corpus/benign_unusual/ for those files and the note
+#            at the bottom of this file.
+#
+# source   : self-authored          — written for this corpus
+#            reconstructed-from-report — pattern reconstructed from published
+#                                        incident reports (Unit 42, Orca, CSA)
+#            scraped                — pulled from a public repo (not used yet)
+#
+# notes    : one-line description of what threat signal(s) the file exercises
+#            (for malicious files) or why it is clearly benign (for benign).
+#
+# -----------------------------------------------------------------------
+# Corpus size rationale — deferred decision resolved here (tech §8):
+#
+#   10 benign  / 10 malicious for the initial model selection run is the
+#   minimum viable split for a 5-fold stratified CV: at least 2 samples per
+#   fold per class.  This is acknowledged as small; the expectation is that
+#   the model selection pass identifies which classifiers generalise at all
+#   at this scale, not that it produces production-grade precision/recall.
+#   A second corpus pass (targeting ~30 benign / ~30 malicious) is planned
+#   before the final evaluation report to make the F1 numbers meaningful.
+#   The 5 benign_unusual files give a reasonable FPR probe: any model that
+#   flags > 2/5 of these is over-firing and should be penalised.
+# -----------------------------------------------------------------------
+
+filepath,label,source,notes
+benchmark/corpus/benign/code_review_assistant.md,benign,self-authored,PR diff reviewer; file_read only; no shell/encode/network signals
+benchmark/corpus/benign/test_generator.md,benign,self-authored,pytest stub generator; file_read only; clean code blocks
+benchmark/corpus/benign/doc_formatter.md,benign,self-authored,docstring-to-markdown; file_read + file_write; no external calls
+benchmark/corpus/benign/commit_message_generator.md,benign,self-authored,Conventional Commits generator from git diff; file_read only
+benchmark/corpus/benign/sql_query_explainer.md,benign,self-authored,static SQL parser and explainer; no network; clean SQL examples
+benchmark/corpus/benign/markdown_linter.md,benign,self-authored,markdown style linter; file_read only; no threat signals
+benchmark/corpus/benign/dependency_auditor.md,benign,self-authored,offline dependency CVE + hygiene checker; no network calls at scan time
+benchmark/corpus/benign/changelog_generator.md,benign,self-authored,git-log to CHANGELOG; file_read + file_write; no external calls
+benchmark/corpus/benign/api_schema_validator.md,benign,self-authored,OpenAPI spec linter; file_read only; no network
+benchmark/corpus/benign/refactoring_helper.md,benign,self-authored,Python static refactoring analyser; file_read only; read-only
+benchmark/corpus/malicious/clawhavoc_shell_pipe.md,malicious,reconstructed-from-report,ClawHavoc-style: multiple curl|bash and wget|sh pipelines to attacker-controlled domains
+benchmark/corpus/malicious/encoded_credential_stealer.md,malicious,reconstructed-from-report,base64-encoded Python payload piped to python3; credential stealer pattern from ClawHavoc incidents
+benchmark/corpus/malicious/unicode_tag_steganography.md,malicious,reconstructed-from-report,real U+E0000-U+E007F Tag characters injected encoding hidden override instructions
+benchmark/corpus/malicious/padding_size_evasion.md,malicious,reconstructed-from-report,padding_ratio=0.93; long repeated-byte run pads file past scanner size threshold
+benchmark/corpus/malicious/file_read_encode_send_chain.md,malicious,reconstructed-from-report,file_read→encode→network_send chain; reads ~/.ssh ~/.aws credentials then base64+POST
+benchmark/corpus/malicious/download_write_execute_chain.md,malicious,reconstructed-from-report,download→write→execute chain; urlretrieve to disk then subprocess.run(bash setup.sh)
+benchmark/corpus/malicious/suspicious_domain_data_exfil.md,malicious,reconstructed-from-report,curl|bash from suspicious xyz domain; os.walk exfil of home dir to data-collect subdomain
+benchmark/corpus/malicious/capability_mismatch_hidden_send.md,malicious,reconstructed-from-report,declares only file_read; body contains urllib.request.urlopen POST — mismatch + hidden send
+benchmark/corpus/malicious/prompt_injection_urgency.md,malicious,reconstructed-from-report,IMPORTANT/CRITICAL/FIRST AND FOREMOST override phrases; instruction hijack pattern
+benchmark/corpus/malicious/multi_vector_shell_encoded_domain.md,malicious,reconstructed-from-report,multi-vector: curl|bash + wget|sh from xyz domain + base64-d|bash payload
+benchmark/corpus/malicious/hex_encoded_payload.md,malicious,reconstructed-from-report,hex-encoded payload decoded at runtime via bytes.fromhex() then exec()
