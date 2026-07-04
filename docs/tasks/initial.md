@@ -105,19 +105,19 @@ Derived from `concept.md`, `prompthound-architecture-flow.md`, `prompthound-tech
 
 ## Phase 7 — Benchmark Harness
 
-- [ ] Write `benchmark/models.yaml` search space exactly as specified in tech-implementation.md §5.2 (decision_tree, random_forest, gradient_boosting, optional lightgbm; stratified_kfold eval config, `fpr_probe_set: benign_unusual`, `primary_metric: f1`, `tie_breaker: interpretability_penalty`)
-- [ ] Implement `classifier/train.py` — training entry point, invoked only by the benchmark harness (never at `scan` runtime, AGENTS.md §5)
-- [ ] Implement `benchmark/run_benchmark.py`:
+- [x] Write `benchmark/models.yaml` search space exactly as specified in tech-implementation.md §5.2 (decision_tree, random_forest, gradient_boosting, optional lightgbm; stratified_kfold eval config, `fpr_probe_set: benign_unusual`, `primary_metric: f1`, `tie_breaker: interpretability_penalty`)
+- [x] Implement `classifier/train.py` — training entry point, invoked only by the benchmark harness (never at `scan` runtime, AGENTS.md §5)
+- [x] Implement `benchmark/run_benchmark.py`:
   - load `labels.csv`, run parse+features once per file, cache and share across all candidates
   - grid-search each candidate via stratified k-fold on `benign`+`malicious` only
   - record precision/recall/F1/ROC-AUC, FPR on `benign_unusual`, mean tree depth/node count, fit+predict wall-clock time
   - write `results/comparison.csv` and rendered `results/comparison.md`, sorted by primary metric with tie-breaker applied
-- [ ] Run the first full benchmark pass
-- [ ] Use the results to resolve the deferred decisions from tech-implementation.md §8:
-  - [ ] `RiskScore.score` → label thresholds (benign/suspicious/malicious)
-  - [ ] whether `benign_unusual` FPR is a hard gate in `promote.py` or advisory
-  - [ ] SARIF field mapping details (rule ids, help URIs)
-  - [ ] confirm or revise corpus size targets from Phase 6
+- [x] Run the first full benchmark pass
+- [x] Use the results to resolve the deferred decisions from tech-implementation.md §8:
+  - [x] `RiskScore.score` → label thresholds (benign/suspicious/malicious)
+  - [x] whether `benign_unusual` FPR is a hard gate in `promote.py` or advisory
+  - [x] SARIF field mapping details (rule ids, help URIs)
+  - [x] confirm or revise corpus size targets from Phase 6
 
 **Exit criteria:** `comparison.md` shows a ranked table across all candidates with the tie-breaker correctly applied; all four deferred decisions have a written resolution (even if "advisory for now, revisit later").
 

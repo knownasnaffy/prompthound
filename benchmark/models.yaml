@@ -1,0 +1,53 @@
+# benchmark/models.yaml — model & hyperparameter search space
+#
+# This is the single source of truth for model selection (AGENTS.md §6).
+# Adding a candidate is a YAML edit, not a code change — run_benchmark.py
+# uses importlib to load the estimator from the fully-qualified ``estimator``
+# path, then grid-searches over the ``grid`` entries.
+#
+# Tie-breaker policy: when two runs are within ``epsilon`` of the top F1,
+# prefer the *simpler / shallower* model.  Interpretability is a first-class
+# requirement, not an afterthought (concept.md §2, tech-implementation.md §5.4,
+# AGENTS.md §6).
+#
+# ``lightgbm`` is an optional extra — run_benchmark.py skips it gracefully if
+# lightgbm is not installed (pip install -e ".[lgbm]" to enable it).
+
+candidates:
+  - name: decision_tree
+    estimator: sklearn.tree.DecisionTreeClassifier
+    grid:
+      max_depth: [3, 5, 8, 12, null]
+      min_samples_leaf: [1, 5, 10]
+      criterion: [gini, entropy]
+
+  - name: random_forest
+    estimator: sklearn.ensemble.RandomForestClassifier
+    grid:
+      n_estimators: [50, 100, 300]
+      max_depth: [5, 10, null]
+      min_samples_leaf: [1, 5]
+
+  - name: gradient_boosting
+    estimator: sklearn.ensemble.GradientBoostingClassifier
+    grid:
+      n_estimators: [50, 100, 200]
+      max_depth: [2, 3, 5]
+      learning_rate: [0.01, 0.05, 0.1, 0.2]
+
+  - name: lightgbm        # optional extra; skipped automatically if not installed
+    estimator: lightgbm.LGBMClassifier
+    grid:
+      num_leaves: [15, 31, 63]
+      max_depth: [3, 5, -1]
+      learning_rate: [0.01, 0.05, 0.1]
+      n_estimators: [50, 100, 200]
+
+evaluation:
+  split: stratified_kfold
+  folds: 5
+  test_holdout: 0.2          # held-out fraction of benign+malicious used for final metrics
+  fpr_probe_set: benign_unusual   # eval-only — NEVER mixed into training (AGENTS.md §6)
+  primary_metric: f1
+  tie_breaker: interpretability_penalty   # prefers shallower trees / fewer estimators when F1 is within epsilon
+  tie_breaker_epsilon: 0.02   # consider two runs tied if their F1 differs by ≤ this value
