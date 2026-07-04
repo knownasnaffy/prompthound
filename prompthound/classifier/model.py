@@ -173,7 +173,7 @@ def _extract_feature_importances(
 # ─────────────────────────────────────────────────────────────────────────────
 
 def classify(feature_vector: FeatureVector) -> RiskScore:
-    """Score a ``FeatureVector`` and return a ``RiskScore`` with decision path.
+    """Score a ``FeatureVector`` and return a ``RiskScore`` with local feature contributions.
 
     Args:
         feature_vector: The numeric feature encoding of a parsed skill file,

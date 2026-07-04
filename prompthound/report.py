@@ -6,7 +6,7 @@ Consumes a ``ScanResult`` and renders it in three formats:
   - SARIF 2.1.0 (``render_sarif``)
 
 Architecture constraint (architecture.md §2.6, AGENTS.md §5 — hard):
-  Rule hits, classifier score + decision path, and capability-chain flags
+  Rule hits, classifier score + local feature contributions, and capability-chain flags
   are **three separate kinds of evidence** and MUST remain visibly separate in
   every output format.  Flattening them into one undifferentiated list is a
   violation caught by snapshot tests (tech-implementation.md §6).
@@ -149,7 +149,7 @@ def render_human(result: ScanResult) -> str:
     Structure (architecture.md §2.6 — three sections, never merged):
       1. File summary line
       2. [RULE HITS] — deterministic heuristics
-      3. [CLASSIFIER] — ML score + decision path
+      3. [CLASSIFIER] — ML score + local feature contributions
       4. [CAPABILITY CHAINS] — structural sequence flags
 
     Returns the complete output as a string (caller writes to stdout).
@@ -226,7 +226,7 @@ def render_json(result: ScanResult) -> str:
     Top-level structure keeps the three evidence types in distinct keys
     (architecture.md §2.6):
       - ``"rule_hits"``     — list of rule hit objects
-      - ``"classifier"``    — classifier score/label/decision_path (or null)
+      - ``"classifier"``    — classifier score/label/local feature contributions (or null)
       - ``"chain_flags"``   — list of chain flag objects
 
     Returns a pretty-printed JSON string (caller writes to stdout).

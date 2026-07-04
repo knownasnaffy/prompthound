@@ -100,11 +100,11 @@ evidence, which is the whole justification for having both layers instead of
 one.
 
 ### 2.4 Classifier **In:** `FeatureVector`. **Out:** `RiskScore` (0–1 or
-categorical) **plus the decision path** — which features and thresholds the
-tree actually split on for this file.
+categorical) **plus the local feature contributions** (via Saabas decomposition)
+showing which features drove the score for this specific sample.
 
-The split path is not an afterthought — it's the main deliverable of this
-stage. A bare score with no path would collapse the interpretability goal from
+Surfacing local feature contributions is not an afterthought — it's the main deliverable of this
+stage. A bare score with no explanation would collapse the interpretability goal from
 concept.md §2 back into a black box.
 
 ### 2.5 Capability-chain check **In:** `ParsedSkill` (frontmatter capabilities
@@ -117,8 +117,8 @@ in the diagram because it's the stage most likely to reference *both*
 frontmatter and scattered body locations at once, so it benefits from the file
 having already been fully parsed and validated by the time it runs.
 
-### 2.6 Reporter **In:** everything upstream — `RuleHit[]`, `RiskScore` + split
-path, `ChainFlags[]`. **Out:** the final report, in human-readable form by
+### 2.6 Reporter **In:** everything upstream — `RuleHit[]`, `RiskScore` + local feature
+contributions, `ChainFlags[]`. **Out:** the final report, in human-readable form by
 default, or `sarif`/`json` on request.
 
 The reporter's only real job is **merge without flattening**: a developer

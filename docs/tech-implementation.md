@@ -24,7 +24,7 @@ resistance for stage 2.1.
 | CLI framework                | `click`                                             | Subcommands, `--format`/`--fail-on` flags map cleanly to option decorators          |
 | Frontmatter/markdown parsing | `python-frontmatter` + `markdown-it-py`             | Frontmatter split is a solved problem; markdown-it gives a token stream for code-block extraction instead of regex-scraping |
 | Unicode Tag detection        | stdlib (`unicodedata`, raw codepoint range checks)  | No library needed for a fixed codepoint range (U+E0000–U+E007F)                     |
-| Classifier                   | `scikit-learn` (`DecisionTreeClassifier`, `GradientBoostingClassifier`, `RandomForestClassifier`) | Interpretable-by-construction, `.tree_` / `decision_path()` give the split path stage 2.4 requires for free |
+| Classifier                   | `scikit-learn` (`DecisionTreeClassifier`, `GradientBoostingClassifier`, `RandomForestClassifier`) | Interpretable-by-construction, surfaces local feature contributions via Saabas decomposition |
 | Optional stronger GBT        | `lightgbm` (behind an extra, not a hard dependency) | Only pulled in if the benchmark (§5) shows it's worth the extra dependency weight over sklearn's GBT |
 | Model serialization          | `joblib`                                            | Standard for sklearn estimators, smaller/faster than pickle for numpy-heavy objects |
 | Output formats               | stdlib `json`; hand-rolled SARIF dict (SARIF is just JSON with a schema) | No SARIF-writing library is worth adding for one schema        |
@@ -121,7 +121,7 @@ class FeatureVector:
 class RiskScore:
     score: float                   # 0-1
     label: str                     # benign | suspicious | malicious (thresholded)
-    decision_path: list[dict]      # [{feature, threshold, direction, node_value}, ...]
+    feature_importances: list[dict] # [{feature, importance}, ...] local feature contributions
 
 @dataclass
 class ChainFlag:
@@ -164,9 +164,9 @@ Only calling out decisions not already settled by architecture.md.
   `features.py::padding_ratio`, per the dual-path note in architecture.md §4.
 - **Classifier (`classifier/model.py`)**: at inference time this module does
   *not* train anything — it loads the committed `.joblib` artifact and calls
-  `.predict_proba()` + `.decision_path()` (or LightGBM's equivalent leaf-path
-  API). Training lives entirely in `classifier/train.py` and is only invoked by
-  the benchmark harness, keeping `scan` fast and deterministic.
+  `.predict_proba()` and extracts Saabas local feature contributions. Training
+  lives entirely in `classifier/train.py` and is only invoked by the benchmark
+  harness, keeping `scan` fast and deterministic.
 - **Capability-chain check (`chains.py`)**: implemented as a small fixed set of
   named sequences (declared as ordered lists of capability-tags, e.g.
   `["file_read", "encode", "network_send"]`) matched against

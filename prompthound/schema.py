@@ -212,9 +212,9 @@ class RiskScore:
     Produced by: C (classifier/model.py).
     Consumed by: REP (report.py).
 
-    The ``decision_path`` is the primary deliverable of the classifier stage —
-    it's what makes the risk score interpretable rather than a black-box number
-    (architecture.md §2.4, concept.md §2).
+    The ``feature_importances`` (local feature contributions via Saabas decomposition)
+    is the primary deliverable of the classifier stage — it's what makes the risk
+    score interpretable rather than a black-box number (architecture.md §2.4, concept.md §2).
     """
 
     score: float
@@ -227,10 +227,10 @@ class RiskScore:
     """
 
     feature_importances: list[dict]
-    """Ordered list of the top features that contributed to this score, based on global feature importance.
+    """Ordered list of the top features that contributed to this score, representing local feature contributions via Saabas decomposition.
     Each entry has the keys:
       - ``feature``    (str)   — feature name from ``FeatureVector.order``
-      - ``importance`` (float) — feature importance weight
+      - ``importance`` (float) — feature importance weight (contribution delta)
 
     An empty list is valid when the model doesn't produce meaningful importances.
     """
@@ -275,7 +275,7 @@ class ScanResult:
     The Reporter MUST keep the three evidence types visibly separate in every
     output format (architecture.md §2.6):
       - Rule hits         → ``rule_hits``
-      - Classifier output → ``risk`` + ``risk.decision_path``
+      - Classifier output → ``risk`` + ``risk.feature_importances``
       - Chain flags       → ``chain_flags``
     Flattening them into one list is a violation checked by snapshot tests.
     """

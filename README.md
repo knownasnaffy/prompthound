@@ -85,7 +85,7 @@ On the expanded benchmark corpus (2000+ files):
 - **Precision / Recall / F1:** Precision 0.971 / Recall 0.872 / F1 0.919 on a 403-file holdout test set.
 - **False Positive Rate (FPR):** 0.00 on a challenging `benign_unusual` probe set (legitimate skills with valid shell/base64 usage).
 
-The classifier outputs its exact decision path for every score (e.g., "Flagged because base64 ratio > X and entropy > Y"). For full details, see `docs/evaluation_report.md`.
+The classifier surfaces the local feature contributions (via Saabas decomposition) that drove each score (e.g., how much base64 ratio or body entropy contributed to the risk score). For full details, see `docs/evaluation_report.md`.
 
 ## 6. Comparison with Alternative Tools
 
@@ -97,7 +97,7 @@ Other security scanners take different architectural approaches:
 
 PromptHound is built for environments with strict constraints:
 - **Air-gapped.** PromptHound relies on a local Random Forest classifier and offline heuristics. It makes zero network calls. Skill files never leave your machine, and scans finish in milliseconds.
-- **Deterministic evidence.** The classifier outputs its exact mathematical decision path (e.g., `base64 ratio > 0.4 AND entropy > 7.1`). Scores are exactly reproducible across CI runs without LLM-as-a-judge variance.
+- **Deterministic evidence.** The classifier surfaces the local feature contributions (via Saabas decomposition) that drove each score. Scores and contributions are exactly reproducible across CI runs without LLM-as-a-judge variance.
 
 Use the LLM-backed suites above for deep semantic analysis or ecosystem auditing. Use PromptHound for offline, sub-second pre-commit hooks.
 

@@ -71,7 +71,7 @@ meaningful statistical signal.
 
 **Conventions:**
 - PH0xx = rule-layer hits (deterministic heuristics).
-- PH1xx = classifier-layer findings (statistical score + decision path).
+- PH1xx = classifier-layer findings (statistical score + local feature contributions).
 - PH2xx = capability-chain findings (structural sequence detection).
 - `helpUri` base: `https://github.com/<org>/prompthound/blob/main/README.md`
 - SARIF `level`: "error" for malicious-threshold hits; "warning" for suspicious;

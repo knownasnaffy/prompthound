@@ -87,7 +87,7 @@ prompthound/
 ├── parse.py          # Stage 1: raw file → ParsedSkill
 ├── rules/            # Stage 2a: stateless heuristic rules (side-channel)
 ├── features.py       # Stage 2b: ParsedSkill → FeatureVector
-├── classifier/        # Stage 3: FeatureVector → RiskScore (+ decision path)
+├── classifier/        # Stage 3: FeatureVector → RiskScore (+ local feature contributions)
 ├── chains.py          # Stage 4: capability declared-vs-referenced + sequence detection
 ├── report.py          # Stage 5: merges everything, renders human/json/sarif
 └── schema.py           # shared dataclasses used across every stage boundary
@@ -122,7 +122,7 @@ that doc is the source of truth.
   `FeatureVector`.** It needs line-level spans for its explanations, which the
   numeric feature vector doesn't carry.
 - **Reporter must keep evidence types visibly separate.** Rule hits, classifier
-  score + decision path, and chain flags are three different kinds of evidence
+  score + local feature contributions, and chain flags are three different kinds of evidence
   and must not be flattened into one undifferentiated list in any output
   format. This is covered by an integration snapshot test — if you change
   `report.py` and a snapshot test fails, don't just update the snapshot without
