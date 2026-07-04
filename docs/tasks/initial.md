@@ -125,11 +125,11 @@ Derived from `concept.md`, `prompthound-architecture-flow.md`, `prompthound-tech
 
 ## Phase 8 — Classifier Promotion & Inference
 
-- [ ] Implement `benchmark/promote.py` — copies the winning (or specified `--run-id`) fitted estimator into `prompthound/classifier/artifact/model.joblib`, writes `metadata.json` (model family, hyperparameters, corpus version/hash, metrics, date)
-- [ ] Run promotion, commit the artifact + metadata
-- [ ] Implement `classifier/model.py` — loads the committed `.joblib` only, calls `.predict_proba()` + `.decision_path()` (or LightGBM's leaf-path equivalent), returns `RiskScore` with populated `decision_path`
-- [ ] Confirm `classifier/model.py` never imports `classifier/train.py` (AGENTS.md §5 hard constraint) and never trains at runtime
-- [ ] Unit test: load the committed artifact, run inference on a known fixture, assert score + decision path are non-trivial and stable across runs
+- [x] Implement `benchmark/promote.py` — copies the winning (or specified `--run-id`) fitted estimator into `prompthound/classifier/artifact/model.joblib`, writes `metadata.json` (model family, hyperparameters, corpus version/hash, metrics, date)
+- [x] Run promotion, commit the artifact + metadata
+- [x] Implement `classifier/model.py` — loads the committed `.joblib` only, calls `.predict_proba()` + `.decision_path()` (or LightGBM's leaf-path equivalent), returns `RiskScore` with populated `decision_path`
+- [x] Confirm `classifier/model.py` never imports `classifier/train.py` (AGENTS.md §5 hard constraint) and never trains at runtime
+- [x] Unit test: load the committed artifact, run inference on a known fixture, assert score + decision path are non-trivial and stable across runs
 
 **Exit criteria:** inference is sub-second, deterministic, and fully traceable to the `metadata.json` provenance record.
 
