@@ -6,13 +6,13 @@ Derived from `concept.md`, `prompthound-architecture-flow.md`, `prompthound-tech
 
 ## Phase 0 — Project Scaffolding
 
-- [ ] Initialize git repo, add `.gitignore` (venv, `__pycache__`, `.joblib` build artifacts that aren't the committed one, `results/*.csv`/`*.md` if regenerated locally before first commit)
-- [ ] Create the full directory layout from tech-implementation.md §2 as empty stubs (`prompthound/`, `rules/`, `classifier/`, `benchmark/`, `tests/unit/`, `tests/integration/`)
-- [ ] Write `pyproject.toml` with dependencies from tech-implementation.md §7 (`click`, `python-frontmatter`, `markdown-it-py`, `scikit-learn`, `joblib`, `pyyaml`, `pytest` dev, `lightgbm` as optional `[lgbm]` extra)
-- [ ] Set up `.venv`, editable install (`pip install -e ".[dev]"`), confirm `prompthound --help` runs (even as a stub) per AGENTS.md §2
-- [ ] Configure `ruff` (check + format) in `pyproject.toml`
-- [ ] Configure `pytest` (test paths, any markers needed for slow/integration tests)
-- [ ] Commit scaffolding as the baseline
+- [x] Initialize git repo, add `.gitignore` (venv, `__pycache__`, `.joblib` build artifacts that aren't the committed one, `results/*.csv`/`*.md` if regenerated locally before first commit)
+- [x] Create the full directory layout from tech-implementation.md §2 as empty stubs (`prompthound/`, `rules/`, `classifier/`, `benchmark/`, `tests/unit/`, `tests/integration/`)
+- [x] Write `pyproject.toml` with dependencies from tech-implementation.md §7 (`click`, `python-frontmatter`, `markdown-it-py`, `scikit-learn`, `joblib`, `pyyaml`, `pytest` dev, `lightgbm` as optional `[lgbm]` extra)
+- [x] Set up `.venv`, editable install (`pip install -e ".[dev]"`), confirm `prompthound --help` runs (even as a stub) per AGENTS.md §2
+- [x] Configure `ruff` (check + format) in `pyproject.toml`
+- [x] Configure `pytest` (test paths, any markers needed for slow/integration tests)
+- [x] Commit scaffolding as the baseline
 
 **Exit criteria:** empty package installs, `prompthound --help` and `pytest` both run without error (even with zero real tests/logic yet).
 
@@ -20,10 +20,10 @@ Derived from `concept.md`, `prompthound-architecture-flow.md`, `prompthound-tech
 
 ## Phase 1 — Shared Schemas (`schema.py`)
 
-- [ ] Implement all dataclasses exactly as specified in tech-implementation.md §3: `CodeBlock`, `ParsedSkill`, `RuleHit`, `FeatureVector`, `RiskScore`, `ChainFlag`, `ScanResult`
-- [ ] Confirm field types match (e.g. `unicode_tag_spans: list[tuple[int,int]]`, `decision_path: list[dict]`)
-- [ ] Add docstrings noting which stage produces / consumes each field, referencing architecture.md §1 diagram
-- [ ] Unit tests: instantiate each dataclass with representative values, confirm no implicit mutation between fields (e.g. `ScanResult` fields are independently settable)
+- [x] Implement all dataclasses exactly as specified in tech-implementation.md §3: `CodeBlock`, `ParsedSkill`, `RuleHit`, `FeatureVector`, `RiskScore`, `ChainFlag`, `ScanResult`
+- [x] Confirm field types match (e.g. `unicode_tag_spans: list[tuple[int,int]]`, `decision_path: list[dict]`)
+- [x] Add docstrings noting which stage produces / consumes each field, referencing architecture.md §1 diagram
+- [x] Unit tests: instantiate each dataclass with representative values, confirm no implicit mutation between fields (e.g. `ScanResult` fields are independently settable)
 
 **Exit criteria:** `schema.py` is the single import source for every later stage; no other module redefines these shapes.
 
