@@ -1,0 +1,44 @@
+{
+  "file": "<TEST_FILE_PATH>",
+  "parse_ok": true,
+  "rule_hits": [],
+  "classifier": {
+    "score": 0.2,
+    "label": "benign",
+    "decision_path": [
+      {
+        "feature": "padding_ratio",
+        "threshold": 0.017415,
+        "direction": ">",
+        "node_value": 0.5238
+      },
+      {
+        "feature": "code_prose_ratio",
+        "threshold": 0.229313,
+        "direction": ">",
+        "node_value": 0.0909
+      },
+      {
+        "feature": "[leaf]",
+        "threshold": null,
+        "direction": null,
+        "node_value": 0.2
+      }
+    ]
+  },
+  "chain_flags": [
+    {
+      "chain_name": "file_read\u2192network_send",
+      "steps": [
+        {
+          "capability": "file_read",
+          "line": 1
+        },
+        {
+          "capability": "network_send",
+          "line": 65
+        }
+      ]
+    }
+  ]
+}

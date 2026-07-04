@@ -161,11 +161,11 @@ Derived from `concept.md`, `prompthound-architecture-flow.md`, `prompthound-tech
 
 ## Phase 11 — Full Test Suite & QA
 
-- [ ] Complete unit test coverage for every stage (parse, rules, features, chains, classifier, reporter) if any gaps remain from earlier phases
-- [ ] Integration tests: full `scan()` over a small fixed subset of `benchmark/corpus/`, snapshot-checked for human/json/sarif output (tests/integration)
-- [ ] Malformed-input tests specifically re-run and confirmed (binary garbage, no frontmatter, empty file) per AGENTS.md §7
-- [ ] Full `pytest` run green, `ruff check .` and `ruff format .` clean
-- [ ] Re-verify: no stage imports across forbidden boundaries (`rules/` importing `rules/`, `features.py` importing `RuleHit`, anything importing `benchmark/` from `prompthound/`, anything importing `classifier/train.py` outside `benchmark/run_benchmark.py`)
+- [x] Complete unit test coverage for every stage (parse, rules, features, chains, classifier, reporter) if any gaps remain from earlier phases
+- [x] Integration tests: full `scan()` over a small fixed subset of `benchmark/corpus/`, snapshot-checked for human/json/sarif output (tests/integration)
+- [x] Malformed-input tests specifically re-run and confirmed (binary garbage, no frontmatter, empty file) per AGENTS.md §7
+- [x] Full `pytest` run green, `ruff check .` and `ruff format .` clean
+- [x] Re-verify: no stage imports across forbidden boundaries (`rules/` importing `rules/`, `features.py` importing `RuleHit`, anything importing `benchmark/` from `prompthound/`, anything importing `classifier/train.py` outside `benchmark/run_benchmark.py`)
 
 **Exit criteria:** clean `pytest` + `ruff` run; forbidden-import check passes; this is the state the project should be in before writing the evaluation report.
 

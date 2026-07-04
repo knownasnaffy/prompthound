@@ -33,7 +33,6 @@ import time
 from dataclasses import dataclass, field
 from typing import Any
 
-
 import numpy as np
 
 
@@ -59,8 +58,8 @@ class TrainResult:
 
 
 def train_model(
-    X_train: "np.ndarray",
-    y_train: "np.ndarray",
+    X_train: np.ndarray,
+    y_train: np.ndarray,
     estimator_class: type,
     hyperparams: dict[str, Any],
     feature_names: list[str],

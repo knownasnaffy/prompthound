@@ -1,0 +1,8 @@
+{
+  "file": "<TEST_FILE_PATH>",
+  "parse_ok": false,
+  "parse_error": "No YAML frontmatter found (missing --- delimiters)",
+  "rule_hits": [],
+  "classifier": null,
+  "chain_flags": []
+}

@@ -1,0 +1,9 @@
+======================================================================
+PromptHound Scan: <TEST_FILE_PATH>
+======================================================================
+
+  [ERROR] Could not parse file.
+  No YAML frontmatter found (missing --- delimiters)
+
+  No further analysis performed.
+======================================================================
