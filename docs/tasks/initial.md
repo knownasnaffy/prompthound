@@ -60,7 +60,7 @@ Derived from `concept.md`, `prompthound-architecture-flow.md`, `prompthound-tech
 
 ## Phase 4 — Feature Extraction (`features.py`)
 
-- [ ] Implement one pure function per feature in concept.md §3:
+- [x] Implement one pure function per feature in concept.md §3:
   - base64/hex blob ratio
   - shell command block presence / pipe-to-interpreter pattern
   - Unicode Tag character count
@@ -70,9 +70,9 @@ Derived from `concept.md`, `prompthound-architecture-flow.md`, `prompthound-tech
   - file size / padding anomaly ratio (shared helper from Phase 2)
   - Shannon entropy of body text
   - code-block-to-prose ratio
-- [ ] Define and freeze the canonical column order (`FeatureVector.order`) — this order is load-bearing for the classifier stage, changing it later requires retraining
-- [ ] Confirm every function takes only `ParsedSkill` — never `RuleHit[]` (architecture.md §2.3, AGENTS.md §5 hard constraint)
-- [ ] Unit tests asserting exact numeric feature values on hand-crafted fixtures (not just "feature fired," but the actual computed number)
+- [x] Define and freeze the canonical column order (`FeatureVector.order`) — this order is load-bearing for the classifier stage, changing it later requires retraining
+- [x] Confirm every function takes only `ParsedSkill` — never `RuleHit[]` (architecture.md §2.3, AGENTS.md §5 hard constraint)
+- [x] Unit tests asserting exact numeric feature values on hand-crafted fixtures (not just "feature fired," but the actual computed number)
 
 **Exit criteria:** `features.py` runs over every corpus-shaped fixture and produces a fully-populated `FeatureVector` with deterministic values.
 
