@@ -4,8 +4,6 @@
 
 *Philosophy: Sniffer, not shield. Detect, score, explain. The final call stays with the developer or CI pipeline.*
 
----
-
 ## 1. The Problem
 
 AI coding agents load third-party "skills" to learn capabilities and rules. Unlike npm or PyPI packages, these payloads are natural-language instructions.
@@ -17,8 +15,6 @@ Traditional static analysis and sandboxing tools miss these because the exploit 
 - **Scanner Evasion:** Padding files with junk data to bypass marketplace scanner size limits.
 
 PromptHound runs in under a second. Run it before you `git clone` a skill.
-
----
 
 ## 2. Architecture & Flow
 
@@ -58,15 +54,13 @@ PromptHound runs a linear pipeline with a rule-based side-channel. Deterministic
                  human report / --format sarif|json
 ```
 
----
-
 ## 3. Installation & Setup
 
 PromptHound is built in Python 3.11+. It uses no external databases or network calls.
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/prompthound.git
+git clone https://github.com/knownasnaffy/prompthound
 cd prompthound
 
 # Create a virtual environment
@@ -76,8 +70,6 @@ source .venv/bin/activate
 # Install the package in editable mode
 pip install -e ".[dev]"
 ```
-
----
 
 ## 4. Usage
 
@@ -102,8 +94,6 @@ prompthound scan path/to/SKILL.md --fail-on suspicious
 - **Suspicious (0.3 - 0.65):** Some anomalous features present. Worth manual review.
 - **Malicious (≥0.65):** Strong signals of steganography, data exfiltration pipelines, or encoded payloads.
 
----
-
 ## 5. Evaluation Results
 
 PromptHound uses a **Random Forest classifier (n_estimators=50, max_depth=5, min_samples_leaf=5)** to score feature vectors.
@@ -113,8 +103,6 @@ On the initial curated benchmark corpus:
 - **False Positive Rate (FPR):** 0.20 on a challenging `benign_unusual` probe set (legitimate skills with valid shell/base64 usage).
 
 The classifier outputs its exact decision path for every score (e.g., "Flagged because base64 ratio > X and entropy > Y"). For full details, see `docs/evaluation_report.md`.
-
----
 
 ## 6. Future Work (Out of Scope for v1.0)
 
