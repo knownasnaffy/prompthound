@@ -6,7 +6,7 @@ models:
       solver: ['lbfgs', 'liblinear']
       class_weight: ['balanced']
       max_iter: [1000]
-      
+
   RandomForestClassifier:
     class: sklearn.ensemble.RandomForestClassifier
     params:
@@ -14,14 +14,14 @@ models:
       max_depth: [None, 10, 20]
       class_weight: ['balanced']
       random_state: [42]
-      
+
   DecisionTreeClassifier:
     class: sklearn.tree.DecisionTreeClassifier
     params:
       max_depth: [None, 5, 10, 20]
       class_weight: ['balanced']
       random_state: [42]
-      
+
   GradientBoostingClassifier:
     class: sklearn.ensemble.GradientBoostingClassifier
     params:
@@ -29,22 +29,32 @@ models:
       learning_rate: [0.01, 0.1, 0.2]
       max_depth: [3, 5, 7]
       random_state: [42]
-      
+
+  # CAUTION: This MF takes a lot of time
   LGBMClassifier:
     class: lightgbm.LGBMClassifier
     params:
-      n_estimators: [100]
-      learning_rate: [0.1]
-      num_leaves: [31]
+      n_estimators: [100, 300]
+      learning_rate: [0.01, 0.1]
+      num_leaves: [31, 63]
       class_weight: ['balanced']
       random_state: [42]
       verbose: [-1]
-      
+
   XGBClassifier:
     class: xgboost.XGBClassifier
     params:
-      n_estimators: [100]
-      learning_rate: [0.1]
-      max_depth: [3, 5, 7]
-      scale_pos_weight: [1.0] # Handle imbalance differently if needed
+      n_estimators: [100, 300]
+      learning_rate: [0.01, 0.1]
+      max_depth: [3, 7]
+      scale_pos_weight: [1.0]
+      random_state: [42]
+
+  HistGradientBoostingClassifier:
+    class: sklearn.ensemble.HistGradientBoostingClassifier
+    params:
+      max_iter: [100, 300]
+      learning_rate: [0.01, 0.1]
+      max_depth: [None, 10]
+      class_weight: ['balanced']
       random_state: [42]

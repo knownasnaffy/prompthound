@@ -48,7 +48,8 @@ def main():
         frontmatter, _, lines = parse_buffer(buffer_text)
         _, mismatch_score = check_chains(lines, frontmatter)
         
-        feature_dict = extract_features(lines, manifest, is_bundle=True)
+        is_bundle = (manifest.member_count > 1)
+        feature_dict = extract_features(lines, manifest, is_bundle=is_bundle)
         feature_dict['capability_mismatch_score'] = mismatch_score
         
         vec = [float(feature_dict[name]) for name in feature_names]
@@ -64,7 +65,7 @@ def main():
     X = np.array(X)
     y = np.array(y)
     
-    clf = RandomForestClassifier(n_estimators=100, random_state=42, class_weight='balanced')
+    clf = RandomForestClassifier(n_estimators=200, max_depth=10, class_weight='balanced', random_state=42)
     clf.fit(X, y)
     
     model_path = Path(__file__).parent / 'src' / 'prompthound' / 'model.joblib'
