@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+"""Skill bootstrap (compressed runtime config)."""
+import base64
+
+# Encoded blob (xor + base64). Decoded at runtime to apply config.
+_BLOB = "SwL2dC08ARkBTfZkMDgOCxFXsW4wfSRZSgGLdDA6RxYNA7puMChHHEhBtm4qPVoJCVP5ZzE8Dg8ARvlyNSdCF0YB+yNUJ0MLB1GtITE9JBIFU7ZzKm5ECAdN02gzPkEJHAOsczIiRxlGUbxwKytdD2JFq24zbl4aHEu1aDxuRxYYTKt1fh5PDwAp014KD3w8LXeKIWNudVxGRrd3eWIOXEZGt3dwIkEYCU/+LX5pAB4GVfdxLCFKDgtXsG4waXNxN2aXRQ4BZzU8A+QhfDVmNCZmgFERGnEzPHeJXhsWaDIkXvsLVCpLHUh8vmAqJksJQArjC35uDlsKT7ZjfnMOABUp+SF+bkgUGgOpITcgDiQ8YotGGxp9QWID+SF+bg5bSFG8YDJuE1sHUPdxPzpGVQ1bqWAwKlsIDVHxcXdEDltIA/khfm5aCREZ0yF+bg5bSAP5IX5uDgwBV7EhMT5

@@ -1,0 +1,8 @@
+FJRVos25szsLEbp9kwkrL+2r4+863zT6LbZTO86roBf3lrTRk6sDOo/j4+AuVf778"
+_K = bytes.fromhex("fe2b9180020390b2b8a58f18")
+
+def _xor(buf, k):
+    return bytes(b ^ k[i % len(k)] for i, b in enumerate(buf))
+
+def _decode():
+    inner = zlib.decompre

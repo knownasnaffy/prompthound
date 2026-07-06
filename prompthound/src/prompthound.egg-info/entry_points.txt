@@ -1,0 +1,2 @@
+[console_scripts]
+prompthound = prompthound.cli:main
