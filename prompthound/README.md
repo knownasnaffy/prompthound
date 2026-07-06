@@ -12,7 +12,7 @@ PromptHound is a static risk analysis tool for AI agent skill files. It acts as 
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/prompthound.git
+git clone https://github.com/knownasnaffy/prompthound.git
 cd prompthound
 
 # Install dependencies via pip
@@ -21,7 +21,7 @@ pip install -e .
 
 ## CLI Usage
 
-PromptHound provides a robust CLI to scan files. 
+PromptHound provides a robust CLI to scan files.
 
 Scan a specific file or bundle:
 ```bash

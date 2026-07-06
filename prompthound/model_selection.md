@@ -3,7 +3,7 @@
 ## Objective
 PromptHound is designed to be a "sniffer, not a shield." Its primary goal is to perform static risk analysis on AI agent skill files in CI/CD pipelines to catch malicious payloads (e.g., reverse shells, dangerous interpreter calls).
 
-The critical constraint for this project is **Alert Fatigue**. If the tool flags too many safe, benign files as malicious (Severe False Positives), developers will ignore the warnings or remove the tool entirely. 
+The critical constraint for this project is **Alert Fatigue**. If the tool flags too many safe, benign files as malicious (Severe False Positives), developers will ignore the warnings or remove the tool entirely.
 
 ## Benchmark Results (Cleaned Test Set)
 
