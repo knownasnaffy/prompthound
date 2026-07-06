@@ -47,7 +47,8 @@ def main():
         frontmatter, _, lines = parse_buffer(buffer_text)
         _, mismatch_score = check_chains(lines, frontmatter)
         
-        feature_dict = extract_features(lines, manifest, is_bundle=True)
+        is_bundle = (manifest.member_count > 1)
+        feature_dict = extract_features(lines, manifest, is_bundle=is_bundle)
         feature_dict['capability_mismatch_score'] = mismatch_score
         
         vec = [float(feature_dict[name]) for name in feature_names]

@@ -49,7 +49,9 @@ def flatten_bundle(directory):
     manifest = SourceSpan()
     
     all_files = []
-    for root, _, files in os.walk(directory_obj):
+    for root, dirs, files in os.walk(directory_obj):
+        if 'benign_pending_review' in dirs:
+            dirs.remove('benign_pending_review')
         for f in files:
             all_files.append(Path(root) / f)
             

@@ -5,6 +5,7 @@ import warnings
 from pathlib import Path
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.metrics import classification_report, f1_score, precision_score, recall_score, confusion_matrix
+from sklearn.preprocessing import LabelEncoder
 
 warnings.filterwarnings('ignore')
 
@@ -42,10 +43,17 @@ def main():
         
     data = np.load(features_path)
     X = data['X']
-    y = data['y']
+    y_raw = data['y']
+    is_bundle_arr = data['is_bundle']
+    
+    le = LabelEncoder()
+    y = le.fit_transform(y_raw)
     
     # 80/20 train/test split, stratified by y
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+    # We also need to split is_bundle_arr
+    X_train, X_test, y_train, y_test, _, is_bundle_test = train_test_split(
+        X, y, is_bundle_arr, test_size=0.2, random_state=42, stratify=y
+    )
     
     print(f"Train size: {len(y_train)}, Test size: {len(y_test)}")
     
@@ -77,34 +85,45 @@ def main():
         y_pred = best_model.predict(X_test)
         
         f1_mac = f1_score(y_test, y_pred, average='macro')
+        
+        bundle_mask = (is_bundle_test == 1)
+        single_mask = (is_bundle_test == 0)
+        
+        f1_mac_bundle = f1_score(y_test[bundle_mask], y_pred[bundle_mask], average='macro') if np.sum(bundle_mask) > 0 else 0
+        f1_mac_single = f1_score(y_test[single_mask], y_pred[single_mask], average='macro') if np.sum(single_mask) > 0 else 0
+        
         prec_mac = precision_score(y_test, y_pred, average='macro', zero_division=0)
         rec_mac = recall_score(y_test, y_pred, average='macro', zero_division=0)
         
-        fpr_severe, fpr_mild = compute_fpr(y_test, y_pred)
+        y_test_str = le.inverse_transform(y_test)
+        y_pred_str = le.inverse_transform(y_pred)
+        fpr_severe, fpr_mild = compute_fpr(y_test_str, y_pred_str)
         
         results.append({
             'Model': model_name,
-            'Macro-F1': f1_mac,
-            'Macro-Precision': prec_mac,
-            'Macro-Recall': rec_mac,
+            'Macro-F1 (All)': f1_mac,
+            'Macro-F1 (Bundle)': f1_mac_bundle,
+            'Macro-F1 (Single)': f1_mac_single,
             'FPR-Severe': fpr_severe,
             'FPR-Mild': fpr_mild
         })
         
-        print(f"Macro-F1: {f1_mac:.4f}")
+        print(f"Macro-F1 (All): {f1_mac:.4f}")
+        print(f"Macro-F1 (Bundle): {f1_mac_bundle:.4f}")
+        print(f"Macro-F1 (Single): {f1_mac_single:.4f}")
         print(f"FPR-Severe: {fpr_severe:.4f}")
         print(f"FPR-Mild: {fpr_mild:.4f}")
 
     # Generate Markdown Report
     report = ["# PromptHound Benchmark Results", ""]
-    report.append("| Model | Macro-F1 | Macro-Precision | Macro-Recall | FPR-Severe | FPR-Mild |")
+    report.append("| Model | Macro-F1 (All) | Macro-F1 (Bundle) | Macro-F1 (Single) | FPR-Severe | FPR-Mild |")
     report.append("|---|---|---|---|---|---|")
     
     # Sort by F1-Macro descending
-    results.sort(key=lambda x: x['Macro-F1'], reverse=True)
+    results.sort(key=lambda x: x['Macro-F1 (All)'], reverse=True)
     
     for r in results:
-        row = f"| {r['Model']} | {r['Macro-F1']:.4f} | {r['Macro-Precision']:.4f} | {r['Macro-Recall']:.4f} | {r['FPR-Severe']:.4f} | {r['FPR-Mild']:.4f} |"
+        row = f"| {r['Model']} | {r['Macro-F1 (All)']:.4f} | {r['Macro-F1 (Bundle)']:.4f} | {r['Macro-F1 (Single)']:.4f} | {r['FPR-Severe']:.4f} | {r['FPR-Mild']:.4f} |"
         report.append(row)
         
     report_path = base_dir / 'benchmark_report.md'

@@ -1,9 +1,10 @@
 # PromptHound Benchmark Results
 
-| Model | Macro-F1 | Macro-Precision | Macro-Recall | FPR-Severe | FPR-Mild |
+| Model | Macro-F1 (All) | Macro-F1 (Bundle) | Macro-F1 (Single) | FPR-Severe | FPR-Mild |
 |---|---|---|---|---|---|
-| LGBMClassifier | 0.7801 | 0.7829 | 0.7837 | 0.0457 | 0.1159 |
-| GradientBoostingClassifier | 0.7759 | 0.8254 | 0.7691 | 0.0610 | 0.0213 |
-| DecisionTreeClassifier | 0.7568 | 0.7654 | 0.7614 | 0.0457 | 0.0884 |
-| RandomForestClassifier | 0.7526 | 0.7731 | 0.7593 | 0.0183 | 0.0457 |
-| LogisticRegression | 0.6509 | 0.6645 | 0.6827 | 0.0213 | 0.1159 |
+| GradientBoostingClassifier | 0.7759 | 0.7712 | 0.9324 | 0.0610 | 0.0213 |
+| XGBClassifier | 0.7750 | 0.7717 | 0.8803 | 0.0579 | 0.0183 |
+| LGBMClassifier | 0.7709 | 0.7648 | 0.9562 | 0.0579 | 0.1189 |
+| DecisionTreeClassifier | 0.7537 | 0.7468 | 0.9562 | 0.0457 | 0.0915 |
+| RandomForestClassifier | 0.7528 | 0.7444 | 1.0000 | 0.0152 | 0.0457 |
+| LogisticRegression | 0.6686 | 0.6676 | 0.4453 | 0.0610 | 0.1189 |

@@ -39,3 +39,12 @@ models:
       class_weight: ['balanced']
       random_state: [42]
       verbose: [-1]
+      
+  XGBClassifier:
+    class: xgboost.XGBClassifier
+    params:
+      n_estimators: [100]
+      learning_rate: [0.1]
+      max_depth: [3, 5, 7]
+      scale_pos_weight: [1.0] # Handle imbalance differently if needed
+      random_state: [42]
