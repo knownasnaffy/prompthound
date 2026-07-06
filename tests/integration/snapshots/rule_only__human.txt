@@ -3,7 +3,7 @@ PromptHound Scan: tests/fixtures/rule_only_skill.md
 ======================================================================
 
 ── RULE HITS (deterministic heuristics) ───────────────────────────────
-  [HIGH] SHELL_PIPE_001  span=(14, 14)
+  [HIGH] SHELL_PIPE_001  lines=(14, 14)
     curl | bash pipeline detected in bash code block at line 14
 
 ── CLASSIFIER (ML risk score) ─────────────────────────────────────────

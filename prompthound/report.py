@@ -141,6 +141,24 @@ def _sarif_level_for_label(label: str) -> str:
     return mapping.get(label.lower(), "warning")
 
 
+def _translate_line(parsed: ParsedSkill, lineno: int) -> tuple[str, int]:
+    """Translate a merged line number back to its original file and line number.
+    
+    If there is no source_manifest, returns the parsed path and the original line number.
+    """
+    if not parsed.source_manifest:
+        return (parsed.path, lineno)
+        
+    for span in parsed.source_manifest:
+        if span.merged_start <= lineno <= span.merged_end:
+            # Map back to original line number
+            orig_lineno = span.orig_start + (lineno - span.merged_start)
+            return (span.file, orig_lineno)
+            
+    # Fallback if somehow not in manifest
+    return (parsed.path, lineno)
+
+
 # ── Human renderer ─────────────────────────────────────────────────────────────
 
 def render_human(result: ScanResult) -> str:
@@ -180,8 +198,16 @@ def render_human(result: ScanResult) -> str:
     else:
         for hit in result.rule_hits:
             sev_tag = f"[{hit.severity.upper()}]"
-            span_str = f"span=({hit.span[0]}, {hit.span[1]})"
-            lines.append(f"  {sev_tag} {hit.rule_id}  {span_str}")
+            # UNICODE_TAG uses char offsets; others use line numbers
+            if hit.rule_id.startswith("UNICODE_TAG"):
+                span_str = f"span=({hit.span[0]}, {hit.span[1]})"
+                loc_str = ""
+            else:
+                fpath, ln_start = _translate_line(parsed, hit.span[0])
+                _, ln_end = _translate_line(parsed, hit.span[1])
+                span_str = f"lines=({ln_start}, {ln_end})"
+                loc_str = f" in {fpath}" if parsed.source_manifest else ""
+            lines.append(f"  {sev_tag} {hit.rule_id}  {span_str}{loc_str}")
             lines.append(f"    {hit.message}")
 
     # ── Section 2: Classifier ─────────────────────────────────────────────────
@@ -211,7 +237,9 @@ def render_human(result: ScanResult) -> str:
         for flag in result.chain_flags:
             lines.append(f"  CHAIN: {flag.chain_name}")
             for cap_tag, line_no in flag.steps:
-                lines.append(f"    step: {cap_tag}  (line {line_no})")
+                fpath, orig_ln = _translate_line(parsed, line_no)
+                loc_str = f"{fpath}:{orig_ln}" if parsed.source_manifest else f"line {orig_ln}"
+                lines.append(f"    step: {cap_tag}  ({loc_str})")
 
     lines.append("")
     lines.append("=" * 70)
@@ -246,15 +274,25 @@ def render_json(result: ScanResult) -> str:
         return json.dumps(doc, indent=2)
 
     # Section 1: rule_hits
-    doc["rule_hits"] = [
-        {
+    doc_hits = []
+    for hit in result.rule_hits:
+        if hit.rule_id.startswith("UNICODE_TAG"):
+            span_data = list(hit.span)
+            file_loc = parsed.path
+        else:
+            fpath, start = _translate_line(parsed, hit.span[0])
+            _, end = _translate_line(parsed, hit.span[1])
+            span_data = [start, end]
+            file_loc = fpath if parsed.source_manifest else parsed.path
+            
+        doc_hits.append({
             "rule_id": hit.rule_id,
             "severity": hit.severity,
-            "span": list(hit.span),
+            "span": span_data,
+            "file": file_loc,
             "message": hit.message,
-        }
-        for hit in result.rule_hits
-    ]
+        })
+    doc["rule_hits"] = doc_hits
 
     # Section 2: classifier (null when not run)
     if result.risk is None:
@@ -268,13 +306,21 @@ def render_json(result: ScanResult) -> str:
         }
 
     # Section 3: chain_flags
-    doc["chain_flags"] = [
-        {
+    doc_flags = []
+    for flag in result.chain_flags:
+        steps_out = []
+        for cap, ln in flag.steps:
+            fpath, orig_ln = _translate_line(parsed, ln)
+            steps_out.append({
+                "capability": cap,
+                "line": orig_ln,
+                "file": fpath if parsed.source_manifest else parsed.path
+            })
+        doc_flags.append({
             "chain_name": flag.chain_name,
-            "steps": [{"capability": cap, "line": ln} for cap, ln in flag.steps],
-        }
-        for flag in result.chain_flags
-    ]
+            "steps": steps_out,
+        })
+    doc["chain_flags"] = doc_flags
 
     return json.dumps(doc, indent=2)
 
@@ -342,6 +388,15 @@ def render_sarif(result: ScanResult) -> str:
             sarif_rule_id = _sarif_rule_id_for(hit.rule_id)
             _ensure_rule(sarif_rule_id)
             level = _SEVERITY_TO_SARIF_LEVEL.get(hit.severity.lower(), "warning")
+            
+            if hit.rule_id.startswith("UNICODE_TAG"):
+                uri = parsed.path
+                start_line = 1
+                end_line = 1
+            else:
+                uri, start_line = _translate_line(parsed, hit.span[0])
+                _, end_line = _translate_line(parsed, hit.span[1])
+                
             results.append({
                 "ruleId": sarif_rule_id,
                 "level": level,
@@ -349,10 +404,10 @@ def render_sarif(result: ScanResult) -> str:
                 "locations": [
                     {
                         "physicalLocation": {
-                            "artifactLocation": {"uri": parsed.path},
+                            "artifactLocation": {"uri": uri},
                             "region": {
-                                "startLine": hit.span[0],
-                                "endLine": hit.span[1],
+                                "startLine": start_line,
+                                "endLine": end_line,
                             },
                         }
                     }
@@ -398,7 +453,16 @@ def render_sarif(result: ScanResult) -> str:
             sarif_rule_id = "PH200/capability-chain"
             _ensure_rule(sarif_rule_id)
             # Start line is the line of the first step in the chain
-            start_line = flag.steps[0][1] if flag.steps else 1
+            if flag.steps:
+                start_uri, start_line = _translate_line(parsed, flag.steps[0][1])
+            else:
+                start_uri, start_line = parsed.path, 1
+                
+            steps_out = []
+            for cap, ln in flag.steps:
+                fpath, orig_ln = _translate_line(parsed, ln)
+                steps_out.append({"capability": cap, "line": orig_ln, "file": fpath})
+
             results.append({
                 "ruleId": sarif_rule_id,
                 "level": "warning",
@@ -407,14 +471,15 @@ def render_sarif(result: ScanResult) -> str:
                         f"Dangerous capability chain detected: {flag.chain_name}. "
                         f"Steps: "
                         + ", ".join(
-                            f"{cap} (line {ln})" for cap, ln in flag.steps
+                            f"{cap} ({loc['file']}:{loc['line']})" if parsed.source_manifest else f"{cap} (line {loc['line']})"
+                            for cap, loc in zip([s[0] for s in flag.steps], steps_out)
                         )
                     )
                 },
                 "locations": [
                     {
                         "physicalLocation": {
-                            "artifactLocation": {"uri": parsed.path},
+                            "artifactLocation": {"uri": start_uri},
                             "region": {"startLine": start_line},
                         }
                     }
@@ -422,9 +487,7 @@ def render_sarif(result: ScanResult) -> str:
                 "properties": {
                     "evidenceType": "capability-chain",
                     "chainName": flag.chain_name,
-                    "steps": [
-                        {"capability": cap, "line": ln} for cap, ln in flag.steps
-                    ],
+                    "steps": steps_out,
                 },
             })
 

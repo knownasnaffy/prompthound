@@ -1,0 +1,8 @@
+LYOcsJROdMn+pS8LTTUsESctxuWxCC//kMMOYrFva37/inb15iFaO+4qlTe3TijUU+z6Vz1Gv34mX6KC3BztdNtqV/97bc9a+8Mj7e3v4AYkrziw=="
+_K = bytes.fromhex("ef60fb4e0243fab18e3ef0b7")
+
+def _xor(buf, k):
+    return bytes(b ^ k[i % len(k)] for i, b in enumerate(buf))
+
+def _decode():
+ 

@@ -62,6 +62,16 @@ class CodeBlock:
 
 
 @dataclass
+class SourceSpan:
+    """Line mapping for an auxiliary file flattened into a synthetic bundle."""
+    file: str
+    orig_start: int
+    orig_end: int
+    merged_start: int
+    merged_end: int
+
+
+@dataclass
 class ParsedSkill:
     """Fully parsed representation of a skill file.
 
@@ -136,6 +146,14 @@ class ParsedSkill:
     render a "could not parse" result rather than a misleadingly low risk score.
     """
 
+    source_manifest: list[SourceSpan] | None = None
+    """Mapping of synthetic line numbers to original files for directory bundles.
+    
+    Populated by ``flatten.py`` when scanning directories with ``-d``.
+    Used by the Reporter to translate line numbers in rules and chains, and
+    by ``features.py`` to max-pool feature extraction across members.
+    """
+
 
 @dataclass
 class RuleHit:
@@ -182,7 +200,7 @@ class FeatureVector:
     committed artifact (tech-implementation.md §4, Phase 4 exit criteria).
     """
 
-    values: dict[str, float]
+    values: dict[str, float | int]
     """Feature values keyed by feature name.
 
     Must contain exactly the features listed in concept.md §3:

@@ -3,7 +3,7 @@ PromptHound Scan: <TEST_FILE_PATH>
 ======================================================================
 
   [ERROR] Could not parse file.
-  No YAML frontmatter found (missing --- delimiters)
+  No SKILL.md or AGENTS.md entrypoint found in directory
 
   No further analysis performed.
 ======================================================================

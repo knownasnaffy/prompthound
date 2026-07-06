@@ -1,0 +1,4 @@
+vGhwR9vCwZsn7KSoUbJA1h+dS67RzoNOe7HSYm4p5U9oZf/tc48TbDPeBOzYYD4zDDix/pIcqgSdSrbh7bekUpidEAqX/X4xcu4aqwIXwVNraVkxoysMHt+5JNi3UWQzlR8Qp+TpyQQ3Isbbyz8wOP/qFSWTqlkQdt/8zsDmSzN43z/sXY6+8+GQqCPL735G1X5v7drEf+arnPQyPo1a1c2w2Lz9f/Fhj/mkaNFQavlYOYre+k5rbKenxV7zygVW50u+wegPU6Evnlq/TFSSDxr49esf8WiRKg=="
+_K = bytes.fromhex("781ecc1246b927bf66e8663e")
+
+def _xor(b

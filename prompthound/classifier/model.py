@@ -80,24 +80,15 @@ def _load_artifact() -> tuple[Any, dict]:
 # Label thresholding
 # ─────────────────────────────────────────────────────────────────────────────
 
-def _score_to_label(score: float, thresholds: dict) -> str:
-    """Map a raw probability score to a categorical label.
-
-    Thresholds come from ``metadata.json["risk_thresholds"]`` and were
-    resolved in Phase 7 (benchmark/results/deferred_decisions.md §1):
-      - score < benign_max   → "benign"
-      - benign_max ≤ score < suspicious_max → "suspicious"
-      - score ≥ suspicious_max → "malicious"
+def _score_to_label(proba_array: np.ndarray) -> str:
+    """Map class probabilities to a categorical label using argmax.
+    
+    Classes: 0 = safe, 1 = suspicious, 2 = malicious.
     """
-    benign_max = float(thresholds.get("benign_max", 0.3))
-    suspicious_max = float(thresholds.get("suspicious_max", 0.65))
-
-    if score < benign_max:
-        return "benign"
-    elif score < suspicious_max:
-        return "suspicious"
-    else:
-        return "malicious"
+    labels = ["safe", "suspicious", "malicious"]
+    idx = int(np.argmax(proba_array))
+    # Cap at 2 just in case
+    return labels[min(idx, 2)]
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -108,19 +99,13 @@ def _extract_feature_importances(
     estimator: Any,
     X_row: np.ndarray,
     feature_names: list[str],
+    target_class: int
 ) -> list[dict]:
     """Extract local feature contributions for the sample using the Saabas method.
 
-    Instead of returning global feature importances (which are the same for every
-    file), this computes how much each feature shifted the probability of the
-    "malicious" class *for this specific sample*, by tracing its path through
-    every tree in the forest and accumulating the changes in expected value.
-    
-    Returns the top 5 features that increased the malicious score, as:
-      - ``feature``    (str)   — feature name
-      - ``importance`` (float) — local contribution to the score
+    Traces the probability delta for the target class (typically the predicted non-safe class).
     """
-    if not hasattr(estimator, "estimators_"):
+    if not hasattr(estimator, "estimators_") or target_class == 0:
         return []
     
     contributions = {name: 0.0 for name in feature_names}
@@ -142,14 +127,18 @@ def _extract_feature_importances(
                 continue
             feature_name = feature_names[feature_idx]
             
-            # Calculate malicious fraction at parent and child
+            # Calculate target fraction at parent and child
             parent_vals = tree.tree_.value[parent, 0]
             child_vals = tree.tree_.value[child, 0]
             
-            parent_frac = parent_vals[1] / parent_vals.sum() if parent_vals.sum() > 0 else 0.0
-            child_frac = child_vals[1] / child_vals.sum() if child_vals.sum() > 0 else 0.0
+            if target_class < len(parent_vals):
+                parent_frac = parent_vals[target_class] / parent_vals.sum() if parent_vals.sum() > 0 else 0.0
+                child_frac = child_vals[target_class] / child_vals.sum() if child_vals.sum() > 0 else 0.0
+            else:
+                parent_frac = 0.0
+                child_frac = 0.0
             
-            # Contribution is the change in malicious probability
+            # Contribution is the change in target probability
             delta = child_frac - parent_frac
             contributions[feature_name] += delta
 
@@ -157,7 +146,7 @@ def _extract_feature_importances(
     active_features = []
     for name, contrib in contributions.items():
         avg_contrib = contrib / n_trees
-        # We only report features that pushed the score higher (contributed to malice)
+        # We only report features that pushed the score higher
         if avg_contrib > 0:
             active_features.append({"feature": name, "importance": round(avg_contrib, 4)})
             
@@ -198,20 +187,20 @@ def classify(feature_vector: FeatureVector) -> RiskScore:
     row_values = [feature_vector.values.get(name, 0.0) for name in feature_order]
     X_row = np.array([row_values], dtype=float)
 
-    # ── predict_proba: probability of [benign, malicious] ─────────────────────
+    # ── predict_proba: probability of [safe, suspicious, malicious] ─────────────────────
     proba = estimator.predict_proba(X_row)
-    # proba shape: (1, n_classes) — extract malicious-class probability
-    if proba.shape[1] >= 2:
-        score = float(proba[0, 1])
+    # proba shape: (1, n_classes) — score is 1.0 - probability of safe (class 0)
+    if proba.shape[1] > 1:
+        score = 1.0 - float(proba[0, 0])
     else:
         score = float(proba[0, 0])
 
-    # ── Label from thresholds in metadata ────────────────────────────────────
-    thresholds = metadata.get("risk_thresholds", {})
-    label = _score_to_label(score, thresholds)
+    # ── Label from argmax ──────────────────────────────────────────────────
+    label = _score_to_label(proba[0])
+    target_class = int(np.argmax(proba[0]))
 
     # ── Feature Importances ──────────────────────────────────────────────────
-    feature_importances = _extract_feature_importances(estimator, X_row, feature_order)
+    feature_importances = _extract_feature_importances(estimator, X_row, feature_order, target_class)
 
     return RiskScore(
         score=round(score, 6),

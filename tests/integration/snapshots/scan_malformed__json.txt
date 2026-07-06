@@ -1,7 +1,7 @@
 {
   "file": "<TEST_FILE_PATH>",
   "parse_ok": false,
-  "parse_error": "No YAML frontmatter found (missing --- delimiters)",
+  "parse_error": "No SKILL.md or AGENTS.md entrypoint found in directory",
   "rule_hits": [],
   "classifier": null,
   "chain_flags": []

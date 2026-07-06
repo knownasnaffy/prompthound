@@ -36,7 +36,7 @@
           "ruleId": "PH000/parse-error",
           "level": "error",
           "message": {
-            "text": "No YAML frontmatter found (missing --- delimiters)"
+            "text": "No SKILL.md or AGENTS.md entrypoint found in directory"
           },
           "locations": [
             {

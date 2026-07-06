@@ -8,8 +8,8 @@ from click.testing import CliRunner
 from prompthound.cli import cli
 
 _ROOT_DIR = Path(__file__).parent.parent.parent
-_BENIGN_FILE = _ROOT_DIR / "benchmark" / "corpus" / "benign" / "api_schema_validator.md"
-_MALICIOUS_FILE = _ROOT_DIR / "benchmark" / "corpus" / "malicious" / "clawhavoc_shell_pipe.md"
+_BENIGN_FILE = _ROOT_DIR / "benchmark" / "corpus" / "benign" / "case_00000"
+_MALICIOUS_FILE = _ROOT_DIR / "benchmark" / "corpus" / "malicious" / "case_00001"
 _MALFORMED_FILE = _ROOT_DIR / "tests" / "unit" / "fixtures" / "parse" / "no_frontmatter.md"
 
 _SNAPSHOT_DIR = Path(__file__).parent / "snapshots"
@@ -58,7 +58,7 @@ def snapshot_update(request: pytest.FixtureRequest) -> bool:
 ])
 def test_scan_formats(fmt: str, file_type: str, file_path: Path, snapshot_update: bool) -> None:
     runner = CliRunner()
-    result = runner.invoke(cli, ["scan", str(file_path), "--format", fmt])
+    result = runner.invoke(cli, ["scan", "-d", str(file_path), "--format", fmt])
     
     assert result.exit_code == 0, f"Expected 0 exit code, got {result.exit_code}: {result.output}"
     assert len(result.output) > 0
@@ -70,13 +70,13 @@ def test_scan_formats(fmt: str, file_type: str, file_path: Path, snapshot_update
 
 def test_scan_fail_on_benign() -> None:
     runner = CliRunner()
-    result = runner.invoke(cli, ["scan", str(_BENIGN_FILE), "--fail-on", "suspicious"])
+    result = runner.invoke(cli, ["scan", "-d", str(_BENIGN_FILE), "--fail-on", "suspicious"])
     # Benign file should not fail
     assert result.exit_code == 0
 
 def test_scan_fail_on_malicious() -> None:
     runner = CliRunner()
-    result = runner.invoke(cli, ["scan", str(_MALICIOUS_FILE), "--fail-on", "suspicious"])
+    result = runner.invoke(cli, ["scan", "-d", str(_MALICIOUS_FILE), "--fail-on", "suspicious"])
     # Malicious file should fail because it meets the threshold
     assert result.exit_code == 1
 

@@ -1,12 +1,14 @@
 {
-  "run_id": "random_forest__0003",
-  "promoted_at": "2026-07-05T02:23:49",
-  "model_family": "random_forest",
-  "estimator_class": "sklearn.ensemble._forest.RandomForestClassifier",
+  "run_id": "lightgbm__0011",
+  "promoted_at": "2026-07-06T11:21:32",
+  "model_family": "lightgbm",
+  "estimator_class": "lightgbm.sklearn.LGBMClassifier",
   "hyperparameters": {
-    "n_estimators": 50,
-    "max_depth": 10,
-    "min_samples_leaf": 1
+    "num_leaves": 15,
+    "max_depth": 3,
+    "learning_rate": 0.05,
+    "n_estimators": 200,
+    "class_weight": "balanced"
   },
   "feature_order": [
     "base64_hex_ratio",
@@ -17,33 +19,38 @@
     "urgency_phrase_density",
     "padding_ratio",
     "body_entropy",
-    "code_prose_ratio"
+    "code_prose_ratio",
+    "member_count",
+    "is_bundle"
   ],
   "corpus": {
-    "n_train_benign": 1625,
-    "n_train_malicious": 388,
-    "n_total": 2013,
-    "corpus_hash": "e53f2f1dffde3be1",
+    "n_train_benign": 1221,
+    "n_train_suspicious": 945,
+    "n_train_malicious": 2688,
+    "n_total": 4854,
+    "corpus_hash": "e3b0c44298fc1c14",
     "labels_csv": "benchmark/corpus/labels.csv"
   },
   "benchmark_metrics": {
-    "cv_f1": 0.8772139955830408,
-    "holdout_f1": 0.918918918918919,
-    "holdout_precision": 0.9714285714285714,
-    "holdout_recall": 0.8717948717948718,
-    "holdout_roc_auc": 0.971242603550296,
-    "fpr_benign_unusual_benchmark": 0.0,
-    "fpr_benign_unusual_full_corpus": 0.0,
-    "mean_depth": 10.0,
-    "total_nodes": 6278,
-    "n_estimators": 50
+    "cv_f1_macro": 0.52107401025173,
+    "holdout_f1_macro": 0.5285838730600306,
+    "holdout_precision": 0.5727714565993282,
+    "holdout_recall": 0.574491103357376,
+    "holdout_roc_auc": 0.7730427859771175,
+    "fpr_mild_benchmark": 0.0,
+    "fpr_severe_benchmark": 1.0,
+    "fpr_mild_full_corpus": 0.0,
+    "fpr_severe_full_corpus": 0.8,
+    "mean_depth": 0.0,
+    "total_nodes": 0,
+    "n_estimators": 1
   },
   "risk_thresholds": {
     "benign_max": 0.3,
     "suspicious_max": 0.65,
     "description": "score < benign_max \u2192 benign; benign_max \u2264 score < suspicious_max \u2192 suspicious; score \u2265 suspicious_max \u2192 malicious"
   },
-  "fit_time_s": 0.0751,
+  "fit_time_s": 0.1046,
   "random_state": 42,
   "fpr_advisory_threshold": 0.4,
   "fpr_advisory_exceeded": false

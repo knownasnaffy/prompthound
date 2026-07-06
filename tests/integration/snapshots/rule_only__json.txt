@@ -9,6 +9,7 @@
         14,
         14
       ],
+      "file": "tests/fixtures/rule_only_skill.md",
       "message": "curl | bash pipeline detected in bash code block at line 14"
     }
   ],

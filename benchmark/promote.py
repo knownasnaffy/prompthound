@@ -77,15 +77,16 @@ RISK_THRESHOLDS = {
 # ─────────────────────────────────────────────────────────────────────────────
 
 def load_labels(labels_csv: Path) -> list[dict[str, str]]:
-    """Return list of dicts with keys filepath/label/source/notes."""
     rows: list[dict[str, str]] = []
-    with labels_csv.open(newline="", encoding="utf-8") as fh:
-        reader = csv.DictReader(
-            (line for line in fh if not line.startswith("#") and line.strip()),
-        )
-        for row in reader:
-            rows.append(dict(row))
-    return rows
+    
+    for cls_name in ["benign", "suspicious", "malicious"]:
+        d = CORPUS_DIR / cls_name
+        if d.exists():
+            for p in d.iterdir():
+                if p.is_dir() or p.suffix == ".md":
+                    rows.append({"filepath": str(p.relative_to(_ROOT)), "label": cls_name})
+                
+    return sorted(rows, key=lambda x: x["filepath"])
 
 
 def extract_all_features(
@@ -106,7 +107,12 @@ def extract_all_features(
     for fp in filepaths:
         abs_fp = root / fp if not fp.is_absolute() else fp
         try:
-            parsed = parse_skill(str(abs_fp))
+            if abs_fp.is_dir():
+                from prompthound.flatten import parse_directory
+                parsed = parse_directory(str(abs_fp))
+            else:
+                parsed = parse_skill(str(abs_fp))
+            
             if not parsed.parse_ok:
                 print(f"  [SKIP] {fp}: parse error — {parsed.parse_error}", file=sys.stderr)
                 failed.append(fp)
@@ -167,7 +173,7 @@ def find_run(rows: list[dict[str, str]], run_id: str | None, top: bool) -> dict[
         if rank1:
             return rank1[0]
         # Fall back: sort by holdout_f1 desc
-        rows_sorted = sorted(rows, key=lambda r: float(r.get("holdout_f1", 0)), reverse=True)
+        rows_sorted = sorted(rows, key=lambda r: float(r.get("holdout_f1_macro", 0)), reverse=True)
         return rows_sorted[0]
     else:
         matches = [r for r in rows if r.get("run_id") == run_id]
@@ -240,25 +246,23 @@ def parse_hyperparams(hyperparams_str: str) -> dict[str, Any]:
 # FPR evaluation on probe set
 # ─────────────────────────────────────────────────────────────────────────────
 
-def evaluate_fpr_probe(estimator: Any) -> float:
-    """Measure FPR on the benign_unusual probe set.
-
-    All probe files are genuinely benign, so any positive prediction is a FP.
-    Returns fraction flagged (0.0 = no FPs, 1.0 = all flagged).
-    """
+def evaluate_fpr_probe(estimator: Any) -> dict[str, float]:
     probe_paths = sorted(BENIGN_UNUSUAL_DIR.glob("*.md"))
     if not probe_paths:
-        return 0.0
+        return {"fpr_mild": 0.0, "fpr_severe": 0.0}
 
     X_probe, ok_probe, _ = extract_all_features(
         [p.relative_to(_ROOT) for p in probe_paths], root=_ROOT
     )
 
     if len(X_probe) == 0:
-        return 0.0
+        return {"fpr_mild": 0.0, "fpr_severe": 0.0}
 
     y_pred = estimator.predict(X_probe)
-    return float(np.mean(y_pred))
+    return {
+        "fpr_mild": float(np.mean(y_pred == 1)),
+        "fpr_severe": float(np.mean(y_pred == 2)),
+    }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -276,12 +280,12 @@ def promote(run_id: str | None, top: bool, random_state: int = 42) -> None:
     model_name = target["model_name"]
     hyperparams_str = target["hyperparams"]
     run_id_actual = target["run_id"]
-    fpr_probe_recorded = float(target.get("fpr_benign_unusual", 0))
+    fpr_probe_recorded = float(target.get("fpr_mild", 0))
 
     print(f"\nTarget run: {run_id_actual}")
     print(f"  Model:       {model_name}")
     print(f"  Hyperparams: {hyperparams_str}")
-    print(f"  Holdout F1:  {target.get('holdout_f1', '?')}")
+    print(f"  Holdout F1:  {target.get('holdout_f1_macro', '?')}")
     print(f"  FPR(probe):  {fpr_probe_recorded:.2f}")
 
     # ── Advisory FPR warning (deferred_decisions.md §2) ───────────────────────
@@ -299,7 +303,7 @@ def promote(run_id: str | None, top: bool, random_state: int = 42) -> None:
     print("\nLoading corpus labels …")
     label_rows = load_labels(LABELS_CSV)
     # Filter to benign/malicious only (exclude benign_unusual — it's eval-only)
-    train_rows = [r for r in label_rows if r["label"] in ("benign", "malicious")]
+    train_rows = [r for r in label_rows if r["label"] in ("benign", "suspicious", "malicious")]
     labeled_paths = [Path(r["filepath"]) for r in train_rows]
     labels_by_path = {Path(r["filepath"]): r["label"] for r in train_rows}
 
@@ -309,13 +313,15 @@ def promote(run_id: str | None, top: bool, random_state: int = 42) -> None:
     if failed_paths:
         print(f"  Warning: {len(failed_paths)} file(s) skipped.", file=sys.stderr)
 
+    label_map = {"benign": 0, "suspicious": 1, "malicious": 2}
     y_all = np.array(
-        [1 if labels_by_path[p] == "malicious" else 0 for p in ok_paths],
+        [label_map[labels_by_path[p]] for p in ok_paths],
         dtype=int,
     )
     n_benign = int(np.sum(y_all == 0))
-    n_malicious = int(np.sum(y_all == 1))
-    print(f"  Training corpus: {len(y_all)} files ({n_benign} benign, {n_malicious} malicious)")
+    n_suspicious = int(np.sum(y_all == 1))
+    n_malicious = int(np.sum(y_all == 2))
+    print(f"  Training corpus: {len(y_all)} files ({n_benign} benign, {n_suspicious} suspicious, {n_malicious} malicious)")
 
     # ── Load estimator class and parse hyperparameters ────────────────────────
     estimator_class = load_estimator_class(model_name)
@@ -336,7 +342,8 @@ def promote(run_id: str | None, top: bool, random_state: int = 42) -> None:
 
     # ── Re-evaluate FPR on probe set using the newly fitted model ─────────────
     print("Evaluating FPR on benign_unusual probe set …")
-    fpr_actual = evaluate_fpr_probe(estimator)
+    fpr_actual_dict = evaluate_fpr_probe(estimator)
+    fpr_actual = fpr_actual_dict['fpr_mild']
     print(f"  FPR(probe) with full-corpus model: {fpr_actual:.2f}")
 
     if fpr_actual > FPR_ADVISORY_THRESHOLD:
@@ -366,19 +373,22 @@ def promote(run_id: str | None, top: bool, random_state: int = 42) -> None:
         "feature_order": FEATURE_ORDER,
         "corpus": {
             "n_train_benign": n_benign,
+            "n_train_suspicious": n_suspicious,
             "n_train_malicious": n_malicious,
             "n_total": int(len(y_all)),
             "corpus_hash": c_hash,
             "labels_csv": str(LABELS_CSV.relative_to(_ROOT)),
         },
         "benchmark_metrics": {
-            "cv_f1": float(target.get("cv_f1", 0)),
-            "holdout_f1": float(target.get("holdout_f1", 0)),
+            "cv_f1_macro": float(target.get("cv_f1_macro", 0)),
+            "holdout_f1_macro": float(target.get("holdout_f1_macro", 0)),
             "holdout_precision": float(target.get("holdout_precision", 0)),
             "holdout_recall": float(target.get("holdout_recall", 0)),
             "holdout_roc_auc": float(target.get("holdout_roc_auc", 0)),
-            "fpr_benign_unusual_benchmark": fpr_probe_recorded,
-            "fpr_benign_unusual_full_corpus": round(fpr_actual, 4),
+            "fpr_mild_benchmark": fpr_probe_recorded,
+            "fpr_severe_benchmark": float(target.get("fpr_severe", 0)),
+            "fpr_mild_full_corpus": round(fpr_actual, 4),
+            "fpr_severe_full_corpus": round(fpr_actual_dict["fpr_severe"], 4),
             "mean_depth": float(target.get("mean_depth", 0)),
             "total_nodes": int(float(target.get("total_nodes", 0))),
             "n_estimators": int(float(target.get("n_estimators", 1))),

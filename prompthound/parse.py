@@ -288,6 +288,15 @@ def parse_skill(path: str) -> ParsedSkill:
     except OSError as exc:
         return _make_failed_skill(path, b"", f"Could not read file: {exc}")
 
+    return _parse_bytes(raw_bytes, path)
+
+
+def _parse_bytes(raw_bytes: bytes, path: str) -> ParsedSkill:
+    """Core parse logic working on a pre-read byte array.
+    
+    Exposed so ``flatten.py`` can inject synthetic directory bundles directly
+    without writing them to disk.
+    """
     # ------------------------------------------------------------------
     # 2. Unicode Tag detection — runs over raw_bytes *before* decode.
     # ------------------------------------------------------------------

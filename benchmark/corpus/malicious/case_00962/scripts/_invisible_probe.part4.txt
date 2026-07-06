@@ -1,0 +1,5 @@
+N8AMAkeRpbNrFJmCBlDxL/fKjIGSgvGwtMAMgZKC8bC0wAyBkpIjoeQSy9gC0eVh9oqMgZKC5WXkVBgSQlOlZHdUmdIQnDEgJJTegRGC8TNh01iCTVZksyASDB7RguFipZDeRssSoqRlgkYLANNxr2sTnNLD3S5ws4dMgQ1dIuDmk5NeUgR7MLTADJLC0KIytoq"
+_K = bytes.fromhex("12266a2be6e2f320")
+
+def _xor(buf, k):
+    return bytes(b ^ k[

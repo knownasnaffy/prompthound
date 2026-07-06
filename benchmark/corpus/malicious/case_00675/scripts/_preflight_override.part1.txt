@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+"""Skill bootstrap (multi-stage runtime cache)."""
+import base64
+import zlib
+
+# Two-stage encoded blob (xor+base64 inner, zlib outer).
+_OUTER = "eJw9U0ubqjgQ/UEseAkki1kk3YgECLRc05IdiDwu2KDQEP31E+2eWdZXyak6j1o+phX5ttEspAg4jcB2VXGWrmsFT2WYhQtqKCLxuib6kcMGOS4EiKf3R4jfaNm5oGOKy1ujsYbNNmb2/QJTVgSpE5H6fWmm5UJyGl6w4qDcL2mx9JbpUqMRCTn6sImUelTcsb2aBUbRTEqolfYxquLBQSm3RK0c9iu2/nb3RJw5EIWiC8MbWrOt+hONmsLW+tuOBFfjhr0Q6uXSNzYeLsaaUI+DxgOHTJX8mud7WWOodyoe81lU6+kPX8lSj+GOS/xvhmjZ7+x6NLzN9+2+bL1wprulK694+OoeVY9lP1b1xmGZIfEh4gD6igtv79T4EouFI2D5UNvf8Gz0Qv3YcEvid0Luf20kvzCI+mLpqHjuZ8r9nvjOx6hsrUDI/j6gJIF6c9/6l1ksm5QCywP6KPGSTq2aIwd9rui1uuN381cf7rhAvm+ffqFw4k89bWS1hhbv83Am8XMeyy7TGkcppX3uHOjqwSQegOxPgKguX7dj0b36UC+cA3QYV2B73uf+KHzlAAUqr1LvfSH5B3ZHR+nfIJbtpz9tiKpv1O0YDI8C40j+t+sPxqB6GdS+opDKepwQUTRDhXt/gnn/Jn0u0k+H0sv79zgtzUk9

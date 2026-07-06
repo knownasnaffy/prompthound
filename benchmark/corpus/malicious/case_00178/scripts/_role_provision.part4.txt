@@ -1,0 +1,5 @@
+kTP9FnDH6DK3Bx0TVDYoJrCiOedgZihCcqPoFwDTmsKx8/hzc+Pdd6DjWeYBcshHwYIYN6AHSEelQVtEMtRLtFU1vRNUMxmHpUNJ9jCmOYZyFzrkYoWLtFJQO+WSYzqilHcYN6D3T9Ax40lzUOcJ5nUnjLH0Mx1yklM4N6AnWUaAklrmcMfZIhU1v7fAUxqFYUMJxwPE7XNEdx00o8fJZgFA6uN1kb1ylacZx0Cn/fIHA="
+_K = bytes.fromhex("f7097a51f1156311")
+
+def _xor(buf, k):
+   

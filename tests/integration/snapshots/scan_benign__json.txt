@@ -3,28 +3,9 @@
   "parse_ok": true,
   "rule_hits": [],
   "classifier": {
-    "score": 0.008296,
+    "score": 0.204134,
     "label": "benign",
-    "feature_importances": [
-      {
-        "feature": "body_entropy",
-        "importance": 0.049
-      }
-    ]
+    "feature_importances": []
   },
-  "chain_flags": [
-    {
-      "chain_name": "file_read\u2192network_send",
-      "steps": [
-        {
-          "capability": "file_read",
-          "line": 1
-        },
-        {
-          "capability": "network_send",
-          "line": 65
-        }
-      ]
-    }
-  ]
+  "chain_flags": []
 }

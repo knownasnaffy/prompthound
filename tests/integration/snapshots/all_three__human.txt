@@ -3,9 +3,9 @@ PromptHound Scan: tests/fixtures/all_three_skill.md
 ======================================================================
 
 ── RULE HITS (deterministic heuristics) ───────────────────────────────
-  [HIGH] SHELL_PIPE_001  span=(11, 11)
+  [HIGH] SHELL_PIPE_001  lines=(11, 11)
     curl | bash pipeline detected in bash code block at line 11
-  [WARN] ENCODED_BLOB_001  span=(5, 6)
+  [WARN] ENCODED_BLOB_001  lines=(5, 6)
     Base64-encoded blob detected (ratio=0.60)
   [HIGH] UNICODE_TAG_001  span=(1, 1)
     Unicode Tag steganography characters detected at byte offsets (45, 50)

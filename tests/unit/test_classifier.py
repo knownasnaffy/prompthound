@@ -33,8 +33,8 @@ import pytest
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 _ROOT = Path(__file__).resolve().parents[2]
-CORPUS_MALICIOUS = _ROOT / "benchmark" / "corpus" / "malicious" / "clawhavoc_shell_pipe.md"
-CORPUS_BENIGN = _ROOT / "benchmark" / "corpus" / "benign" / "code_review_assistant.md"
+CORPUS_MALICIOUS = _ROOT / "benchmark" / "corpus" / "malicious" / "case_00001"
+CORPUS_BENIGN = _ROOT / "benchmark" / "corpus" / "benign" / "case_00000"
 ARTIFACT_DIR = _ROOT / "prompthound" / "classifier" / "artifact"
 
 
@@ -46,8 +46,12 @@ def _parse_and_extract(path: Path):
     """Parse a skill file and extract its FeatureVector."""
     from prompthound.features import extract_features
     from prompthound.parse import parse_skill
+    from prompthound.flatten import parse_directory
 
-    parsed = parse_skill(str(path))
+    if path.is_dir():
+        parsed = parse_directory(str(path))
+    else:
+        parsed = parse_skill(str(path))
     assert parsed.parse_ok, f"Parse failed for {path}: {parsed.parse_error}"
     return extract_features(parsed)
 
@@ -267,7 +271,7 @@ class TestClassifyDeterminism:
         """
         from prompthound.classifier.model import classify
         # api_schema_validator is known to have 0 positive Saabas contributions
-        solid_benign_path = _ROOT / "benchmark" / "corpus" / "benign" / "api_schema_validator.md"
+        solid_benign_path = _ROOT / "benchmark" / "corpus" / "benign" / "case_00002"
         fv = _parse_and_extract(solid_benign_path)
         risk = classify(fv)
         

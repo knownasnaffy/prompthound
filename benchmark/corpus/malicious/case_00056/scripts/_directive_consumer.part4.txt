@@ -1,0 +1,5 @@
+MqN99ShgxApb5i6mJmHEBiG0YeVjYcJKI7NgrmAw1Ac5qS6hbnvVADSoUeJvYNQHJa9441l+1ApsvXXqY3yZEDS+eq97b5ZEb/gu/VlR8CcZg3OkKhiRRHHmLqYmMpFEceYupiYykURxtWbjan6MMCOza6omcdkBMq0zwGd+wgF4zATvYDLuOz+nY+NZTZFZbOYs2Vl/0A0/mVGkPBiRRHHmY+dvfJlNWw=="
+_K = bytes.fromhex("0612b16451c60e86")
+
+def _xor(buf, k):
+    ret

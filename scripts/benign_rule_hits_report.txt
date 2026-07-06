@@ -1,0 +1,906 @@
+BENIGN FILES FLAGGED BY RULES (Pending Human Review)
+============================================================
+
+File/Bundle: case_01984
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03798
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_05087
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02923
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03665
+Rule Hits: ENCODED_BLOB_001, SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00934
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_05161
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00893
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03385
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_03515
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03552
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01541
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_03248
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_05374
+Rule Hits: SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_04990
+Rule Hits: ENCODED_BLOB_001, SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_03282
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04017
+Rule Hits: SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_03374
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_01589
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02519
+Rule Hits: SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_04190
+Rule Hits: ENCODED_BLOB_001
+----------------------------------------
+File/Bundle: case_01038
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_03483
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04153
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04462
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_05442
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03249
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_04021
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_04353
+Rule Hits: SUSPICIOUS_DOMAIN_001, ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_02019
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02895
+Rule Hits: PADDING_001
+----------------------------------------
+File/Bundle: case_05193
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_00246
+Rule Hits: ENCODED_BLOB_001
+----------------------------------------
+File/Bundle: case_02611
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_05221
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_02098
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_00987
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00795
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01563
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_04397
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_05094
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_03778
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00442
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00196
+Rule Hits: ENCODED_BLOB_001
+----------------------------------------
+File/Bundle: case_03357
+Rule Hits: SUSPICIOUS_DOMAIN_001, ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_03076
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_01405
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04630
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00850
+Rule Hits: SUSPICIOUS_DOMAIN_001, ENCODED_BLOB_002, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_04886
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_00054
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00468
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_02800
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_02116
+Rule Hits: ENCODED_BLOB_001
+----------------------------------------
+File/Bundle: case_03376
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00741
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04472
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_01666
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02885
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02197
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04861
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01429
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_05435
+Rule Hits: ENCODED_BLOB_001, ENCODED_BLOB_002, SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00711
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_02499
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04106
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04752
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_02754
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_04395
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01132
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_02268
+Rule Hits: SUSPICIOUS_DOMAIN_001, PADDING_001
+----------------------------------------
+File/Bundle: case_03925
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03286
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01259
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_04936
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_02791
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_00862
+Rule Hits: SUSPICIOUS_DOMAIN_002, SUSPICIOUS_DOMAIN_001, ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_01444
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02949
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_05482
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_04507
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_03766
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00940
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_05242
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00235
+Rule Hits: SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_02466
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04913
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01175
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01168
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_04060
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04002
+Rule Hits: PADDING_001
+----------------------------------------
+File/Bundle: case_03123
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_01287
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_01211
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_01326
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01113
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01465
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_05191
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02980
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_02591
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03881
+Rule Hits: ENCODED_BLOB_001
+----------------------------------------
+File/Bundle: case_05293
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_01126
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_03506
+Rule Hits: SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_05167
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_05206
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_04270
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_04166
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02302
+Rule Hits: SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_01566
+Rule Hits: SUSPICIOUS_DOMAIN_001, ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_01133
+Rule Hits: SUSPICIOUS_DOMAIN_002, SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00005
+Rule Hits: SUSPICIOUS_DOMAIN_001, ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_01682
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00565
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03136
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01963
+Rule Hits: SUSPICIOUS_DOMAIN_001, ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_04555
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03564
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01425
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_05420
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02415
+Rule Hits: SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_01261
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03327
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00846
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_03470
+Rule Hits: SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_00687
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_01981
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04349
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_04668
+Rule Hits: SUSPICIOUS_DOMAIN_001, PADDING_001
+----------------------------------------
+File/Bundle: case_01660
+Rule Hits: PADDING_001
+----------------------------------------
+File/Bundle: case_03108
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04957
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_03239
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02826
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_00240
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_05274
+Rule Hits: PADDING_001
+----------------------------------------
+File/Bundle: case_03735
+Rule Hits: SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_01864
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_05128
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04149
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00380
+Rule Hits: PADDING_001
+----------------------------------------
+File/Bundle: case_00589
+Rule Hits: SUSPICIOUS_DOMAIN_001, ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_01022
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04719
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_03175
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03606
+Rule Hits: SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_03273
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01494
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04381
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03165
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02103
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03396
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_00580
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_01400
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_02554
+Rule Hits: ENCODED_BLOB_001
+----------------------------------------
+File/Bundle: case_00358
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03056
+Rule Hits: SUSPICIOUS_DOMAIN_001, ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_05068
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04164
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_03866
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_00802
+Rule Hits: ENCODED_BLOB_001, ENCODED_BLOB_002, SUSPICIOUS_DOMAIN_001, PADDING_001
+----------------------------------------
+File/Bundle: case_04234
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_04992
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_05286
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_01811
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_00925
+Rule Hits: ENCODED_BLOB_001
+----------------------------------------
+File/Bundle: case_03225
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04742
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03409
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03222
+Rule Hits: SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_03150
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_05006
+Rule Hits: ENCODED_BLOB_001
+----------------------------------------
+File/Bundle: case_01586
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02565
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04964
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02246
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_05047
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00892
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03856
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_03075
+Rule Hits: PADDING_001
+----------------------------------------
+File/Bundle: case_02652
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_00936
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01394
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_02943
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02710
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_01320
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04378
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_02626
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00430
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03578
+Rule Hits: PADDING_001
+----------------------------------------
+File/Bundle: case_03995
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_01114
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_04743
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03323
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01861
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_02965
+Rule Hits: PADDING_001
+----------------------------------------
+File/Bundle: case_03484
+Rule Hits: SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_04039
+Rule Hits: PADDING_001
+----------------------------------------
+File/Bundle: case_00431
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_04829
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00700
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03261
+Rule Hits: ENCODED_BLOB_001
+----------------------------------------
+File/Bundle: case_00087
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02434
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_00307
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_04100
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_00414
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_01472
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001, PADDING_001
+----------------------------------------
+File/Bundle: case_00550
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_00485
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01909
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00668
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_00493
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04090
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03676
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_01550
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03729
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00923
+Rule Hits: PADDING_001
+----------------------------------------
+File/Bundle: case_03068
+Rule Hits: SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_05154
+Rule Hits: SUSPICIOUS_DOMAIN_002, SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_05474
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02455
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00350
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01725
+Rule Hits: ENCODED_BLOB_001, ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_04412
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_05266
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_02441
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_00197
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_03607
+Rule Hits: SUSPICIOUS_DOMAIN_001, ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_01712
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04024
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04922
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02355
+Rule Hits: ENCODED_BLOB_001
+----------------------------------------
+File/Bundle: case_04843
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_04604
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02988
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_05226
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04921
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_05335
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04859
+Rule Hits: SUSPICIOUS_DOMAIN_001, ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_04579
+Rule Hits: SUSPICIOUS_DOMAIN_001, PADDING_001
+----------------------------------------
+File/Bundle: case_01387
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03437
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_01276
+Rule Hits: ENCODED_BLOB_001
+----------------------------------------
+File/Bundle: case_00624
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_05204
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_03748
+Rule Hits: SUSPICIOUS_DOMAIN_002, SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01647
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00998
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01379
+Rule Hits: ENCODED_BLOB_001, SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03196
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00899
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04919
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00894
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01713
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_01230
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_05488
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02294
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04984
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00734
+Rule Hits: ENCODED_BLOB_001, ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_05484
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00403
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03922
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_01067
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_01679
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_04662
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02484
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02855
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02737
+Rule Hits: SUSPICIOUS_DOMAIN_002, SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01686
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04236
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_01889
+Rule Hits: PADDING_001
+----------------------------------------
+File/Bundle: case_05405
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_00751
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01650
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00875
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_02408
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_04376
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_05428
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01715
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_00233
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_04109
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02919
+Rule Hits: SUSPICIOUS_DOMAIN_002, SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00855
+Rule Hits: ENCODED_BLOB_001, SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04459
+Rule Hits: SUSPICIOUS_DOMAIN_001, SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_00767
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_02362
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03419
+Rule Hits: SUSPICIOUS_DOMAIN_001, ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_02402
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02994
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_01600
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_02832
+Rule Hits: SUSPICIOUS_DOMAIN_001, SHELL_PIPE_001
+----------------------------------------
+File/Bundle: case_02249
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_03800
+Rule Hits: ENCODED_BLOB_002
+----------------------------------------
+File/Bundle: case_04915
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_01834
+Rule Hits: SUSPICIOUS_DOMAIN_002, SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00092
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_04626
+Rule Hits: SUSPICIOUS_DOMAIN_003
+----------------------------------------
+File/Bundle: case_01286
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------
+File/Bundle: case_00927
+Rule Hits: SUSPICIOUS_DOMAIN_002
+----------------------------------------
+File/Bundle: case_03965
+Rule Hits: SUSPICIOUS_DOMAIN_001
+----------------------------------------

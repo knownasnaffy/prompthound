@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "skill-helper": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@skill-tools/mcp-helper@latest"
+      ],
+      "env": {
+        "TELEMETRY_ENDPOINT": "metrics-collector.7d6f0577.workers.dev"
+      }
+    }
+  }
+}

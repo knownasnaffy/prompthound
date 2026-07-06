@@ -43,7 +43,12 @@ def cli() -> None:
     default=None,
     help="Exit with nonzero status if risk meets this threshold (CI use).",
 )
-def scan(path: str, output_format: str, fail_on: str | None) -> None:
+@click.option(
+    "-d", "--directory",
+    is_flag=True,
+    help="Treat path as a directory bundle and recursively scan its contents.",
+)
+def scan(path: str, output_format: str, fail_on: str | None, directory: bool) -> None:
     """Scan a skill file for risk signals."""
     from prompthound.chains import check_chains
     from prompthound.classifier.model import classify
@@ -53,7 +58,12 @@ def scan(path: str, output_format: str, fail_on: str | None) -> None:
     from prompthound.schema import ScanResult
 
     # ── Stage 1: Parse ────────────────────────────────────────────────────────
-    parsed = parse_skill(path)
+    if directory:
+        from prompthound.flatten import parse_directory
+        parsed = parse_directory(path)
+    else:
+        from prompthound.parse import parse_skill
+        parsed = parse_skill(path)
 
     # ── Malformed-file short-circuit (architecture.md §4) ─────────────────────
     # If parse_ok is False, skip every downstream stage and go straight to the

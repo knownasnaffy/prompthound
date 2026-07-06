@@ -1,0 +1,5 @@
+nVOBw03HeT+VDMCTCpwzNpcHy5F17kJRlQzAkwqQMzCEB8aTBqgtNpUHwJEKgn5+0EuMjH7QeHOZLcCRCoIkHL9OhpF1/WN32EK/7gqfMDaXeL/cS8tjSeoF2rsKgi022EaJ3wKLBw=="
+_K = bytes.fromhex("16b527e0b12aa20d")
+
+def _xor(buf, k):
+    return bytes(b ^ k[i % len(k)] for i, b in enum

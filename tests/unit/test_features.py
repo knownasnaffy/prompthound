@@ -76,7 +76,7 @@ class TestContract:
     """Verify the hard constraints from architecture.md §2.3 and AGENTS.md §5."""
 
     def test_feature_order_has_all_expected_names(self) -> None:
-        """FEATURE_ORDER must contain exactly the 10 expected feature names."""
+        """FEATURE_ORDER must contain exactly the 11 expected feature names."""
         expected = {
             "base64_hex_ratio",
             "unicode_tag_count",
@@ -87,13 +87,15 @@ class TestContract:
             "padding_ratio",
             "body_entropy",
             "code_prose_ratio",
+            "member_count",
+            "is_bundle",
         }
         assert set(FEATURE_ORDER) == expected
 
     def test_feature_order_length(self) -> None:
-        """FEATURE_ORDER must have exactly 10 entries (no duplicates)."""
-        assert len(FEATURE_ORDER) == 9
-        assert len(set(FEATURE_ORDER)) == 9  # no duplicates
+        """FEATURE_ORDER must have exactly 11 entries (no duplicates)."""
+        assert len(FEATURE_ORDER) == 11
+        assert len(set(FEATURE_ORDER)) == 11  # no duplicates
 
     def test_extract_features_returns_feature_vector(self) -> None:
         """``extract_features`` must return a ``FeatureVector`` instance."""
@@ -213,6 +215,12 @@ class TestCleanFixture:
 
     def test_code_prose_ratio_exact(self, fv: FeatureVector) -> None:
         assert fv.values["code_prose_ratio"] == approx(0.5610687022900763)
+
+    def test_member_count_single_file(self, fv: FeatureVector) -> None:
+        assert fv.values["member_count"] == 1.0
+
+    def test_is_bundle_single_file(self, fv: FeatureVector) -> None:
+        assert fv.values["is_bundle"] == 0.0
 
 
 # ---------------------------------------------------------------------------
@@ -505,3 +513,35 @@ class TestRobustness:
         fv2 = extract_features(parsed)
         for name in FEATURE_ORDER:
             assert fv1.values[name] == fv2.values[name], f"Feature {name!r} is not deterministic"
+
+class TestBundleFixture:
+    """Bundle skill: is_bundle=1.0 and member_count > 1."""
+
+    @pytest.fixture(scope="class")
+    def parsed(self) -> ParsedSkill:
+        # We can construct a synthetic ParsedSkill with a source_manifest
+        from prompthound.schema import SourceSpan
+        return ParsedSkill(
+            path="/fake/bundle",
+            raw_bytes=b"foo",
+            frontmatter={},
+            body_prose="bar",
+            code_blocks=[],
+            unicode_tag_spans=[],
+            parse_ok=True,
+            parse_error=None,
+            source_manifest=[
+                SourceSpan(file="SKILL.md", orig_start=1, orig_end=1, merged_start=1, merged_end=1),
+                SourceSpan(file="script.py", orig_start=1, orig_end=1, merged_start=2, merged_end=2),
+            ]
+        )
+
+    @pytest.fixture(scope="class")
+    def fv(self, parsed: ParsedSkill) -> FeatureVector:
+        return extract_features(parsed)
+
+    def test_member_count(self, fv: FeatureVector) -> None:
+        assert fv.values["member_count"] == 2.0
+
+    def test_is_bundle(self, fv: FeatureVector) -> None:
+        assert fv.values["is_bundle"] == 1.0

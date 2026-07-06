@@ -202,15 +202,18 @@
             "steps": [
               {
                 "capability": "file_read",
-                "line": 8
+                "line": 8,
+                "file": "tests/fixtures/all_three_skill.md"
               },
               {
                 "capability": "encode",
-                "line": 15
+                "line": 15,
+                "file": "tests/fixtures/all_three_skill.md"
               },
               {
                 "capability": "network_send",
-                "line": 11
+                "line": 11,
+                "file": "tests/fixtures/all_three_skill.md"
               }
             ]
           }
@@ -239,15 +242,18 @@
             "steps": [
               {
                 "capability": "download",
-                "line": 11
+                "line": 11,
+                "file": "tests/fixtures/all_three_skill.md"
               },
               {
                 "capability": "write",
-                "line": 20
+                "line": 20,
+                "file": "tests/fixtures/all_three_skill.md"
               },
               {
                 "capability": "execute",
-                "line": 25
+                "line": 25,
+                "file": "tests/fixtures/all_three_skill.md"
               }
             ]
           }

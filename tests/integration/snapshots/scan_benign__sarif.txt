@@ -19,17 +19,6 @@
               "properties": {
                 "precision": "medium"
               }
-            },
-            {
-              "id": "PH200/capability-chain",
-              "name": "CapabilityChain",
-              "shortDescription": {
-                "text": "Dangerous capability sequence detected (e.g. read\u2192encode\u2192send)"
-              },
-              "helpUri": "https://github.com/your-org/prompthound/blob/main/README.md#ph200-capability-chain",
-              "properties": {
-                "precision": "medium"
-              }
             }
           ]
         }
@@ -47,7 +36,7 @@
           "ruleId": "PH100/classifier-score",
           "level": "note",
           "message": {
-            "text": "Classifier risk score 0.0083 \u2192 label 'benign'."
+            "text": "Classifier risk score 0.2041 \u2192 label 'benign'."
           },
           "locations": [
             {
@@ -63,47 +52,9 @@
           ],
           "properties": {
             "evidenceType": "classifier",
-            "score": 0.008296,
+            "score": 0.204134,
             "label": "benign",
-            "featureImportances": [
-              {
-                "feature": "body_entropy",
-                "importance": 0.049
-              }
-            ]
-          }
-        },
-        {
-          "ruleId": "PH200/capability-chain",
-          "level": "warning",
-          "message": {
-            "text": "Dangerous capability chain detected: file_read\u2192network_send. Steps: file_read (line 1), network_send (line 65)"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "<TEST_FILE_PATH>"
-                },
-                "region": {
-                  "startLine": 1
-                }
-              }
-            }
-          ],
-          "properties": {
-            "evidenceType": "capability-chain",
-            "chainName": "file_read\u2192network_send",
-            "steps": [
-              {
-                "capability": "file_read",
-                "line": 1
-              },
-              {
-                "capability": "network_send",
-                "line": 65
-              }
-            ]
+            "featureImportances": []
           }
         }
       ]

@@ -57,6 +57,8 @@ FEATURE_ORDER: list[str] = [
     "padding_ratio",
     "body_entropy",
     "code_prose_ratio",
+    "member_count",
+    "is_bundle",
 ]
 
 # ---------------------------------------------------------------------------
@@ -154,6 +156,35 @@ def feat_base64_hex_ratio(parsed: ParsedSkill) -> float:
 
     Returns 0.0 for empty files.
     """
+    if parsed.source_manifest:
+        # Max-pool across members
+        try:
+            lines = parsed.raw_bytes.decode("utf-8").splitlines()
+        except UnicodeDecodeError:
+            lines = []
+            
+        max_ratio = 0.0
+        for span in parsed.source_manifest:
+            member_text = "\n".join(lines[span.merged_start - 1:span.merged_end])
+            total_chars = len(member_text)
+            if total_chars == 0:
+                continue
+            
+            blob_chars = 0
+            for m in _BASE64_RE.finditer(member_text):
+                blob = m.group(1)
+                if len(blob) % 4 == 0 or blob.endswith("="):
+                    blob_chars += len(blob)
+            for m in _HEX_RE.finditer(member_text):
+                blob = m.group(1)
+                if len(blob) % 2 == 0:
+                    blob_chars += len(blob)
+                    
+            ratio = min(blob_chars / total_chars, 1.0)
+            if ratio > max_ratio:
+                max_ratio = ratio
+        return max_ratio
+
     text = _all_text(parsed)
     total_chars = len(text)
     if total_chars == 0:
@@ -350,6 +381,17 @@ def feat_padding_ratio(parsed: ParsedSkill) -> float:
 
     Returns a 0-1 float. High values indicate padding-based evasion attempts.
     """
+    if parsed.source_manifest:
+        # Max-pool across members
+        lines = parsed.raw_bytes.splitlines(keepends=True)
+        max_ratio = 0.0
+        for span in parsed.source_manifest:
+            member_bytes = b"".join(lines[span.merged_start - 1:span.merged_end])
+            ratio = compute_padding_ratio(member_bytes)
+            if ratio > max_ratio:
+                max_ratio = ratio
+        return max_ratio
+
     return compute_padding_ratio(parsed.raw_bytes)
 
 
@@ -402,6 +444,20 @@ def feat_code_prose_ratio(parsed: ParsedSkill) -> float:
     return code_len / prose_len
 
 
+def feat_member_count(parsed: ParsedSkill) -> int:
+    """Number of individual files inside the bundle."""
+    if not parsed.source_manifest:
+        return 1
+    return len(set(span.file for span in parsed.source_manifest))
+
+
+def feat_is_bundle(parsed: ParsedSkill) -> float:
+    """1.0 if this is a directory bundle, 0.0 if a single file."""
+    if parsed.source_manifest and len(parsed.source_manifest) > 1:
+        return 1.0
+    return 0.0
+
+
 # ---------------------------------------------------------------------------
 # Main entry point
 # ---------------------------------------------------------------------------
@@ -417,6 +473,8 @@ _FEATURE_FUNCTIONS: dict[str, object] = {
     "padding_ratio":            feat_padding_ratio,
     "body_entropy":             feat_body_entropy,
     "code_prose_ratio":         feat_code_prose_ratio,
+    "member_count":             feat_member_count,
+    "is_bundle":                feat_is_bundle,
 }
 
 # Sanity check at import time: every feature in FEATURE_ORDER must have a

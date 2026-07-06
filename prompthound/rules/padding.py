@@ -44,7 +44,29 @@ def check(parsed: ParsedSkill) -> list[RuleHit]:
 
     Returns at most one RuleHit (either the whole file is padded or it isn't).
     """
-    ratio = compute_padding_ratio(parsed.raw_bytes)
+    if parsed.source_manifest:
+        # Max-pool across members
+        lines = parsed.raw_bytes.splitlines(keepends=True)
+        max_ratio = 0.0
+        best_span = (0, len(parsed.raw_bytes))
+        for span in parsed.source_manifest:
+            member_bytes = b"".join(lines[span.merged_start - 1:span.merged_end])
+            ratio = compute_padding_ratio(member_bytes)
+            if ratio > max_ratio:
+                max_ratio = ratio
+                # The exact byte span is hard to compute without re-encoding, 
+                # but rules use line or byte offsets. Let's just use the line offset 
+                # for the span since it will be translated by the reporter anyway.
+                # Actually, RuleHit.span expects byte or line offsets depending on the rule.
+                # The original returned (0, len(parsed.raw_bytes)).
+                # We can approximate or just return (span.merged_start, span.merged_end)
+                best_span = (span.merged_start, span.merged_end)
+                
+        ratio = max_ratio
+        span = best_span
+    else:
+        ratio = compute_padding_ratio(parsed.raw_bytes)
+        span = (0, len(parsed.raw_bytes))
 
     if ratio < _PADDING_THRESHOLD:
         return []
@@ -54,7 +76,7 @@ def check(parsed: ParsedSkill) -> list[RuleHit]:
         RuleHit(
             rule_id=RULE_ID,
             severity=SEVERITY,
-            span=(0, len(parsed.raw_bytes)),
+            span=span,
             message=(
                 f"Abnormal padding detected: {pct:.1f}% of file bytes are long "
                 "runs of a single repeated byte. This pattern is associated with "

