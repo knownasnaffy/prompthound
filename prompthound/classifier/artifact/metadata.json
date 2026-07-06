@@ -1,13 +1,14 @@
 {
-  "run_id": "lightgbm__0011",
-  "promoted_at": "2026-07-06T11:21:32",
+  "run_id": "lightgbm__0257",
+  "promoted_at": "2026-07-06T12:39:30",
   "model_family": "lightgbm",
   "estimator_class": "lightgbm.sklearn.LGBMClassifier",
   "hyperparameters": {
-    "num_leaves": 15,
-    "max_depth": 3,
-    "learning_rate": 0.05,
-    "n_estimators": 200,
+    "num_leaves": 31,
+    "max_depth": 5,
+    "learning_rate": 0.1,
+    "n_estimators": 50,
+    "min_child_samples": 20,
     "class_weight": "balanced"
   },
   "feature_order": [
@@ -20,6 +21,7 @@
     "padding_ratio",
     "body_entropy",
     "code_prose_ratio",
+    "shell_pipe_count",
     "member_count",
     "is_bundle"
   ],
@@ -32,15 +34,15 @@
     "labels_csv": "benchmark/corpus/labels.csv"
   },
   "benchmark_metrics": {
-    "cv_f1_macro": 0.52107401025173,
-    "holdout_f1_macro": 0.5285838730600306,
-    "holdout_precision": 0.5727714565993282,
-    "holdout_recall": 0.574491103357376,
-    "holdout_roc_auc": 0.7730427859771175,
+    "cv_f1_macro": 0.5803837396338893,
+    "holdout_f1_macro": 0.6114770544595106,
+    "holdout_precision": 0.635316601078059,
+    "holdout_recall": 0.6575788677074557,
+    "holdout_roc_auc": 0.8229422531511492,
     "fpr_mild_benchmark": 0.0,
-    "fpr_severe_benchmark": 1.0,
+    "fpr_severe_benchmark": 0.6,
     "fpr_mild_full_corpus": 0.0,
-    "fpr_severe_full_corpus": 0.8,
+    "fpr_severe_full_corpus": 0.6,
     "mean_depth": 0.0,
     "total_nodes": 0,
     "n_estimators": 1
@@ -50,7 +52,7 @@
     "suspicious_max": 0.65,
     "description": "score < benign_max \u2192 benign; benign_max \u2264 score < suspicious_max \u2192 suspicious; score \u2265 suspicious_max \u2192 malicious"
   },
-  "fit_time_s": 0.1046,
+  "fit_time_s": 20.8573,
   "random_state": 42,
   "fpr_advisory_threshold": 0.4,
   "fpr_advisory_exceeded": false

@@ -57,6 +57,7 @@ FEATURE_ORDER: list[str] = [
     "padding_ratio",
     "body_entropy",
     "code_prose_ratio",
+    "shell_pipe_count",
     "member_count",
     "is_bundle",
 ]
@@ -408,18 +409,46 @@ def feat_body_entropy(parsed: ParsedSkill) -> float:
     bytes because we want to measure the *instruction* content, not the
     encoding artifacts of the markdown format itself.
     """
-    text = parsed.body_prose
-    if not text:
-        return 0.0
+    def _compute_entropy(text: str) -> float:
+        if not text:
+            return 0.0
+        counts = Counter(text)
+        total = len(text)
+        ent = 0.0
+        for count in counts.values():
+            p = count / total
+            if p > 0:
+                ent -= p * math.log2(p)
+        return ent
 
-    counts = Counter(text)
-    total = len(text)
-    entropy = 0.0
-    for count in counts.values():
-        p = count / total
-        if p > 0:
-            entropy -= p * math.log2(p)
-    return entropy
+    if parsed.source_manifest:
+        # Max-pool across members
+        try:
+            lines = parsed.raw_bytes.decode("utf-8").splitlines(keepends=True)
+        except UnicodeDecodeError:
+            lines = []
+        max_ent = 0.0
+        for span in parsed.source_manifest:
+            member_lines = lines[span.merged_start - 1:span.merged_end]
+            member_code_blocks = [b for b in parsed.code_blocks if span.merged_start <= b.start_line <= span.merged_end]
+            
+            body_lines = []
+            for i, line in enumerate(member_lines):
+                line_num = span.merged_start + i
+                is_code = False
+                for b in member_code_blocks:
+                    if b.start_line <= line_num <= b.end_line:
+                        is_code = True
+                        break
+                if not is_code:
+                    body_lines.append(line)
+            
+            ent = _compute_entropy("".join(body_lines))
+            if ent > max_ent:
+                max_ent = ent
+        return max_ent
+
+    return _compute_entropy(parsed.body_prose)
 
 
 def feat_code_prose_ratio(parsed: ParsedSkill) -> float:
@@ -435,6 +464,37 @@ def feat_code_prose_ratio(parsed: ParsedSkill) -> float:
     (malicious setup blocks with minimal prose explanation) or suspiciously low
     ratios (pure prose instruction injection with no code at all).
     """
+    if parsed.source_manifest:
+        # Max-pool across members
+        try:
+            lines = parsed.raw_bytes.decode("utf-8").splitlines(keepends=True)
+        except UnicodeDecodeError:
+            lines = []
+        max_ratio = 0.0
+        for span in parsed.source_manifest:
+            member_lines = lines[span.merged_start - 1:span.merged_end]
+            member_code_blocks = [b for b in parsed.code_blocks if span.merged_start <= b.start_line <= span.merged_end]
+            code_len = sum(len(b.content) for b in member_code_blocks)
+            
+            prose_len = 0
+            for i, line in enumerate(member_lines):
+                line_num = span.merged_start + i
+                is_code = False
+                for b in member_code_blocks:
+                    if b.start_line <= line_num <= b.end_line:
+                        is_code = True
+                        break
+                if not is_code:
+                    prose_len += len(line)
+            
+            if prose_len == 0:
+                ratio = 0.0
+            else:
+                ratio = code_len / prose_len
+            if ratio > max_ratio:
+                max_ratio = ratio
+        return max_ratio
+
     code_len = sum(len(b.content) for b in parsed.code_blocks)
     prose_len = len(parsed.body_prose)
 
@@ -442,6 +502,12 @@ def feat_code_prose_ratio(parsed: ParsedSkill) -> float:
         return 0.0
 
     return code_len / prose_len
+
+
+def feat_shell_pipe_count(parsed: ParsedSkill) -> float:
+    """Count of shell pipe-to-interpreter sequences in all text."""
+    text = _all_text(parsed)
+    return float(len(_PIPE_RE.findall(text)))
 
 
 def feat_member_count(parsed: ParsedSkill) -> int:
@@ -473,6 +539,7 @@ _FEATURE_FUNCTIONS: dict[str, object] = {
     "padding_ratio":            feat_padding_ratio,
     "body_entropy":             feat_body_entropy,
     "code_prose_ratio":         feat_code_prose_ratio,
+    "shell_pipe_count":         feat_shell_pipe_count,
     "member_count":             feat_member_count,
     "is_bundle":                feat_is_bundle,
 }

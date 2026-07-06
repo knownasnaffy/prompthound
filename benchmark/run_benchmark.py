@@ -38,6 +38,31 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
+
+from joblib import Memory
+
+_memory = Memory(Path(__file__).parent / ".cache", verbose=0)
+
+@_memory.cache
+def _cached_parse_and_extract(abs_fp_str: str) -> tuple[bool, dict | None, str]:
+    abs_fp = Path(abs_fp_str)
+    try:
+        if abs_fp.is_dir():
+            from prompthound.flatten import parse_directory
+            parsed = parse_directory(str(abs_fp))
+        else:
+            from prompthound.parse import parse_skill
+            parsed = parse_skill(str(abs_fp))
+        
+        if not parsed.parse_ok:
+            return False, None, parsed.parse_error
+        
+        from prompthound.features import extract_features
+        fv = extract_features(parsed)
+        return True, fv.values, ""
+    except Exception as exc:
+        return False, None, str(exc)
+
 import yaml
 
 # ── Ensure the project root is importable even when run as a script. ──────────
@@ -114,22 +139,12 @@ def extract_all_features(
 
     for fp in filepaths:
         abs_fp = root / fp if not fp.is_absolute() else fp
-        try:
-            if abs_fp.is_dir():
-                from prompthound.flatten import parse_directory
-                parsed = parse_directory(str(abs_fp))
-            else:
-                parsed = parse_skill(str(abs_fp))
-            
-            if not parsed.parse_ok:
-                print(f"  [SKIP] {fp}: parse error — {parsed.parse_error}", file=sys.stderr)
-                failed.append(fp)
-                continue
-            fv = extract_features(parsed)
-            X_rows.append([fv.values[name] for name in FEATURE_ORDER])
+        ok_flag, fv_vals, err = _cached_parse_and_extract(str(abs_fp))
+        if ok_flag:
+            X_rows.append([fv_vals[name] for name in FEATURE_ORDER])
             ok.append(fp)
-        except Exception as exc:
-            print(f"  [SKIP] {fp}: exception — {exc}", file=sys.stderr)
+        else:
+            print(f"  [SKIP] {fp}: parse error — {err}", file=sys.stderr)
             failed.append(fp)
 
     X = np.array(X_rows, dtype=float) if X_rows else np.empty((0, len(FEATURE_ORDER)))
