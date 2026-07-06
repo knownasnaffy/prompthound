@@ -1,12 +1,12 @@
 {
-  "run_id": "random_forest__0003",
-  "promoted_at": "2026-07-05T02:23:49",
-  "model_family": "random_forest",
-  "estimator_class": "sklearn.ensemble._forest.RandomForestClassifier",
+  "run_id": "gradient_boosting__0020",
+  "promoted_at": "2026-07-06T10:49:54",
+  "model_family": "gradient_boosting",
+  "estimator_class": "sklearn.ensemble._gb.GradientBoostingClassifier",
   "hyperparameters": {
-    "n_estimators": 50,
-    "max_depth": 10,
-    "min_samples_leaf": 1
+    "n_estimators": 100,
+    "max_depth": 3,
+    "learning_rate": 0.2
   },
   "feature_order": [
     "base64_hex_ratio",
@@ -27,23 +27,23 @@
     "labels_csv": "benchmark/corpus/labels.csv"
   },
   "benchmark_metrics": {
-    "cv_f1": 0.8772139955830408,
-    "holdout_f1": 0.918918918918919,
-    "holdout_precision": 0.9714285714285714,
-    "holdout_recall": 0.8717948717948718,
-    "holdout_roc_auc": 0.971242603550296,
+    "cv_f1": 0.8648838642066659,
+    "holdout_f1": 0.9419354838709677,
+    "holdout_precision": 0.948051948051948,
+    "holdout_recall": 0.9358974358974359,
+    "holdout_roc_auc": 0.9671005917159763,
     "fpr_benign_unusual_benchmark": 0.0,
     "fpr_benign_unusual_full_corpus": 0.0,
-    "mean_depth": 10.0,
-    "total_nodes": 6278,
-    "n_estimators": 50
+    "mean_depth": 3.0,
+    "total_nodes": 1382,
+    "n_estimators": 100
   },
   "risk_thresholds": {
     "benign_max": 0.3,
     "suspicious_max": 0.65,
     "description": "score < benign_max \u2192 benign; benign_max \u2264 score < suspicious_max \u2192 suspicious; score \u2265 suspicious_max \u2192 malicious"
   },
-  "fit_time_s": 0.0751,
+  "fit_time_s": 0.1731,
   "random_state": 42,
   "fpr_advisory_threshold": 0.4,
   "fpr_advisory_exceeded": false
