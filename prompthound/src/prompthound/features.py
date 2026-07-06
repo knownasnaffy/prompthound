@@ -39,7 +39,7 @@ def extract_features(buffer_lines, manifest, is_bundle):
     url_pattern = re.compile(r'https?://[^\s]+')
     urgency_pattern = re.compile(r'(first and foremost|important|critical|immediately)', re.IGNORECASE)
     b64_pattern = re.compile(r'(?:[A-Za-z0-9+/]{4}){10,}(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?')
-    shell_pattern = re.compile(r'(bash|sh|curl|wget)')
+    shell_pattern = re.compile(r'\b(bash|sh|curl|wget)\b')
     eval_exec_pattern = re.compile(r'\b(eval|exec|os\.system|subprocess)\b')
     secret_pattern = re.compile(r'(password|token|secret|id_rsa|api_key)', re.IGNORECASE)
     

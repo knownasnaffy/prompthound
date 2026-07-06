@@ -1,3 +1,5 @@
+import re
+
 def check_chains(buffer_lines, frontmatter):
     """
     Checks for sequences like read -> encode -> network send.
@@ -8,16 +10,20 @@ def check_chains(buffer_lines, frontmatter):
     has_encode = False
     has_network = False
     
+    read_pattern = re.compile(r'\b(read|cat)\b|open\(')
+    encode_pattern = re.compile(r'\b(base64)\b|hex\(')
+    network_pattern = re.compile(r'\b(curl|wget)\b|requests\.post')
+    
     for line in buffer_lines:
         line_lower = line.lower()
         
-        if 'read' in line_lower or 'cat ' in line_lower or 'open(' in line_lower:
+        if read_pattern.search(line_lower):
             has_read = True
         
-        if 'base64' in line_lower or 'hex(' in line_lower:
+        if encode_pattern.search(line_lower):
             has_encode = True
             
-        if 'curl' in line_lower or 'wget' in line_lower or 'requests.post' in line_lower:
+        if network_pattern.search(line_lower):
             has_network = True
             
     if has_read and has_encode and has_network:
