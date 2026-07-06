@@ -1,8 +1,7 @@
 import os
 from pathlib import Path
 
-MAX_BUNDLE_SIZE = 5 * 1024 * 1024 # 5MB limit
-MAX_FILES = 100
+from .limits import MAX_BUNDLE_SIZE, MAX_FILES
 
 class SourceSpan:
     def __init__(self):
