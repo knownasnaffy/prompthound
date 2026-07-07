@@ -292,7 +292,7 @@ def render_downloads(result: dict, key_suffix: str = ""):
     c1, c2 = st.columns(2)
     with c1:
         st.download_button(
-            "⬇ JSON",
+            "Download JSON",
             data=json_str,
             file_name="prompthound_report.json",
             mime="application/json",
@@ -300,7 +300,7 @@ def render_downloads(result: dict, key_suffix: str = ""):
         )
     with c2:
         st.download_button(
-            "⬇ SARIF",
+            "Download SARIF",
             data=sarif_str,
             file_name="prompthound_report.sarif",
             mime="application/json",
@@ -320,7 +320,7 @@ def render_single_result(result: dict, label: str = ""):
     render_rule_hits(result)
     render_chains(result)
     render_feature_expander(result)
-    render_downloads(result, key_suffix=label[:20])
+    render_downloads(result, key_suffix=label)
 
 
 # ---------------------------------------------------------------------------
@@ -414,14 +414,14 @@ def render_upload_panel():
     col1, col2 = st.columns([1, 1])
 
     with col1:
-        if st.button("🔍  Scan", disabled=not scan_ready, type="primary", key="scan_btn", use_container_width=True):
+        if st.button("Scan", disabled=not scan_ready, type="primary", key="scan_btn", use_container_width=True):
             _clear_tmpdir()
             st.session_state.scan_files = uploaded
             st.session_state.scan_mode = mode
             st.session_state.scan_results = None  # Clear previous results to force rescan
 
     with col2:
-        if st.button("🗑️  Clear", disabled=not uploaded, type="secondary", key="clear_btn", use_container_width=True):
+        if st.button("Clear", disabled=not uploaded, type="secondary", key="clear_btn", use_container_width=True):
             st.session_state.uploader_key += 1
             _clear_tmpdir()
             st.session_state.scan_results = None
