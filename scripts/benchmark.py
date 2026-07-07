@@ -1,5 +1,6 @@
 import numpy as np
 import yaml
+import argparse
 import importlib
 import warnings
 from pathlib import Path
@@ -44,6 +45,12 @@ def compute_fpr(
 
 
 def main():
+    parser = argparse.ArgumentParser(description="PromptHound Benchmark")
+    parser.add_argument(
+        "--comment", type=str, help="Comment string for the benchmark run"
+    )
+    args = parser.parse_args()
+
     base_dir = Path(__file__).parent
     features_path = base_dir.parent / "data" / "features.npz"
     models_yaml_path = base_dir.parent / "data" / "models.yaml"
@@ -142,7 +149,18 @@ def main():
         row = f"| {r['Model']} | {r['Macro-F1 (All)']:.4f} | {r['Macro-F1 (Bundle)']:.4f} | {r['Macro-F1 (Single)']:.4f} | {r['FPR-Severe']:.4f} | {r['FPR-Mild']:.4f} |"
         report.append(row)
 
-    report_path = base_dir.parent / "benchmark_report.md"
+    if args.comment:
+        safe_comment = args.comment.replace(" ", "_").replace("/", "_")
+        benchmarks_dir = base_dir.parent / "data" / "benchmarks"
+        benchmarks_dir.mkdir(parents=True, exist_ok=True)
+        report_path = benchmarks_dir / f"{safe_comment}.md"
+
+        # Add comment to the report header
+        report.insert(2, f"**Comment:** {args.comment}")
+        report.insert(3, "")
+    else:
+        report_path = base_dir.parent / "benchmark_report.md"
+
     with open(report_path, "w") as f:
         f.write("\n".join(report))
 
