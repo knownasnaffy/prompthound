@@ -4,7 +4,7 @@ import urllib.error
 import re
 import streamlit as st
 
-from app_utils import Mode, run_project_scan, display_results, _clear_tmpdir
+from utils import Mode, run_project_scan, display_results, _clear_tmpdir
 
 st.subheader("GitHub Repository Scan")
 st.info(
@@ -20,18 +20,21 @@ if "github_scan_results" not in st.session_state:
 # ---------------------------------------------------------------------------
 # UI Input
 # ---------------------------------------------------------------------------
-repo_url = st.text_input(
-    "GitHub URL", placeholder="https://github.com/knownasnaffy/prompthound"
-)
+with st.form("github_scan_form"):
+    repo_url = st.text_input(
+        "GitHub URL", placeholder="https://github.com/knownasnaffy/prompthound"
+    )
 
-col1, col2 = st.columns([1, 4])
-with col1:
-    scan_btn = st.button("Scan Repository", type="primary", use_container_width=True)
-with col2:
-    if st.button("Clear", type="secondary"):
-        st.session_state.github_scan_results = None
-        _clear_tmpdir()
-        st.rerun()
+    col1, col2 = st.columns([1, 4])
+    with col1:
+        scan_btn = st.form_submit_button("Scan Repository", type="primary", use_container_width=True)
+    with col2:
+        clear_btn = st.form_submit_button("Clear", type="secondary")
+
+if clear_btn:
+    st.session_state.github_scan_results = None
+    _clear_tmpdir()
+    st.rerun()
 
 
 # ---------------------------------------------------------------------------

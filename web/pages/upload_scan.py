@@ -1,6 +1,6 @@
 import streamlit as st
 
-from app_utils import (
+from utils import (
     Mode,
     detect_mode,
     _clear_tmpdir,

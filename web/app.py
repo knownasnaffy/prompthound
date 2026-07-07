@@ -23,12 +23,12 @@ st.set_page_config(
 page = st.navigation(
     [
         st.Page(
-            "app_pages/upload_scan.py",
+            "pages/upload_scan.py",
             title="Upload & Scan",
             icon=":material/upload_file:",
         ),
         st.Page(
-            "app_pages/github_scan.py", title="GitHub Scan", icon=":material/code:"
+            "pages/github_scan.py", title="GitHub Scan", icon=":material/code:"
         ),
     ]
 )
