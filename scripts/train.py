@@ -6,72 +6,88 @@ from pathlib import Path
 from sklearn.ensemble import RandomForestClassifier
 
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
+
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from prompthound.flatten import flatten_bundle
 from prompthound.parser import parse_buffer
 from prompthound.features import extract_features
 from prompthound.capability_chain import check_chains
 
+
 def main():
-    dataset_dir = Path(__file__).parent.parent / 'dataset'
-    gt_path = dataset_dir / 'ground_truth.json'
-    
-    with open(gt_path, 'r') as f:
+    dataset_dir = Path(__file__).parent.parent / "dataset"
+    gt_path = dataset_dir / "ground_truth.json"
+
+    with open(gt_path, "r") as f:
         gt = json.load(f)
-        
+
     feature_names = [
-        'b64_ratio', 'padding_ratio', 'code_to_prose_ratio', 'url_count', 
-        'unicode_count', 'shell_command_presence', 'urgency_density', 
-        'entropy', 'is_bundle', 'member_count', 'capability_mismatch_score',
-        'high_severity_hits', 'medium_severity_hits', 'eval_exec_density', 'secret_keyword_density'
+        "b64_ratio",
+        "padding_ratio",
+        "code_to_prose_ratio",
+        "url_count",
+        "unicode_count",
+        "shell_command_presence",
+        "urgency_density",
+        "entropy",
+        "is_bundle",
+        "member_count",
+        "capability_mismatch_score",
+        "high_severity_hits",
+        "medium_severity_hits",
+        "eval_exec_density",
+        "secret_keyword_density",
     ]
-    
+
     X = []
     y = []
-    
+
     print(f"Loading {len(gt['test_cases'])} cases...")
-    
+
     count = 0
-    for case in gt['test_cases']:
-        case_id = case['id']
+    for case in gt["test_cases"]:
+        case_id = case["id"]
         case_dir = dataset_dir / case_id
-        
+
         if not case_dir.exists():
             continue
-            
-        judgment = case['judgment']
-        if judgment == 'normal':
-            judgment = 'safe'
-            
+
+        judgment = case["judgment"]
+        if judgment == "normal":
+            judgment = "safe"
+
         buffer_text, manifest = flatten_bundle(case_dir)
         frontmatter, _, lines = parse_buffer(buffer_text)
         _, mismatch_score = check_chains(lines, frontmatter)
-        
-        is_bundle = (manifest.member_count > 1)
+
+        is_bundle = manifest.member_count > 1
         feature_dict = extract_features(lines, manifest, is_bundle=is_bundle)
-        feature_dict['capability_mismatch_score'] = mismatch_score
-        
+        feature_dict["capability_mismatch_score"] = mismatch_score
+
         vec = [float(feature_dict[name]) for name in feature_names]
-        
+
         X.append(vec)
         y.append(judgment)
-        
+
         count += 1
         if count % 100 == 0:
             print(f"Processed {count} cases...")
-            
+
     print(f"Training RandomForest on {len(X)} samples...")
     X = np.array(X)
     y = np.array(y)
-    
-    clf = RandomForestClassifier(n_estimators=200, max_depth=10, class_weight='balanced', random_state=42)
+
+    clf = RandomForestClassifier(
+        n_estimators=200, max_depth=10, class_weight="balanced", random_state=42
+    )
     clf.fit(X, y)
-    
-    model_path = Path(__file__).parent.parent / 'src' / 'prompthound' / 'model.joblib'
+
+    model_path = Path(__file__).parent.parent / "src" / "prompthound" / "model.joblib"
     joblib.dump(clf, model_path)
     print(f"Model saved to {model_path}")
     print(f"Classes: {clf.classes_}")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

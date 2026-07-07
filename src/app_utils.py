@@ -11,7 +11,6 @@ from prompthound.flatten import flatten_bundle, flatten_single
 from prompthound.pipeline import run_pipeline
 from prompthound.reporter import format_report
 
-
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
@@ -19,6 +18,7 @@ ANCHOR_FILENAMES = {"SKILL.md"}  # TODO task A: add "AGENTS.md" post-spec
 
 SEVERITY_RANK = {"safe": 0, "suspicious": 1, "malicious": 2}
 SEVERITY_EMOJI = {"safe": "🟢", "suspicious": "🟡", "malicious": "🔴"}
+
 
 class Mode(Enum):
     IDLE = auto()
@@ -65,13 +65,21 @@ def detect_mode(files: list) -> Mode:
 # ---------------------------------------------------------------------------
 def _ensure_tmpdir() -> str:
     """Create or return the session-scoped temp directory."""
-    if "tmpdir" not in st.session_state or st.session_state.tmpdir is None or not os.path.isdir(st.session_state.tmpdir):
+    if (
+        "tmpdir" not in st.session_state
+        or st.session_state.tmpdir is None
+        or not os.path.isdir(st.session_state.tmpdir)
+    ):
         st.session_state.tmpdir = tempfile.mkdtemp(prefix="prompthound_")
     return st.session_state.tmpdir
 
 
 def _clear_tmpdir():
-    if "tmpdir" in st.session_state and st.session_state.tmpdir is not None and os.path.isdir(st.session_state.tmpdir):
+    if (
+        "tmpdir" in st.session_state
+        and st.session_state.tmpdir is not None
+        and os.path.isdir(st.session_state.tmpdir)
+    ):
         shutil.rmtree(st.session_state.tmpdir, ignore_errors=True)
     st.session_state.tmpdir = None
 
@@ -134,7 +142,9 @@ def run_bundle_scan(files: list, frontmatter_absent: bool = False) -> dict:
     tmpdir = _ensure_tmpdir()
     _write_flat_bundle(files, tmpdir)
     buffer, manifest = flatten_bundle(Path(tmpdir))
-    res = run_pipeline(buffer, manifest, is_bundle=True, frontmatter_absent=frontmatter_absent)
+    res = run_pipeline(
+        buffer, manifest, is_bundle=True, frontmatter_absent=frontmatter_absent
+    )
     res["manifest"] = manifest
     return res
 
@@ -213,7 +223,9 @@ def render_rule_hits(result: dict):
         if manifest and line_idx != "?":
             filepath, orig_line = manifest.get_source(line_idx)
 
-        location = f"{filepath}:{orig_line}" if filepath != "unknown" else f"line {orig_line}"
+        location = (
+            f"{filepath}:{orig_line}" if filepath != "unknown" else f"line {orig_line}"
+        )
 
         if sev == "high":
             st.error(f"**[{sev.upper()}]** {rule} — `{match[:80]}` ({location})")
@@ -253,16 +265,22 @@ def render_feature_expander(result: dict):
         mid = len(items) // 2
         with col1:
             for k, v in items[:mid]:
-                st.metric(k.replace("_", " "), f"{v:.4f}" if isinstance(v, float) else v)
+                st.metric(
+                    k.replace("_", " "), f"{v:.4f}" if isinstance(v, float) else v
+                )
         with col2:
             for k, v in items[mid:]:
-                st.metric(k.replace("_", " "), f"{v:.4f}" if isinstance(v, float) else v)
+                st.metric(
+                    k.replace("_", " "), f"{v:.4f}" if isinstance(v, float) else v
+                )
 
 
 class _dummy_manifest:
     """Minimal manifest shim for reporter calls — SourceSpan not accessible post-scan."""
+
     def get_source(self, idx):
         return ("unknown", idx)
+
     member_count = 1
 
 
@@ -300,20 +318,29 @@ def render_single_result(result: dict, label: str = ""):
 
 def display_results(results_list, mode):
     if mode == Mode.AMBIGUOUS_NO_ANCHOR:
-        st.warning("Scanned without anchor frontmatter — capability mismatch feature disabled. Results may be less precise.")
+        st.warning(
+            "Scanned without anchor frontmatter — capability mismatch feature disabled. Results may be less precise."
+        )
         render_single_result(results_list[0][1])
     elif mode in (Mode.SINGLE_FILE, Mode.BUNDLE):
         render_single_result(results_list[0][1])
     elif mode == Mode.PROJECT:
         sub_results = results_list
         # Rollup verdict — worst-case across all sub-skills
-        worst = max(sub_results, key=lambda x: SEVERITY_RANK.get(x[1]["classification"]["class"], 0))
+        worst = max(
+            sub_results,
+            key=lambda x: SEVERITY_RANK.get(x[1]["classification"]["class"], 0),
+        )
         worst_cls = worst[1]["classification"]["class"]
 
-        st.write(f"**Project Rollup**: {SEVERITY_EMOJI[worst_cls]} {worst_cls.upper()} ({len(sub_results)} skill(s) scanned)")
+        st.write(
+            f"**Project Rollup**: {SEVERITY_EMOJI[worst_cls]} {worst_cls.upper()} ({len(sub_results)} skill(s) scanned)"
+        )
 
         if len(sub_results) == 1 and sub_results[0][0].startswith("(entire"):
-            st.warning("No `SKILL.md` found in archive — entire structure scanned as one bundle without anchor.")
+            st.warning(
+                "No `SKILL.md` found in archive — entire structure scanned as one bundle without anchor."
+            )
 
         for label, result in sub_results:
             cls = result["classification"]["class"]

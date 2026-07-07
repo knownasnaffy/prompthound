@@ -4,6 +4,7 @@ from .features import extract_features
 from .classifier import score_features
 from .capability_chain import check_chains
 
+
 def run_pipeline(buffer_text, manifest, is_bundle, frontmatter_absent=False):
     """Run the full analysis pipeline on a flattened buffer.
 
@@ -22,20 +23,22 @@ def run_pipeline(buffer_text, manifest, is_bundle, frontmatter_absent=False):
             AGENTS.md anchor-set expansion task (task A).
     """
     frontmatter, code_blocks, lines = parse_buffer(buffer_text)
-    
+
     # If caller signals no-anchor input, override whatever parse_buffer found
     # (it will have returned {} anyway, but this makes the branch explicit).
     if frontmatter_absent:
         frontmatter = {}
 
     rule_hits = scan_rules(lines)
-    
+
     chains_found, mismatch_score = check_chains(lines, frontmatter)
     if frontmatter_absent:
-        mismatch_score = 0.0  # Undefined, not "perfect match" — see frontmatter_absent flag
+        mismatch_score = (
+            0.0  # Undefined, not "perfect match" — see frontmatter_absent flag
+        )
 
     feature_dict = extract_features(lines, manifest, is_bundle)
-    feature_dict['capability_mismatch_score'] = mismatch_score
+    feature_dict["capability_mismatch_score"] = mismatch_score
 
     # FIXME: frontmatter_absent is extracted here but intentionally NOT passed to
     # score_features() / the classifier X vector. The current trained model does not
@@ -43,16 +46,15 @@ def run_pipeline(buffer_text, manifest, is_bundle, frontmatter_absent=False):
     # count). Unblock: retrain model with frontmatter_absent in the feature set.
     # Retrain itself is blocked on completion of the 301-file human review in
     # dataset/pending_review/ (open task, unresolved as of 2026-07-07).
-    feature_dict['frontmatter_absent'] = 1 if frontmatter_absent else 0
+    feature_dict["frontmatter_absent"] = 1 if frontmatter_absent else 0
 
     classification = score_features(feature_dict)
-    
-    return {
-        'frontmatter': frontmatter,
-        'frontmatter_absent': frontmatter_absent,
-        'rule_hits': rule_hits,
-        'chains_found': chains_found,
-        'features': feature_dict,
-        'classification': classification
-    }
 
+    return {
+        "frontmatter": frontmatter,
+        "frontmatter_absent": frontmatter_absent,
+        "rule_hits": rule_hits,
+        "chains_found": chains_found,
+        "features": feature_dict,
+        "classification": classification,
+    }

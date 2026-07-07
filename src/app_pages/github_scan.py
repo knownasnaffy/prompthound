@@ -7,7 +7,9 @@ import streamlit as st
 from app_utils import Mode, run_project_scan, display_results, _clear_tmpdir
 
 st.subheader("GitHub Repository Scan")
-st.info("Enter a public GitHub repository URL to download its default branch archive and scan it for risks.")
+st.info(
+    "Enter a public GitHub repository URL to download its default branch archive and scan it for risks."
+)
 
 # ---------------------------------------------------------------------------
 # State
@@ -18,7 +20,9 @@ if "github_scan_results" not in st.session_state:
 # ---------------------------------------------------------------------------
 # UI Input
 # ---------------------------------------------------------------------------
-repo_url = st.text_input("GitHub URL", placeholder="https://github.com/knownasnaffy/prompthound")
+repo_url = st.text_input(
+    "GitHub URL", placeholder="https://github.com/knownasnaffy/prompthound"
+)
 
 col1, col2 = st.columns([1, 4])
 with col1:
@@ -28,6 +32,7 @@ with col2:
         st.session_state.github_scan_results = None
         _clear_tmpdir()
         st.rerun()
+
 
 # ---------------------------------------------------------------------------
 # Logic
@@ -39,6 +44,7 @@ def extract_owner_repo(url: str) -> tuple:
     if match:
         return match.group(1), match.group(2)
     return None, None
+
 
 def download_github_zip(owner: str, repo: str) -> io.BytesIO:
     """Download the zipball for a given GitHub repository using the GitHub API."""
@@ -53,6 +59,7 @@ def download_github_zip(owner: str, repo: str) -> io.BytesIO:
     except Exception as e:
         raise RuntimeError(f"Failed to fetch repository: {str(e)}")
 
+
 if scan_btn and repo_url:
     owner, repo = extract_owner_repo(repo_url)
     if not owner or not repo:
@@ -60,7 +67,7 @@ if scan_btn and repo_url:
     else:
         st.session_state.github_scan_results = None
         _clear_tmpdir()
-        
+
         with st.spinner(f"Downloading {owner}/{repo}..."):
             try:
                 zip_io = download_github_zip(owner, repo)

@@ -1,27 +1,28 @@
 import yaml
 
+
 def parse_buffer(buffer_text):
     """
     Splits buffer into frontmatter, prose, and code blocks.
     Extracts the first valid YAML frontmatter block.
     """
     frontmatter = {}
-    lines = buffer_text.split('\n')
-    
+    lines = buffer_text.split("\n")
+
     in_frontmatter = False
     fm_lines = []
-    
+
     for i, line in enumerate(lines):
-        if line.strip() == '---':
+        if line.strip() == "---":
             if not in_frontmatter:
                 # Check if it's start of file or right after a BEGIN MEMBER fence
-                if i == 0 or (i > 0 and lines[i-1].startswith('--- BEGIN MEMBER')):
+                if i == 0 or (i > 0 and lines[i - 1].startswith("--- BEGIN MEMBER")):
                     in_frontmatter = True
                     continue
             else:
                 in_frontmatter = False
                 try:
-                    parsed = yaml.safe_load('\n'.join(fm_lines))
+                    parsed = yaml.safe_load("\n".join(fm_lines))
                     if isinstance(parsed, dict):
                         frontmatter = parsed
                         break
@@ -29,24 +30,24 @@ def parse_buffer(buffer_text):
                     pass
                 fm_lines = []
                 continue
-                
+
         if in_frontmatter:
             fm_lines.append(line)
-            
+
     # Extract code blocks
     code_blocks = []
     in_code = False
     current_code = []
-    
+
     for line in lines:
-        if line.startswith('```'):
+        if line.startswith("```"):
             if not in_code:
                 in_code = True
             else:
                 in_code = False
-                code_blocks.append('\n'.join(current_code))
+                code_blocks.append("\n".join(current_code))
                 current_code = []
         elif in_code:
             current_code.append(line)
-            
+
     return frontmatter, code_blocks, lines

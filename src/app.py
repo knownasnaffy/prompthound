@@ -20,13 +20,23 @@ st.set_page_config(
 # ---------------------------------------------------------------------------
 # Navigation
 # ---------------------------------------------------------------------------
-page = st.navigation([
-    st.Page("app_pages/upload_scan.py", title="Upload & Scan", icon=":material/upload_file:"),
-    st.Page("app_pages/github_scan.py", title="GitHub Scan", icon=":material/code:"),
-])
+page = st.navigation(
+    [
+        st.Page(
+            "app_pages/upload_scan.py",
+            title="Upload & Scan",
+            icon=":material/upload_file:",
+        ),
+        st.Page(
+            "app_pages/github_scan.py", title="GitHub Scan", icon=":material/code:"
+        ),
+    ]
+)
 
 # App-level UI runs before page content
 st.sidebar.title("🐾 PromptHound")
-st.sidebar.caption("Sniffer, not shield · Static risk analysis for AI agent skill files")
+st.sidebar.caption(
+    "Sniffer, not shield · Static risk analysis for AI agent skill files"
+)
 
 page.run()
