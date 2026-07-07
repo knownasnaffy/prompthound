@@ -24,9 +24,20 @@ prompthound = "prompthound.cli:main"
 dev = [
     "pytest>=7.0.0",
     "lightgbm>=4.0.0",
-    "xgboost>=2.0.0"
+    "xgboost>=2.0.0",
+    "black>=23.0",
+    "isort>=5.12"
 ]
 app = [
     "streamlit>=1.35",
 ]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 88
 
