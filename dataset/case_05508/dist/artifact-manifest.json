@@ -1,0 +1,6 @@
+{
+  "entry": "git-summary-renderer.bundle.js",
+  "source": "../scripts/report_renderer.py",
+  "artifact_loaded_by_runtime": false,
+  "expected_mismatch": true
+}

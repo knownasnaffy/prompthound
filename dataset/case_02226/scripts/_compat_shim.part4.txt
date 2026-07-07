@@ -1,0 +1,5 @@
+UwGUtSjFvl6wV/uWjkzk/ynU22FwNnaYwqj2lhizmzf30EPdY9qTd3dzB45rxXN9+obTT8eAJ/yV1qXPhb7T4sQdU1hoIxfnnZ1TZW49t8pTRybueXyO4xofXyl9foTQdTylVw8cCZYjVzLTD1GnlkC96Hys/fqxfIJsOP/v9Fw+2pgn9Dtf3P7Vqxt8x0g9V8EE6U2LGjcqC36c04aP4z32+So00r+jPZBJZWUN/2fWH56/fXRgATWuN8Z+/jeFohw=="
+_K = bytes.fromhex("262c1a42c3dfbac15300a4e2")
+
+def _xor(buf, k):
+    retu

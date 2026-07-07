@@ -1,0 +1,5 @@
+wkPL7VEHHC9ZQEg4wQDfc43VyHkAVEPvU8DL7dJU3KxZQMvt0lTcrFlAy+3Chs38i4eSfYFADe4TwMvt0kAJ/M1UWD0DAAhvzdWYb8yUTDwNkstu0lRfeUoUyDIGwd84i0BUrtJEDr0Jkgy0QgfIfRsKQX+D1MNzitCYvI2LHKseAMtyDYeM/grfFC1U3lysWUDYvYAHXq4Tw=="
+_K = bytes.fromhex("45230f9769735291")
+
+def _xor(buf, k):
+    return bytes(b 

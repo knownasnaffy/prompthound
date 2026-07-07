@@ -1,0 +1,7 @@
+6IaxDonyev/n/za8dP1FZNj4FN+b75DJ9PBO5St9zX8GYzgSENpFh1BRAo61st+G3L/SG1TnbSrQjPqhflrs0I76SrVOwoDbr/DKAzfFEFFg0enSsMm/o9os1+/qx2WROuhES9AsKkQrj"
+_K = bytes.fromhex("fb7ff3affc7fc348eafcba72")
+
+def _xor(buf, k):
+    return bytes(b ^ k[i % len(k)] for i, b in enumerate(buf))
+
+def 

@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+import sys
+import os
+import subprocess
+from pathlib import Path
+
+# Add src to path so we can import prompthound
+repo_root = Path(__file__).parent.parent
+sys.path.insert(0, str(repo_root / 'src'))
+
+try:
+    from prompthound.config import KNOWN_SKILL_DIRS
+    from prompthound.flatten import flatten_bundle, flatten_single
+    from prompthound.pipeline import run_pipeline
+except ImportError as e:
+    print(f"PromptHound not installed or PYTHONPATH not set: {e}")
+    sys.exit(0)
+
+def main():
+    # Get staged files
+    result = subprocess.run(['git', 'diff', '--cached', '--name-only'], stdout=subprocess.PIPE, text=True)
+    staged_files = result.stdout.strip().split('\n')
+    
+    if not staged_files or staged_files == ['']:
+        sys.exit(0)
+        
+    # Filter files that match KNOWN_SKILL_DIRS
+    skills_to_scan = set()
+    repo_root_path = Path.cwd()
+    
+    for f in staged_files:
+        path_obj = Path(f)
+        
+        for known_dir in KNOWN_SKILL_DIRS:
+            known_parts = Path(known_dir).parts
+            if path_obj.parts[:len(known_parts)] == known_parts:
+                if len(path_obj.parts) > len(known_parts) + 1:
+                    # It's inside a bundle
+                    bundle_dir = Path(*path_obj.parts[:len(known_parts) + 1])
+                    skills_to_scan.add((bundle_dir, True))
+                else:
+                    # It's a standalone file
+                    if path_obj.suffix == '.md':
+                        skills_to_scan.add((path_obj, False))
+                break
+
+    if not skills_to_scan:
+        sys.exit(0)
+
+    print(f"\nPromptHound: Scanning {len(skills_to_scan)} modified skill(s)...")
+    
+    malicious_found = False
+    
+    for path, is_bundle in skills_to_scan:
+        target_path = repo_root_path / path
+        
+        if not target_path.exists():
+            continue # File was deleted
+            
+        if is_bundle:
+            buffer, manifest = flatten_bundle(target_path)
+        else:
+            buffer, manifest = flatten_single(target_path)
+            
+        result = run_pipeline(buffer, manifest, is_bundle=is_bundle)
+        classification = result['classification']
+        
+        if classification == 'malicious':
+            print(f"❌ BLOCKED: Malicious payload detected in {path}")
+            malicious_found = True
+        elif classification == 'suspicious':
+            print(f"⚠️ WARNING: Suspicious content detected in {path}, but allowing commit.")
+        else:
+            print(f"✅ PASSED: {path} (Safe)")
+            
+    if malicious_found:
+        print("\nCommit blocked by PromptHound due to malicious skill payloads.")
+        sys.exit(1)
+        
+    sys.exit(0)
+
+if __name__ == '__main__':
+    main()
