@@ -1,9 +1,7 @@
 import click
-import json
 import sys
 from pathlib import Path
 
-import os
 from .flatten import flatten_bundle, flatten_single
 from .pipeline import run_pipeline
 from .reporter import format_report

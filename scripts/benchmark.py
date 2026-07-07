@@ -5,11 +5,7 @@ import warnings
 from pathlib import Path
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.metrics import (
-    classification_report,
     f1_score,
-    precision_score,
-    recall_score,
-    confusion_matrix,
 )
 from sklearn.preprocessing import LabelEncoder
 
@@ -110,9 +106,6 @@ def main():
             if np.sum(single_mask) > 0
             else 0
         )
-
-        prec_mac = precision_score(y_test, y_pred, average="macro", zero_division=0)
-        rec_mac = recall_score(y_test, y_pred, average="macro", zero_division=0)
 
         y_test_str = le.inverse_transform(y_test)
         y_pred_str = le.inverse_transform(y_pred)

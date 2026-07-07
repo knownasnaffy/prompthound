@@ -1,6 +1,4 @@
-import pytest
-import os
-from prompthound.flatten import flatten_bundle, flatten_single, SourceSpan
+from prompthound.flatten import flatten_bundle, flatten_single
 
 
 def test_flatten_single(tmp_path):

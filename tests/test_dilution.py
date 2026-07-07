@@ -1,5 +1,3 @@
-import pytest
-import os
 import math
 from pathlib import Path
 import sys
