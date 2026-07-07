@@ -1,8 +1,11 @@
 #!/bin/bash
 # install_hooks.sh
 
-HOOKS_DIR="../hooks"
-GIT_HOOKS_DIR="../../.git/hooks"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+HOOKS_DIR="$REPO_ROOT/hooks"
+GIT_HOOKS_DIR="$REPO_ROOT/.git/hooks"
 
 echo "Installing PromptHound Git Hooks..."
 

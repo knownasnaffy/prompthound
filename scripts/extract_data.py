@@ -4,7 +4,7 @@ import numpy as np
 from pathlib import Path
 import sys
 
-sys.path.insert(0, str(Path(__file__).parent / 'src'))
+sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
 from prompthound.flatten import flatten_bundle
 from prompthound.parser import parse_buffer
@@ -65,7 +65,7 @@ def main():
     y = np.array(y)
     is_bundle_arr = np.array(is_bundle_arr)
     
-    out_path = Path(__file__).parent / 'features.npz'
+    out_path = Path(__file__).parent.parent / 'data' / 'features.npz'
     np.savez(out_path, X=X, y=y, is_bundle=is_bundle_arr)
     print(f"Features saved to {out_path} with shape {X.shape}")
 

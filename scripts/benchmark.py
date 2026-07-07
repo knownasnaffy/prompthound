@@ -34,8 +34,8 @@ def compute_fpr(y_true, y_pred, safe_label='safe', suspicious_label='suspicious'
 
 def main():
     base_dir = Path(__file__).parent
-    features_path = base_dir / 'features.npz'
-    models_yaml_path = base_dir / 'models.yaml'
+    features_path = base_dir.parent / 'data' / 'features.npz'
+    models_yaml_path = base_dir.parent / 'data' / 'models.yaml'
     
     if not features_path.exists():
         print("features.npz not found. Run extract_data.py first.")
@@ -126,7 +126,7 @@ def main():
         row = f"| {r['Model']} | {r['Macro-F1 (All)']:.4f} | {r['Macro-F1 (Bundle)']:.4f} | {r['Macro-F1 (Single)']:.4f} | {r['FPR-Severe']:.4f} | {r['FPR-Mild']:.4f} |"
         report.append(row)
         
-    report_path = base_dir / 'benchmark_report.md'
+    report_path = base_dir.parent / 'benchmark_report.md'
     with open(report_path, 'w') as f:
         f.write('\n'.join(report))
         

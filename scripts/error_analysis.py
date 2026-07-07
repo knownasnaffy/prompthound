@@ -11,7 +11,7 @@ def load_class(class_path):
 
 def main():
     base_dir = Path(__file__).parent
-    features_path = base_dir / 'features.npz'
+    features_path = base_dir.parent / 'data' / 'features.npz'
     
     data = np.load(features_path)
     X = data['X']

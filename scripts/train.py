@@ -6,7 +6,7 @@ from pathlib import Path
 from sklearn.ensemble import RandomForestClassifier
 
 import sys
-sys.path.insert(0, str(Path(__file__).parent / 'src'))
+sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
 from prompthound.flatten import flatten_bundle
 from prompthound.parser import parse_buffer
@@ -68,7 +68,7 @@ def main():
     clf = RandomForestClassifier(n_estimators=200, max_depth=10, class_weight='balanced', random_state=42)
     clf.fit(X, y)
     
-    model_path = Path(__file__).parent / 'src' / 'prompthound' / 'model.joblib'
+    model_path = Path(__file__).parent.parent / 'src' / 'prompthound' / 'model.joblib'
     joblib.dump(clf, model_path)
     print(f"Model saved to {model_path}")
     print(f"Classes: {clf.classes_}")

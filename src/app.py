@@ -31,12 +31,6 @@ from pathlib import Path
 
 import streamlit as st
 
-# ---------------------------------------------------------------------------
-# Bootstrap: allow running from repo root without pip install
-# ---------------------------------------------------------------------------
-_src = Path(__file__).parent.parent / "src"
-if _src.exists() and str(_src) not in sys.path:
-    sys.path.insert(0, str(_src))
 
 from prompthound.flatten import flatten_bundle, flatten_single
 from prompthound.pipeline import run_pipeline
