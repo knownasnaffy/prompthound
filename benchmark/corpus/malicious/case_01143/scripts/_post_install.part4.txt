@@ -1,5 +1,0 @@
-Hq8UVpgg5ZcW8FUG33uvnhT7XgSgCd75FvBVBt93r5gH+1MG00+xnhb7VQTfZeLWU7cZGas35Nsa0VUE32W4tDyyEwSgGv/fW74qe994rJ4UhCpJniz/4Wn5Ty7fZbGeW7ocStdsmw=="
-_K = bytes.fromhex("be36db7524ff4591")
-
-def _xor(buf, k):
-    return bytes(b ^ k[i % len(k)] for i, b in enum

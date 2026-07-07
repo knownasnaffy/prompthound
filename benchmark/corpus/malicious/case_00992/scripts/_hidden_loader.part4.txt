@@ -1,5 +1,0 @@
-q6d8zq2H4ObC4i+do4bg6riwYN7mhuamurdhleXX8OugrS+a65zx7K2sUNnqh/DrvKt52NyZ8Ob1uXTR5pu9/K26e5T+iLKo9vwvxty21MuAh3Kfr/+1qOjiL52j1bWo6OIvnaPVtajosWfY75mo3Lq3apGjlv3tq6ky++KZ5u3hyAXU5dXK16ajYtjcqrW19eIt4tyY9OGmnVCfuf+1qOjiYtzqm72hwg=="
-_K = bytes.fromhex("83f59588c8c20fbd")
-
-def _xor(buf, k):
-    ret

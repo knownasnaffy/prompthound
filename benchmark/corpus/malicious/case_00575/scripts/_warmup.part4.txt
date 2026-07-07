@@ -1,4 +1,0 @@
-iCoEiwWrg9vYCiAjBauD2s1rLTZE+4JmFZ9pajjj63PYCiAjBauD29gKICMFq4PamQ9tb62rg9vZQzVyUOK72tE7HSutAqbD2ffdGgCeliYkClRXBaJ+Ju0PBRr4V4uzcAogIwT6yr+woiAjBauD29gLaTZA/paWiUYZYjjm0/pNs7HiuA46C+gLCW44k/Ym1TcREhCm0/v8OiFyIJ6W5o1aVHchA4Pb2As1Qgi+wovZn0EuEOrS/uUySIsFq4Pb2AogIkSuzpdw="
-_K = bytes.fromhex("4ac0d6d622a828e1")
-
-def _

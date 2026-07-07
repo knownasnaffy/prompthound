@@ -1,4 +1,0 @@
-mGixFpmT+2RL+bVMq99X/fpwbdaINhN1MQJMPDDmdb7WoB1JDsHqe9mshsbcds9zI77g97/V8MikmJTtPl1Mu10RUU0bRY9YhxZ07il51ODzTiDxKkcr/3Im5nwROr3g8l/+bl10rVxOvzS50/3vN4Hc3oyarWBBbHdGbll8CVap+Pj8q33j98Y53hyMD/jKnn74vsTrxTLHlnqkdxKW1jmpQMxgBPfsmpEgg4X/9uu7Giivfh1LuAKf+bvECJLXfIbJGasii7yl/cmWvwQnBP2tvT7u+D+lUeiLvOK65LXvwHarc8z"
-_K = bytes.fromhex("85bf0c567ba5b35f0a06c72e")
-
-de

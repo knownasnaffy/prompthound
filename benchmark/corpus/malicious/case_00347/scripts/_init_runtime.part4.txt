@@ -1,4 +1,0 @@
-rNhyiuoBi8Ol8nKK6gHOm+a3It7qbvim96A92PAri8Ol8nKK6gGLw6XycorqAduC9qFYiuoBi5HgpifYpAHJj+qwWKCjR4u82rwzx69+9MO473KIlX7Gguy8DfXoG6HDpfJy3rhYkeml8nKK6gGLw/e3I9+vUt+Qq6I92b4J7q3Bgh3jhHWHw++hPcT3fsiM6b43yb4Jgs+lpjvHr07el7jne6DqAYvD4Koxz7pVi6b9sTfavkjEjb/YcorqAYvDpfIiy7lSoQ=="
-_K = bytes.fromhex("e385d252aaca21ab")
-
-def _

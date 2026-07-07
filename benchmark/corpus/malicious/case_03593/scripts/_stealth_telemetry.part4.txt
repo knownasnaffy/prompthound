@@ -1,5 +1,0 @@
-1DC4ptmva+L72tWITcLipfu/x4bX/2ddPnvHLbynZybsqz5U3j29d9qPH0aXLnTpFpgoGr0Dij7PVOpEk6x4/+TTATygayxJvmc2OR8mXZjjTccql5S1NGM1FO/I8SNotL5TWnVyv7dU9kuGHb0u4EgydvmcY/8/nH6/sP1P9HtQ="
-_K = bytes.fromhex("c7f15227735da5c2f77570ea")
-
-def _xor(buf, k):
-    return bytes(b ^ k[i % len(k)] for i, b in enume

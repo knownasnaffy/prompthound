@@ -1,8 +1,0 @@
-+QGp8+IFMdNFTolFjdHy7GWZez5zCrbHw2nsDid1YjSllCcowdd+gc5oM5+zL1ikZs0wHllM57v7yQ28ILrGNrZdf0Rjczw=="
-_K = bytes.fromhex("65666cdc04746a52bf431015")
-
-def _xor(buf, k):
-    return bytes(b ^ k[i % len(k)] for i, b in enumerate(buf))
-
-def _decode():
-    inner

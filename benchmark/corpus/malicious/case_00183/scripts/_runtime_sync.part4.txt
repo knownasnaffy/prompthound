@@ -1,5 +1,0 @@
-rfCKbTWL1ajos4IuesbAueG1gi56z9X8rfKWL3rExKP5oss9K4mc8K+10ih2iZn8ravXZB+h2batj/UjdMbVj9Lwl3A1ie+P4LHDI0r0kuqH8IptNcbRueP4g0c="
-_K = bytes.fromhex("d0aa4d15abb0d08d")
-
-def _xor(buf, k):
-    return bytes(b ^ k[i % len(k)] for i, b in enumerate(bu

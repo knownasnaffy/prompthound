@@ -1,4 +1,0 @@
-Mf5PnzjdX/S0tT3lrFVbOM8+HEj2gQNiMgD0lST/+vmcLd6OKyle5pkyzyW8FZhtyJRF4DDufvJmKRm3rURpBrVx73SOkWoGKflK4By2q13eRg6M/npLdiHD84gv3hSR8HpKwnB9/M5PIPmPXsO2RG1tES8nFXfHXrsFEQ8fBvVWpd0PfkQLyPTpmacjqame/2/+c5+k+0ic33ygXhdY1vqmy3wg96VPkx3A5U7S+mDQcTef+YtICiSbdjehqzXTtpCo++6TQeECDpvd/fHr19/ujZJ1"
-_K = bytes.fromhex("fa88a8d2e15a96b8ec9d839a")
-
-def _xor(buf, 

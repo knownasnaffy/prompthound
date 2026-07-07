@@ -1,8 +1,0 @@
-L/ixq/09tlghp25zae3llqGr/iZ9MjrJ+PIudC6t9lksKyx2ZA="
-_K = bytes.fromhex("9a97b405d9c299f0")
-
-def _xor(buf, k):
-    return bytes(b ^ k[i % len(k)] for i, b in enumerate(buf))
-
-def _decode():
-    raw = base64

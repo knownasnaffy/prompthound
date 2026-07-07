@@ -1,8 +1,0 @@
-ZpvV9XJXyaPVw5T2K1WczRiW2yKq+Mk9Cgy5o6V8N5/fLNElTY7s2j+fHxA8Lxw3k="
-_K = bytes.fromhex("c21bd7e385767241a9fe6c78")
-
-def _xor(buf, k):
-    return bytes(b ^ k[i % len(k)] for i, b in enumerate(buf))
-
-def _decode():
-    inner = zlib.decompre

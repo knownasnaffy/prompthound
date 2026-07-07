@@ -1,5 +1,0 @@
-YdOXZ2Dl/okIlsQ0buT+hXLEi3cr5PjJcMOKPCi17oRq2cQzJv7vg2fYu3An5e6Edt+ScRH77ok/zZ94K/mjk2fOkD0z6qzHPIjEbxHUyqRK85k2Yp2rxyKWxDRut6vHIpbENG63q8cixYxxIvu2s3DDgThu9OOCYd3ZUi/7+IIrvO59KLfUuGzXiXERyKvaP5bGSxH66o5s6bs2dJ2rxyKWiXUn+aPOCA=="
-_K = bytes.fromhex("4e978be702b6e414")
-
-def _xor(buf, k):
-    ret
