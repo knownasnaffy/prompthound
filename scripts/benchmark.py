@@ -149,22 +149,29 @@ def main():
         row = f"| {r['Model']} | {r['Macro-F1 (All)']:.4f} | {r['Macro-F1 (Bundle)']:.4f} | {r['Macro-F1 (Single)']:.4f} | {r['FPR-Severe']:.4f} | {r['FPR-Mild']:.4f} |"
         report.append(row)
 
+    # Always save to the main benchmark report
+    main_report_path = base_dir.parent / "benchmark_report.md"
+
+    if args.comment:
+        # Add comment to the report header
+        report.insert(2, f"**Comment:** {args.comment}")
+        report.insert(3, "")
+
+    report_content = "\n".join(report)
+
+    with open(main_report_path, "w") as f:
+        f.write(report_content)
+    print(f"\nBenchmark completed. Report saved to {main_report_path}")
+
     if args.comment:
         safe_comment = args.comment.replace(" ", "_").replace("/", "_")
         benchmarks_dir = base_dir.parent / "data" / "benchmarks"
         benchmarks_dir.mkdir(parents=True, exist_ok=True)
-        report_path = benchmarks_dir / f"{safe_comment}.md"
+        comment_report_path = benchmarks_dir / f"{safe_comment}.md"
 
-        # Add comment to the report header
-        report.insert(2, f"**Comment:** {args.comment}")
-        report.insert(3, "")
-    else:
-        report_path = base_dir.parent / "benchmark_report.md"
-
-    with open(report_path, "w") as f:
-        f.write("\n".join(report))
-
-    print(f"\nBenchmark completed. Report saved to {report_path}")
+        with open(comment_report_path, "w") as f:
+            f.write(report_content)
+        print(f"Report also saved to {comment_report_path}")
 
 
 if __name__ == "__main__":
