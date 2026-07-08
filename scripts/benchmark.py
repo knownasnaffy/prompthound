@@ -126,6 +126,8 @@ def main():
                 "Macro-F1 (Single)": f1_mac_single,
                 "FPR-Severe": fpr_severe,
                 "FPR-Mild": fpr_mild,
+                "Params": clf.best_params_,
+                "Class": model_info["class"]
             }
         )
 
@@ -135,43 +137,49 @@ def main():
         print(f"FPR-Severe: {fpr_severe:.4f}")
         print(f"FPR-Mild: {fpr_mild:.4f}")
 
-    # Generate Markdown Report
-    report = ["# PromptHound Benchmark Results", ""]
-    report.append(
-        "| Model | Macro-F1 (All) | Macro-F1 (Bundle) | Macro-F1 (Single) | FPR-Severe | FPR-Mild |"
-    )
-    report.append("|---|---|---|---|---|---|")
-
-    # Sort by F1-Macro descending
-    results.sort(key=lambda x: x["Macro-F1 (All)"], reverse=True)
-
+    import json
+    benchmarks_dir = base_dir.parent / "data" / "benchmarks"
+    benchmarks_dir.mkdir(parents=True, exist_ok=True)
+    comparison_path = benchmarks_dir / "comparison.json"
+    
+    comp_data = {}
     for r in results:
-        row = f"| {r['Model']} | {r['Macro-F1 (All)']:.4f} | {r['Macro-F1 (Bundle)']:.4f} | {r['Macro-F1 (Single)']:.4f} | {r['FPR-Severe']:.4f} | {r['FPR-Mild']:.4f} |"
-        report.append(row)
-
-    # Always save to the main benchmark report
-    main_report_path = base_dir.parent / "benchmark_report.md"
-
-    if args.comment:
-        # Add comment to the report header
-        report.insert(2, f"**Comment:** {args.comment}")
-        report.insert(3, "")
-
-    report_content = "\n".join(report)
-
-    with open(main_report_path, "w") as f:
-        f.write(report_content)
-    print(f"\nBenchmark completed. Report saved to {main_report_path}")
+        comp_data[r["Model"]] = {
+            "f1_macro": float(r["Macro-F1 (All)"]),
+            "f1_bundle": float(r["Macro-F1 (Bundle)"]),
+            "f1_single": float(r["Macro-F1 (Single)"]),
+            "fpr_severe": float(r["FPR-Severe"]),
+            "fpr_mild": float(r["FPR-Mild"]),
+            "params": r["Params"],
+            "class": r["Class"]
+        }
+        
+    with open(comparison_path, "w") as f:
+        json.dump(comp_data, f, indent=2)
+    print(f"\nSaved comparison to {comparison_path}")
 
     if args.comment:
+        report = ["# PromptHound Benchmark Results", ""]
+        report.append(f"**Comment:** {args.comment}")
+        report.append("")
+        report.append(
+            "| Model | Macro-F1 (All) | Macro-F1 (Bundle) | Macro-F1 (Single) | FPR-Severe | FPR-Mild |"
+        )
+        report.append("|---|---|---|---|---|---|")
+
+        results.sort(key=lambda x: x["Macro-F1 (All)"], reverse=True)
+
+        for r in results:
+            row = f"| {r['Model']} | {r['Macro-F1 (All)']:.4f} | {r['Macro-F1 (Bundle)']:.4f} | {r['Macro-F1 (Single)']:.4f} | {r['FPR-Severe']:.4f} | {r['FPR-Mild']:.4f} |"
+            report.append(row)
+
+        report_content = "\n".join(report)
         safe_comment = args.comment.replace(" ", "_").replace("/", "_")
-        benchmarks_dir = base_dir.parent / "data" / "benchmarks"
-        benchmarks_dir.mkdir(parents=True, exist_ok=True)
         comment_report_path = benchmarks_dir / f"{safe_comment}.md"
 
         with open(comment_report_path, "w") as f:
             f.write(report_content)
-        print(f"Report also saved to {comment_report_path}")
+        print(f"Report saved to {comment_report_path}")
 
 
 if __name__ == "__main__":

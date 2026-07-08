@@ -1,8 +1,9 @@
 import json
 import joblib
 import numpy as np
+import argparse
+import importlib
 from pathlib import Path
-from sklearn.ensemble import RandomForestClassifier
 
 import sys
 
@@ -14,9 +15,58 @@ from prompthound.features import extract_features
 from prompthound.capability_chain import check_chains
 
 
+def load_class(class_path):
+    module_name, class_name = class_path.rsplit(".", 1)
+    module = importlib.import_module(module_name)
+    return getattr(module, class_name)
+
+
 def main():
-    dataset_dir = Path(__file__).parent.parent / "dataset"
+    parser = argparse.ArgumentParser(description="PromptHound Model Training (Promote)")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--top", action="store_true", help="Train top model from comparison.json")
+    group.add_argument("--id", type=str, help="Train specific model from comparison.json")
+    args = parser.parse_args()
+
+    base_dir = Path(__file__).parent.parent
+    dataset_dir = base_dir / "dataset"
     gt_path = dataset_dir / "ground_truth.json"
+    comparison_path = base_dir / "data" / "benchmarks" / "comparison.json"
+
+    if not comparison_path.exists():
+        print(f"Error: {comparison_path} not found. Run benchmark.py first.")
+        sys.exit(1)
+
+    with open(comparison_path, "r") as f:
+        comp_data = json.load(f)
+
+    if args.top:
+        best_model = None
+        best_f1 = -1
+        for model_name, info in comp_data.items():
+            if info["f1_macro"] > best_f1:
+                best_f1 = info["f1_macro"]
+                best_model = model_name
+        
+        if not best_model:
+            print("Error: No models found in comparison.json")
+            sys.exit(1)
+        
+        target_model = best_model
+        print(f"Selected top model: {target_model} (F1-Macro: {best_f1:.4f})")
+    else:
+        target_model = args.id
+        if target_model not in comp_data:
+            print(f"Error: Model {target_model} not found in comparison.json")
+            sys.exit(1)
+        print(f"Selected model: {target_model}")
+
+    target_info = comp_data[target_model]
+    target_class = target_info["class"]
+    target_params = target_info["params"]
+
+    print(f"Class: {target_class}")
+    print(f"Params: {target_params}")
 
     with open(gt_path, "r") as f:
         gt = json.load(f)
@@ -73,13 +123,12 @@ def main():
         if count % 100 == 0:
             print(f"Processed {count} cases...")
 
-    print(f"Training RandomForest on {len(X)} samples...")
+    print(f"Training {target_model} on {len(X)} samples...")
     X = np.array(X)
     y = np.array(y)
 
-    clf = RandomForestClassifier(
-        n_estimators=200, max_depth=10, class_weight="balanced", random_state=42
-    )
+    cls = load_class(target_class)
+    clf = cls(**target_params)
     clf.fit(X, y)
 
     model_path = Path(__file__).parent.parent / "src" / "prompthound" / "model.joblib"

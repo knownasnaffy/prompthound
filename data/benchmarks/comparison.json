@@ -1,0 +1,103 @@
+{
+  "LogisticRegression": {
+    "f1_macro": 0.6732811033440482,
+    "f1_bundle": 0.6637511218688751,
+    "f1_single": 0.8803149606299212,
+    "fpr_severe": 0.03048780487804878,
+    "fpr_mild": 0.13109756097560976,
+    "params": {
+      "C": 0.1,
+      "class_weight": "balanced",
+      "max_iter": 1000,
+      "solver": "lbfgs"
+    },
+    "class": "sklearn.linear_model.LogisticRegression"
+  },
+  "RandomForestClassifier": {
+    "f1_macro": 0.7570441829843523,
+    "f1_bundle": 0.7487672823637045,
+    "f1_single": 1.0,
+    "fpr_severe": 0.012195121951219513,
+    "fpr_mild": 0.039634146341463415,
+    "params": {
+      "class_weight": "balanced",
+      "max_depth": 10,
+      "n_estimators": 200,
+      "random_state": 42
+    },
+    "class": "sklearn.ensemble.RandomForestClassifier"
+  },
+  "DecisionTreeClassifier": {
+    "f1_macro": 0.7532500483922654,
+    "f1_bundle": 0.7472532009461433,
+    "f1_single": 0.9324444444444444,
+    "fpr_severe": 0.039634146341463415,
+    "fpr_mild": 0.11280487804878049,
+    "params": {
+      "class_weight": "balanced",
+      "max_depth": 10,
+      "random_state": 42
+    },
+    "class": "sklearn.tree.DecisionTreeClassifier"
+  },
+  "GradientBoostingClassifier": {
+    "f1_macro": 0.7855007947535558,
+    "f1_bundle": 0.7808593119445671,
+    "f1_single": 0.9324444444444444,
+    "fpr_severe": 0.06402439024390244,
+    "fpr_mild": 0.027439024390243903,
+    "params": {
+      "learning_rate": 0.1,
+      "max_depth": 3,
+      "n_estimators": 200,
+      "random_state": 42
+    },
+    "class": "sklearn.ensemble.GradientBoostingClassifier"
+  },
+  "LGBMClassifier": {
+    "f1_macro": 0.7591290557416889,
+    "f1_bundle": 0.7505453403329295,
+    "f1_single": 1.0,
+    "fpr_severe": 0.10060975609756098,
+    "fpr_mild": 0.12804878048780488,
+    "params": {
+      "class_weight": "balanced",
+      "learning_rate": 0.1,
+      "n_estimators": 300,
+      "num_leaves": 63,
+      "random_state": 42,
+      "verbose": -1
+    },
+    "class": "lightgbm.LGBMClassifier"
+  },
+  "XGBClassifier": {
+    "f1_macro": 0.7756223755074503,
+    "f1_bundle": 0.7715709607151157,
+    "f1_single": 0.9072039072039072,
+    "fpr_severe": 0.051829268292682924,
+    "fpr_mild": 0.018292682926829267,
+    "params": {
+      "learning_rate": 0.1,
+      "max_depth": 3,
+      "n_estimators": 100,
+      "random_state": 42,
+      "scale_pos_weight": 1.0
+    },
+    "class": "xgboost.XGBClassifier"
+  },
+  "HistGradientBoostingClassifier": {
+    "f1_macro": 0.7918585171276242,
+    "f1_bundle": 0.7847738784756145,
+    "f1_single": 1.0,
+    "fpr_severe": 0.024390243902439025,
+    "fpr_mild": 0.08841463414634146,
+    "params": {
+      "class_weight": "balanced",
+      "learning_rate": 0.01,
+      "max_depth": 10,
+      "max_iter": 300,
+      "random_state": 42
+    },
+    "class": "sklearn.ensemble.HistGradientBoostingClassifier"
+  }
+}
