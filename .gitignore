@@ -22,3 +22,4 @@ coverage.xml
 .installed.cfg
 *.egg
 .DS_Store
+worktrees/
