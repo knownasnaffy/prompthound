@@ -1,6 +1,13 @@
 import yaml
 
 
+class NoAliasSafeLoader(yaml.SafeLoader):
+    def compose_node(self, parent, index):
+        if self.check_event(yaml.events.AliasEvent):
+            raise yaml.YAMLError("Aliases are not allowed (DoS protection)")
+        return super().compose_node(parent, index)
+
+
 def parse_buffer(buffer_text):
     """
     Splits buffer into frontmatter, prose, and code blocks.
@@ -22,7 +29,7 @@ def parse_buffer(buffer_text):
             else:
                 in_frontmatter = False
                 try:
-                    parsed = yaml.safe_load("\n".join(fm_lines))
+                    parsed = yaml.load("\n".join(fm_lines), Loader=NoAliasSafeLoader)
                     if isinstance(parsed, dict):
                         frontmatter = parsed
                         break
