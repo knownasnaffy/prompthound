@@ -7,7 +7,12 @@ PromptHound is a static risk analysis tool for AI agent skill files. It acts as 
 - **Anti-Dilution Architecture**: Parses companion file "bundles" to ensure malicious payloads cannot be hidden by padding them with massive benign files.
 - **Low False Positives**: Powered by a tuned Random Forest model optimized specifically to minimize Severe False Positives (<1.5%) so your developers aren't blocked by noise.
 
-## 1. Initial Setup
+## 1. Reading
+
+- [Presentation](./data/presentation.pdf)
+- [Project Report](./data/project-report.pdf)
+
+## 2. Initial Setup
 
 First, clone the repository and set up a Python virtual environment:
 
@@ -18,7 +23,7 @@ python -m venv .venv
 source ./.venv/bin/activate
 ```
 
-## 2. Using the CLI
+## 3. Using the CLI
 
 To use the PromptHound CLI with the pre-trained model, install the required dependencies:
 
@@ -42,7 +47,7 @@ prompthound scan -p
 prompthound scan /path/to/SKILL.md --format json
 ```
 
-## 3. Web App
+## 4. Web App
 
 PromptHound also includes a Streamlit web app. Install the `app` dependencies to run it:
 
@@ -51,7 +56,7 @@ pip install -e ".[app]"
 streamlit run app.py
 ```
 
-## 4. Development & Training
+## 5. Development & Training
 
 If you want to train the model, run benchmarks, or contribute to the project, install the `dev` dependencies:
 
@@ -78,7 +83,7 @@ The `scripts/` directory contains tools for the ML pipeline. Run them in this or
    python scripts/error_analysis.py
    ```
 
-## 5. Integrations
+## 6. Integrations
 
 ### Git Hooks
 You can install a pre-commit hook to automatically scan skills before they are committed:
@@ -87,10 +92,10 @@ You can install a pre-commit hook to automatically scan skills before they are c
 ```
 
 ### verify_skill Agent Skill Integration
-*Pending - coming soon.*
+This is currently blocked as an optimal method for distributing our cli with the proposed skill has yet to be decided.
 
 
-## 6. Comparison with Alternative Tools
+## 7. Comparison with Alternative Tools
 
 Other security scanners take different architectural approaches:
 
@@ -104,7 +109,7 @@ PromptHound is built for environments with strict constraints:
 
 Use the LLM-backed suites above for deep semantic analysis or ecosystem auditing. Use PromptHound for offline, sub-second pre-commit hooks.
 
-## 7. Acknowledgements
+## 8. Acknowledgements
 
 Our evaluation corpus and dataset generation heavily rely on the following open-source datasets:
 - **[cuhk-zhuque/SkillTrustBench](https://huggingface.co/datasets/cuhk-zhuque/SkillTrustBench)**
