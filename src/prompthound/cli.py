@@ -44,6 +44,9 @@ def scan(path, directory, project, format):
         )
         found_any = False
         cwd = Path.cwd()
+        total_scanned = 0
+        bad_files = []
+
         for known_dir in KNOWN_SKILL_DIRS:
             target_dir = cwd / known_dir
             if target_dir.exists() and target_dir.is_dir():
@@ -65,6 +68,11 @@ def scan(path, directory, project, format):
                             console.print(report)
                         else:
                             click.echo(report)
+                        total_scanned += 1
+                        classification = result["classification"]["class"].upper()
+                        if classification in ("SUSPICIOUS", "MALICIOUS"):
+                            bad_files.append((item.relative_to(cwd), classification))
+
                     elif item.suffix == ".md":
                         console.print(
                             f"\n-> Scanning file: [bold cyan]{item.relative_to(cwd)}[/bold cyan]"
@@ -76,10 +84,50 @@ def scan(path, directory, project, format):
                             console.print(report)
                         else:
                             click.echo(report)
+                        total_scanned += 1
+                        classification = result["classification"]["class"].upper()
+                        if classification in ("SUSPICIOUS", "MALICIOUS"):
+                            bad_files.append((item.relative_to(cwd), classification))
+
         if not found_any:
             console.print(
                 "[yellow]No known skill directories found in this project.[/yellow]"
             )
+        else:
+            if format == "human":
+                from rich.panel import Panel
+                from rich.table import Table
+
+                summary_table = Table(show_header=False, box=None)
+                summary_table.add_column("Property", style="bold")
+                summary_table.add_column("Value")
+
+                summary_table.add_row("Total Scanned:", str(total_scanned))
+
+                if bad_files:
+                    summary_table.add_row(
+                        "Flagged Items:", f"[bold red]{len(bad_files)}[/bold red]"
+                    )
+                    for item_path, classification in bad_files:
+                        color = "red" if classification == "MALICIOUS" else "yellow"
+                        summary_table.add_row(
+                            f"  - [{color}]{classification}[/{color}]", str(item_path)
+                        )
+                else:
+                    summary_table.add_row(
+                        "Status:", "[bold green]All Safe[/bold green]"
+                    )
+
+                console.print()
+                console.print(
+                    Panel(
+                        summary_table,
+                        title="[bold]Project Scan Summary[/bold]",
+                        expand=False,
+                        border_style="cyan",
+                    )
+                )
+
         return
 
     if not path:
