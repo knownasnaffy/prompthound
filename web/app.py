@@ -27,9 +27,7 @@ page = st.navigation(
             title="Upload & Scan",
             icon=":material/upload_file:",
         ),
-        st.Page(
-            "pages/github_scan.py", title="GitHub Scan", icon=":material/code:"
-        ),
+        st.Page("pages/github_scan.py", title="GitHub Scan", icon=":material/code:"),
     ]
 )
 

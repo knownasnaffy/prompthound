@@ -27,7 +27,9 @@ with st.form("github_scan_form"):
 
     col1, col2 = st.columns([1, 4])
     with col1:
-        scan_btn = st.form_submit_button("Scan Repository", type="primary", use_container_width=True)
+        scan_btn = st.form_submit_button(
+            "Scan Repository", type="primary", use_container_width=True
+        )
     with col2:
         clear_btn = st.form_submit_button("Clear", type="secondary")
 

@@ -127,7 +127,7 @@ def main():
                 "FPR-Severe": fpr_severe,
                 "FPR-Mild": fpr_mild,
                 "Params": clf.best_params_,
-                "Class": model_info["class"]
+                "Class": model_info["class"],
             }
         )
 
@@ -138,10 +138,11 @@ def main():
         print(f"FPR-Mild: {fpr_mild:.4f}")
 
     import json
+
     benchmarks_dir = base_dir.parent / "data" / "benchmarks"
     benchmarks_dir.mkdir(parents=True, exist_ok=True)
     comparison_path = benchmarks_dir / "comparison.json"
-    
+
     comp_data = {}
     for r in results:
         comp_data[r["Model"]] = {
@@ -151,9 +152,9 @@ def main():
             "fpr_severe": float(r["FPR-Severe"]),
             "fpr_mild": float(r["FPR-Mild"]),
             "params": r["Params"],
-            "class": r["Class"]
+            "class": r["Class"],
         }
-        
+
     with open(comparison_path, "w") as f:
         json.dump(comp_data, f, indent=2)
     print(f"\nSaved comparison to {comparison_path}")

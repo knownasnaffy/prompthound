@@ -24,8 +24,12 @@ def load_class(class_path):
 def main():
     parser = argparse.ArgumentParser(description="PromptHound Model Training (Promote)")
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--top", action="store_true", help="Train top model from comparison.json")
-    group.add_argument("--id", type=str, help="Train specific model from comparison.json")
+    group.add_argument(
+        "--top", action="store_true", help="Train top model from comparison.json"
+    )
+    group.add_argument(
+        "--id", type=str, help="Train specific model from comparison.json"
+    )
     args = parser.parse_args()
 
     base_dir = Path(__file__).parent.parent
@@ -47,11 +51,11 @@ def main():
             if info["f1_macro"] > best_f1:
                 best_f1 = info["f1_macro"]
                 best_model = model_name
-        
+
         if not best_model:
             print("Error: No models found in comparison.json")
             sys.exit(1)
-        
+
         target_model = best_model
         print(f"Selected top model: {target_model} (F1-Macro: {best_f1:.4f})")
     else:

@@ -2,10 +2,11 @@ import json
 import sys
 from pathlib import Path
 
+
 def main():
     base_dir = Path(__file__).parent.parent
     comparison_path = base_dir / "data" / "benchmarks" / "comparison.json"
-    
+
     if not comparison_path.exists():
         print(f"Error: {comparison_path} not found.")
         sys.exit(1)
@@ -68,8 +69,11 @@ def main():
         print("  Demerits:")
         for c in sorted(set(cons)):
             print(f"    - {c}")
-        
-        print(f"  Summary: F1={m['f1_macro']:.3f} | FPR_Severe={m['fpr_severe']:.3f} | FPR_Mild={m['fpr_mild']:.3f}\n")
+
+        print(
+            f"  Summary: F1={m['f1_macro']:.3f} | FPR_Severe={m['fpr_severe']:.3f} | FPR_Mild={m['fpr_mild']:.3f}\n"
+        )
+
 
 if __name__ == "__main__":
     main()
