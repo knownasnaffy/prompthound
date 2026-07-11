@@ -2,6 +2,24 @@ import math
 import re
 from prompthound.rules import scan_rules
 
+FEATURE_NAMES = [
+    "b64_ratio",
+    "padding_ratio",
+    "code_to_prose_ratio",
+    "url_count",
+    "unicode_count",
+    "shell_command_presence",
+    "urgency_density",
+    "entropy",
+    "is_bundle",
+    "member_count",
+    "capability_mismatch_score",
+    "high_severity_hits",
+    "medium_severity_hits",
+    "eval_exec_density",
+    "secret_keyword_density",
+]
+
 
 def compute_entropy(text):
     if not text:

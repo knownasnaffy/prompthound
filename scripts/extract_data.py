@@ -7,7 +7,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from prompthound.flatten import flatten_bundle
 from prompthound.parser import parse_buffer
-from prompthound.features import extract_features
+from prompthound.features import extract_features, FEATURE_NAMES
 from prompthound.capability_chain import check_chains
 
 
@@ -17,24 +17,6 @@ def main():
 
     with open(gt_path, "r") as f:
         gt = json.load(f)
-
-    feature_names = [
-        "b64_ratio",
-        "padding_ratio",
-        "code_to_prose_ratio",
-        "url_count",
-        "unicode_count",
-        "shell_command_presence",
-        "urgency_density",
-        "entropy",
-        "is_bundle",
-        "member_count",
-        "capability_mismatch_score",
-        "high_severity_hits",
-        "medium_severity_hits",
-        "eval_exec_density",
-        "secret_keyword_density",
-    ]
 
     X = []
     y = []
@@ -62,7 +44,7 @@ def main():
         feature_dict = extract_features(lines, manifest, is_bundle=is_bundle)
         feature_dict["capability_mismatch_score"] = mismatch_score
 
-        vec = [float(feature_dict[name]) for name in feature_names]
+        vec = [float(feature_dict[name]) for name in FEATURE_NAMES]
 
         X.append(vec)
         y.append(judgment)

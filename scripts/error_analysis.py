@@ -1,7 +1,14 @@
 import numpy as np
 import importlib
+import pandas as pd
+import sys
 from pathlib import Path
 from sklearn.model_selection import train_test_split
+
+# Add src to sys.path to import prompthound
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
+
+from prompthound.features import FEATURE_NAMES
 
 
 def load_class(class_path):
@@ -15,7 +22,7 @@ def main():
     features_path = base_dir.parent / "data" / "features.npz"
 
     data = np.load(features_path)
-    X = data["X"]
+    X = pd.DataFrame(data["X"], columns=FEATURE_NAMES)
     y = data["y"]
 
     X_train, X_test, y_train, y_test = train_test_split(
@@ -48,28 +55,18 @@ def main():
         )
         tp_indices = np.where((y_test == "malicious") & (y_pred == "malicious"))[0]
 
-        feature_names = [
-            "b64_ratio",
-            "padding_ratio",
-            "code_to_prose_ratio",
-            "url_count",
-            "unicode_count",
-            "shell_command_presence",
-            "urgency_density",
-            "entropy",
-            "is_bundle",
-            "member_count",
-            "capability_mismatch_score",
-        ]
+        feature_names = FEATURE_NAMES
 
-        fn_means = np.mean(X_test[fn_indices], axis=0)
+        fn_means = X_test.iloc[fn_indices].mean(axis=0)
         tp_means = (
-            np.mean(X_test[tp_indices], axis=0)
+            X_test.iloc[tp_indices].mean(axis=0)
             if len(tp_indices) > 0
-            else np.zeros(len(feature_names))
+            else pd.Series(0, index=feature_names)
         )
 
-        for name, fn_val, tp_val in zip(feature_names, fn_means, tp_means):
+        for name in feature_names:
+            fn_val = fn_means[name]
+            tp_val = tp_means[name]
             print(f"{name:25s} | FN mean: {fn_val:.4f} | TP mean: {tp_val:.4f}")
 
 
