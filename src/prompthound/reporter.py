@@ -33,32 +33,57 @@ def format_report(result, manifest, fmt):
             )
 
         return json.dumps(sarif, indent=2)
-    else:  # human
-        report = []
-        report.append("=== PromptHound Risk Report ===")
-        report.append(f"Classification: {result['classification']['class'].upper()}")
-        probs = result["classification"]["probabilities"]
-        report.append(
-            f"Confidence: Safe {probs['safe']:.2f}, Suspicious {probs['suspicious']:.2f}, Malicious {probs['malicious']:.2f}"
-        )
 
-        report.append("\n-- Rule Hits --")
+    else:  # human
+        from rich.table import Table
+        from rich.console import Group
+        from rich.panel import Panel
+
+        classification = result['classification']['class'].upper()
+        class_color = "green" if classification == "SAFE" else "yellow" if classification == "SUSPICIOUS" else "red"
+        
+        probs = result["classification"]["probabilities"]
+        
+        # summary table
+        summary_table = Table(show_header=True, header_style="bold magenta")
+        summary_table.add_column("Classification", style=f"bold {class_color}")
+        summary_table.add_column("Safe Confidence", justify="right")
+        summary_table.add_column("Suspicious Confidence", justify="right")
+        summary_table.add_column("Malicious Confidence", justify="right")
+        summary_table.add_row(
+            classification,
+            f"{probs['safe']:.2f}",
+            f"{probs['suspicious']:.2f}",
+            f"{probs['malicious']:.2f}"
+        )
+        
+        # Rules table
+        rules_table = Table(title="Rule Hits", show_header=True, header_style="bold magenta", title_style="bold cyan")
+        rules_table.add_column("Severity")
+        rules_table.add_column("Rule")
+        rules_table.add_column("Location")
+        
         if result["rule_hits"]:
             for hit in result["rule_hits"]:
+                sev = hit['severity'].upper()
+                sev_color = "red" if sev == "HIGH" else "yellow"
                 filepath, orig_line = manifest.get_source(hit["line_idx"])
-                report.append(
-                    f"[{hit['severity'].upper()}] {hit['rule']} at {filepath}:{orig_line}"
-                )
+                rules_table.add_row(f"[{sev_color}]{sev}[/]", hit['rule'], f"{filepath}:{orig_line}")
         else:
-            report.append("None")
-
-        report.append("\n-- Capability Chains --")
+            rules_table.add_row("[green]NONE[/]", "-", "-")
+            
+        # Chains table
+        chains_table = Table(title="Capability Chains", show_header=True, header_style="bold magenta", title_style="bold cyan")
+        chains_table.add_column("Severity")
+        chains_table.add_column("Name")
+        chains_table.add_column("Description")
+        
         if result["chains_found"]:
             for chain in result["chains_found"]:
-                report.append(
-                    f"[{chain['severity'].upper()}] {chain['name']}: {chain['description']}"
-                )
+                sev = chain['severity'].upper()
+                sev_color = "red" if sev == "HIGH" else "yellow"
+                chains_table.add_row(f"[{sev_color}]{sev}[/]", chain['name'], chain['description'])
         else:
-            report.append("None")
-
-        return "\n".join(report)
+            chains_table.add_row("[green]NONE[/]", "-", "-")
+            
+        return Panel(Group(summary_table, rules_table, chains_table), expand=False)

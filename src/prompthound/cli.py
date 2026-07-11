@@ -1,12 +1,15 @@
 import click
 import sys
 from pathlib import Path
+from rich.console import Console
 
 from .flatten import flatten_bundle, flatten_single
 from .pipeline import run_pipeline
 from .reporter import format_report
 from .config import KNOWN_SKILL_DIRS
 
+
+console = Console()
 
 @click.group(invoke_without_command=True)
 @click.pass_context
@@ -36,7 +39,7 @@ def main(ctx):
 def scan(path, directory, project, format):
     """Scan a skill file or bundle for risks."""
     if project:
-        click.echo(
+        console.print(
             f"Scanning project for known skill directories... (format: {format})"
         )
         found_any = False
@@ -44,41 +47,49 @@ def scan(path, directory, project, format):
         for known_dir in KNOWN_SKILL_DIRS:
             target_dir = cwd / known_dir
             if target_dir.exists() and target_dir.is_dir():
-                click.echo(f"\nFound skill directory: {known_dir}")
+                console.print(f"\nFound skill directory: [bold blue]{known_dir}[/bold blue]")
                 found_any = True
 
                 # Scan immediate children
                 for item in target_dir.iterdir():
                     if item.is_dir():
-                        click.echo(f"\n-> Scanning bundle: {item.relative_to(cwd)}")
+                        console.print(f"\n-> Scanning bundle: [bold cyan]{item.relative_to(cwd)}[/bold cyan]")
                         buffer, manifest = flatten_bundle(item)
                         result = run_pipeline(buffer, manifest, is_bundle=True)
-                        click.echo(format_report(result, manifest, fmt=format))
+                        report = format_report(result, manifest, fmt=format)
+                        if format == "human":
+                            console.print(report)
+                        else:
+                            click.echo(report)
                     elif item.suffix == ".md":
-                        click.echo(f"\n-> Scanning file: {item.relative_to(cwd)}")
+                        console.print(f"\n-> Scanning file: [bold cyan]{item.relative_to(cwd)}[/bold cyan]")
                         buffer, manifest = flatten_single(item)
                         result = run_pipeline(buffer, manifest, is_bundle=False)
-                        click.echo(format_report(result, manifest, fmt=format))
+                        report = format_report(result, manifest, fmt=format)
+                        if format == "human":
+                            console.print(report)
+                        else:
+                            click.echo(report)
         if not found_any:
-            click.echo("No known skill directories found in this project.")
+            console.print("[yellow]No known skill directories found in this project.[/yellow]")
         return
 
     if not path:
-        click.echo("Error: Missing argument 'PATH' when not using -p.", err=True)
+        console.print("[bold red]Error: Missing argument 'PATH' when not using -p.[/bold red]", style="red")
         sys.exit(1)
 
     path_obj = Path(path)
 
     if directory and not path_obj.is_dir():
-        click.echo("Error: -d flag used but path is not a directory.", err=True)
+        console.print("[bold red]Error: -d flag used but path is not a directory.[/bold red]", style="red")
         sys.exit(1)
 
     if not directory and path_obj.is_dir():
-        click.echo("Error: Path is a directory but -d flag not provided.", err=True)
+        console.print("[bold red]Error: Path is a directory but -d flag not provided.[/bold red]", style="red")
         sys.exit(1)
 
-    click.echo(
-        f"Scanning {'bundle' if directory else 'file'}: {path} (format: {format})"
+    console.print(
+        f"Scanning {'bundle' if directory else 'file'}: [bold cyan]{path}[/bold cyan] (format: {format})"
     )
 
     if directory:
@@ -88,7 +99,10 @@ def scan(path, directory, project, format):
 
     result = run_pipeline(buffer, manifest, is_bundle=directory)
     report = format_report(result, manifest, fmt=format)
-    click.echo(report)
+    if format == "human":
+        console.print(report)
+    else:
+        click.echo(report)
 
 
 if __name__ == "__main__":
